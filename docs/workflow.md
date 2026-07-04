@@ -16,7 +16,7 @@ I develop with Claude Code under the rules in `CLAUDE.md`:
 
 - One session per issue, anchored on `CLAUDE.md` and the issue text; each new issue gets a fresh session.
 - Substantive PR feedback goes as inline review comments on GitHub; the agent addresses them on the same branch. Trivial fixes can go through chat.
-- Interview-critical code (calibration, aggregation, gate semantics, tenancy) I drive by hand. No agent code merges unreviewed.
+- Trust-critical code (calibration, aggregation, gate semantics, tenant isolation) I drive by hand. No agent code merges unreviewed.
 
 ## Board
 

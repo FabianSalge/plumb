@@ -1,6 +1,6 @@
 # Plumb
 
-The open-source, self-hostable groundedness gate — one engine that scores your PRs and your production answers with the same calibrated verifier, against your own knowledge base, without data leaving your cluster.
+The open-source, self-hostable groundedness gate — one calibrated verifier that checks AI-generated answers against your own knowledge base and gates both CI and production on the result, without data leaving your cluster.
 
 > **Status:** early development, not yet usable.
 
