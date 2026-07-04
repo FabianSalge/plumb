@@ -1,9 +1,9 @@
 # Plumb — agent constitution
 
 ## What this is
-The open-source, self-hostable groundedness gate: one engine that scores
-PRs and production answers with the same calibrated verifier, against a
-tenant's own knowledge base, in-cluster. Scope and roadmap live in the
+The open-source, self-hostable groundedness gate: one calibrated verifier
+that checks AI-generated answers against a tenant's knowledge base and
+gates both CI and production on the result, in-cluster. Scope and roadmap live in the
 GitHub issues and milestones — there is no plan doc in the repo.
 
 ## Layout
@@ -25,7 +25,7 @@ GitHub issues and milestones — there is no plan doc in the repo.
 5. Never merge without human review. Never weaken a CI gate to pass it.
 
 ## Protected zones — plan first, never modify silently
-- engine/calibration/ and engine/aggregation/ (interview-critical math)
+- engine/calibration/ and engine/aggregation/ (trust-critical math)
 - gate semantics and API response contracts
 - anything touching tenant isolation
 - CI workflow files and coverage/threshold configs
