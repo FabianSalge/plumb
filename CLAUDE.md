@@ -1,12 +1,14 @@
 # Plumb — agent constitution
 
 ## What this is
+
 The open-source, self-hostable groundedness gate: one calibrated verifier
 that checks AI-generated answers against a tenant's knowledge base and
 gates both CI and production on the result, in-cluster. Scope and roadmap live in the
 GitHub issues and milestones — there is no plan doc in the repo.
 
 ## Layout
+
 - api/        HTTP surface (contracts in openspec/specs/)
 - engine/     verification pipeline (decomposition, retrieval, signals,
               aggregation, calibration, gate)
@@ -17,6 +19,7 @@ GitHub issues and milestones — there is no plan doc in the repo.
 - docs/       workflow.md (how development runs), playbooks/, devlog/
 
 ## Workflow (non-negotiable)
+
 1. Work happens against a GitHub issue with acceptance criteria.
 2. Features go through OpenSpec: propose → review → apply → verify → archive.
    Chores and spikes skip the spec stage.
@@ -25,6 +28,7 @@ GitHub issues and milestones — there is no plan doc in the repo.
 5. Never merge without human review. Never weaken a CI gate to pass it.
 
 ## Protected zones — plan first, never modify silently
+
 - engine/calibration/ and engine/aggregation/ (trust-critical math)
 - gate semantics and API response contracts
 - anything touching tenant isolation
@@ -32,6 +36,7 @@ GitHub issues and milestones — there is no plan doc in the repo.
 - docs/adr/ (append-only; decisions change via a new ADR)
 
 ## Conventions
+
 - Commits: conventional, one sentence max, no bodies, no trailers.
   Never add AI attribution or a Co-Authored-By line.
 - All prose (commits, PRs, issues, docs, comments) is written in the
@@ -44,11 +49,13 @@ GitHub issues and milestones — there is no plan doc in the repo.
 - Docs are code: user-visible changes update README/docs in the same PR.
 
 ## Definition of done
+
 Acceptance criteria checked; tests green locally and in CI; lint/typecheck
 clean; OpenSpec change verified + archived; docs updated; PR description
 says how it was verified.
 
 ## Commands
+
 - pre-commit install --hook-type commit-msg --hook-type pre-commit  (once per clone)
 - pre-commit run --all-files
 - make targets (test/lint/run/kind-up/deploy/e2e) arrive with the language
