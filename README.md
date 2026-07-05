@@ -10,7 +10,7 @@ Work is planned and tracked publicly via [milestones](https://github.com/FabianS
 
 ## Try it locally
 
-Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/). The first run downloads the scoring model (~420 MB).
+Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/). The first run downloads the scoring model (~1.2 GB).
 
 ```sh
 make run
@@ -37,7 +37,7 @@ curl -s localhost:8000/v1/verify \
 }
 ```
 
-The whole input is treated as one claim and checked against the caller-provided evidence with a single grounding signal (HHEM-2.1-open, pinned by revision in [config/verifier.yaml](config/verifier.yaml)). Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Claim decomposition, retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
+The whole input is treated as one claim and checked against the caller-provided evidence with a single grounding signal ([LettuceDetect v2](https://huggingface.co/KRLabsOrg/lettucedect-v2-mmbert-base), pinned by revision in [config/verifier.yaml](config/verifier.yaml) — see ADR-0006 for the selection benchmark). Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Claim decomposition, retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
 
 ### Container
 
@@ -46,7 +46,7 @@ make image   # build plumb:dev
 docker run --rm -p 8000:8000 plumb:dev
 ```
 
-The image runs as a non-root user with CPU-only torch. Model weights are not baked in: the container downloads them on first start (~420 MB, cached under `HF_HOME`), and `/readyz` returns 503 until the model is loaded.
+The image runs as a non-root user with CPU-only torch. Model weights are not baked in: the container downloads them on first start (~1.2 GB from a single Hub repo, no remote code, cached under `HF_HOME`), and `/readyz` returns 503 until the model is loaded.
 
 ## Deploy with Helm
 
@@ -80,5 +80,5 @@ pre-commit install --hook-type commit-msg --hook-type pre-commit
 make test        # pytest with the coverage floor
 make lint        # ruff check + format check
 make typecheck   # mypy (strict)
-make test-model  # integration test against the real HHEM weights
+make test-model  # integration test against the real LettuceDetect weights
 ```

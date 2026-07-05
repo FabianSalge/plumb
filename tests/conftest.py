@@ -8,7 +8,7 @@ from api.app import create_app
 
 
 class FakeScorer:
-    """Stands in for the HHEM wrapper: returns one preset score per passage."""
+    """Stands in for the scoring wrapper: returns one preset score per passage."""
 
     def __init__(self, scores: list[float]):
         self.scores = scores

@@ -13,11 +13,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# HHEM-2.1-open's remote code breaks on transformers 5.x, and the open release
-# is frozen upstream, so the <5 pin is permanent for this model
-# (docs/spikes/2026-07-04-fastapi-hhem.md; successor decided in #18).
-hhem = [
-    "transformers>=4.57,<5",
+# LettuceDetect v2's tokenizer requires transformers >=5 (ADR-0006).
+model = [
+    "transformers>=5.13",
     "torch>=2.12",
 ]
 
@@ -32,10 +30,10 @@ dev = [
 ]
 
 [tool.uv.sources]
-# On Linux the default PyPI torch wheels bundle CUDA (~5 GB installed); HHEM
-# serves on CPU, so the container image resolves torch from the CPU wheel
-# index instead. macOS keeps PyPI (its wheels are CPU/MPS already). Revisit
-# alongside the vLLM/GPU work.
+# On Linux the default PyPI torch wheels bundle CUDA (~5 GB installed); the
+# scoring model serves on CPU, so the container image resolves torch from the
+# CPU wheel index instead. macOS keeps PyPI (its wheels are CPU/MPS already).
+# Revisit alongside the vLLM/GPU work.
 torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
 
 [[tool.uv.index]]
@@ -53,7 +51,7 @@ packages = ["api", "engine"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 markers = [
-    "model: loads the real HHEM weights; needs the 'hhem' extra and a model download",
+    "model: loads the real LettuceDetect weights; needs the 'model' extra and a model download",
     "e2e: golden verify request against a deployed instance; needs PLUMB_URL reachable",
 ]
 addopts = "-m 'not model and not e2e'"

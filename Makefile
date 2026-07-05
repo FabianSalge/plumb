@@ -8,8 +8,8 @@ KIND_NODE_IMAGE = kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e55
 test:
 	uv run pytest --cov
 
-test-model:  ## integration test against the real HHEM weights (downloads ~420 MB once)
-	uv run --extra hhem pytest -m model --no-cov
+test-model:  ## integration test against the real LettuceDetect weights (downloads ~1.2 GB once)
+	uv run --extra model pytest -m model --no-cov
 
 lint:
 	uv run ruff check . && uv run ruff format --check .
@@ -18,7 +18,7 @@ typecheck:
 	uv run mypy
 
 run:  ## serve the API locally (needs the model extra)
-	uv run --extra hhem uvicorn api.main:app
+	uv run --extra model uvicorn api.main:app
 
 image:  ## build the container image (CPU-only torch; weights download at start)
 	docker build -t plumb:dev .

@@ -59,7 +59,7 @@ says how it was verified.
 - pre-commit install --hook-type commit-msg --hook-type pre-commit  (once per clone)
 - pre-commit run --all-files
 - make test       — pytest with the coverage floor (model-marked tests excluded)
-- make test-model — integration test against the real HHEM weights
+- make test-model — integration test against the real LettuceDetect weights
 - make lint       — ruff check + format check
 - make typecheck  — mypy (strict)
 - make run        — serve the API locally with the real model
