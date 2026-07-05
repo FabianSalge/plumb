@@ -1,0 +1,5 @@
+# Tool-managed trees whose markdown format is dictated by OpenSpec, not authored here.
+.claude/
+openspec/
+# GitHub UI scaffolding (issue/PR templates), not prose docs.
+.github/

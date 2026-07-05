@@ -1,0 +1,3 @@
+# Line length is left to the editor; everything else stays at markdownlint defaults.
+default: true
+MD013: false
