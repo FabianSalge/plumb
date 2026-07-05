@@ -39,15 +39,16 @@ class GraniteGuardianCandidate:
             {"role": "context", "content": example.context},
             {"role": "assistant", "content": example.response},
         ]
-        input_ids = self._tokenizer.apply_chat_template(
+        encoded = self._tokenizer.apply_chat_template(
             messages,
             guardian_config={"risk_name": "groundedness"},
             add_generation_prompt=True,
             return_tensors="pt",
+            return_dict=True,
         )
         with torch.no_grad():
             generated = self._model.generate(
-                input_ids,
+                **encoded,
                 max_new_tokens=4,
                 do_sample=False,
                 output_scores=True,
@@ -61,7 +62,7 @@ class GraniteGuardianCandidate:
             if p_yes + p_no > 0.5:
                 # "Yes" answers "is there groundedness risk" — support is P(No).
                 return p_no / (p_yes + p_no)
-        text = self._tokenizer.decode(generated.sequences[0, input_ids.shape[1] :])
+        text = self._tokenizer.decode(generated.sequences[0, encoded["input_ids"].shape[1] :])
         raise GraniteGuardianError(f"no Yes/No token in guardian output: {text!r}")
 
 

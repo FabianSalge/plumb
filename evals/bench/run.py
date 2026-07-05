@@ -103,17 +103,21 @@ def percentile(values: list[float], pct: float) -> float:
     return ordered[index]
 
 
-def weights_on_disk_bytes(repos: list[str]) -> int | None:
+def weights_on_disk_bytes(repos: list[tuple[str, str | None]]) -> int | None:
+    """Size of each repo's pinned revision in the local cache (not stray revisions)."""
     from huggingface_hub import scan_cache_dir
 
-    sizes = {
-        cached.repo_id: cached.size_on_disk
-        for cached in scan_cache_dir().repos
-        if cached.repo_type == "model"
-    }
-    if any(repo not in sizes for repo in repos):
-        return None
-    return sum(sizes[repo] for repo in repos)
+    cached_models = {c.repo_id: c for c in scan_cache_dir().repos if c.repo_type == "model"}
+    total = 0
+    for repo, revision in repos:
+        if repo not in cached_models:
+            return None
+        revisions = cached_models[repo].revisions
+        matching = [r for r in revisions if revision is None or r.commit_hash == revision]
+        if not matching:
+            return None
+        total += max(r.size_on_disk for r in matching)
+    return total
 
 
 def hardware_info() -> dict:
@@ -157,10 +161,11 @@ def main() -> None:
 
     precision, recall = precision_recall(labels, predicted)
     repo = getattr(candidate, "repo", None) or getattr(module, "REPO", None)
+    revision = getattr(candidate, "revision", None) or getattr(module, "REVISION", None)
     result = {
         "candidate": candidate.name,
         "repo": repo,
-        "revision": getattr(candidate, "revision", None) or getattr(module, "REVISION", None),
+        "revision": revision,
         "slice": {"per_task": args.per_task, "seed": args.seed, "n": len(examples)},
         "threshold": THRESHOLD,
         "metrics": {
@@ -181,7 +186,7 @@ def main() -> None:
             "rss_after_load_bytes": rss_after_load,
             "rss_after_run_bytes": process.memory_info().rss,
             "weights_on_disk_bytes": weights_on_disk_bytes(
-                [repo, *getattr(module, "EXTRA_REPOS", [])]
+                [(repo, revision)] + [(extra, None) for extra in getattr(module, "EXTRA_REPOS", [])]
             ),
         },
         "sanity": sanity,

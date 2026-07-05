@@ -1,0 +1,4250 @@
+{
+ "candidate": "lettucedetect-large-v1",
+ "repo": "KRLabsOrg/lettucedect-large-modernbert-en-v1",
+ "revision": "22296c700ef0ba4ab3e5c9afffa0185caaf61e52",
+ "slice": {
+  "per_task": 200,
+  "seed": 18,
+  "n": 600
+ },
+ "threshold": 0.5,
+ "metrics": {
+  "auroc": 0.9092358803986711,
+  "balanced_accuracy": 0.8265176683781335,
+  "f1_hallucinated": 0.776255707762557,
+  "precision_hallucinated": 0.7623318385650224,
+  "recall_hallucinated": 0.7906976744186046
+ },
+ "latency": {
+  "slice_median_ms": 548.8431460689753,
+  "slice_p95_ms": 1431.352499872446,
+  "short_pair": {
+   "median_ms": 92.33602054882795,
+   "p95_ms": 104.75137480534613
+  },
+  "long_pair_500w": {
+   "median_ms": 588.380541652441,
+   "p95_ms": 621.4245411101729
+  }
+ },
+ "footprint": {
+  "load_seconds": 2.0761569580063224,
+  "rss_after_load_bytes": 568541184,
+  "rss_after_run_bytes": 1548058624,
+  "weights_on_disk_bytes": 1586957672
+ },
+ "sanity": {
+  "supported": 0.9429087601602077,
+  "contradicted": 0.05807995796203613
+ },
+ "environment": {
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "cpu": "Apple M4",
+  "memory_gb": 16,
+  "python": "3.13.7",
+  "torch": "2.12.1",
+  "transformers": "4.57.6"
+ },
+ "per_example": [
+  {
+   "id": "10002",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9927107468247414,
+   "ms": 618.4482499957085
+  },
+  {
+   "id": "10004",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.00939321517944336,
+   "ms": 604.3489160947502
+  },
+  {
+   "id": "10015",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9906975794583559,
+   "ms": 1414.4596250262111
+  },
+  {
+   "id": "10017",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8960019424557686,
+   "ms": 1149.9066660180688
+  },
+  {
+   "id": "10068",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.07072246074676514,
+   "ms": 1096.1281668860465
+  },
+  {
+   "id": "10072",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.09052115678787231,
+   "ms": 980.2141669206321
+  },
+  {
+   "id": "10111",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.019700169563293457,
+   "ms": 1029.5556669589132
+  },
+  {
+   "id": "10209",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.044436633586883545,
+   "ms": 551.2336250394583
+  },
+  {
+   "id": "10332",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.6558832824230194,
+   "ms": 1115.3919170610607
+  },
+  {
+   "id": "10335",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9821778666228056,
+   "ms": 1340.985249960795
+  },
+  {
+   "id": "10336",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.1668773889541626,
+   "ms": 1287.0201668702066
+  },
+  {
+   "id": "10352",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.14149558544158936,
+   "ms": 801.8420420121402
+  },
+  {
+   "id": "10362",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9359594136476517,
+   "ms": 1224.4034581817687
+  },
+  {
+   "id": "10363",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.05716252326965332,
+   "ms": 1355.6813749019057
+  },
+  {
+   "id": "10365",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.02766561508178711,
+   "ms": 1235.9167078975588
+  },
+  {
+   "id": "10367",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9673799052834511,
+   "ms": 1140.1100831571966
+  },
+  {
+   "id": "10458",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9420380555093288,
+   "ms": 792.5777500495315
+  },
+  {
+   "id": "10459",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.6490163207054138,
+   "ms": 900.7130418904126
+  },
+  {
+   "id": "10460",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.018871665000915527,
+   "ms": 1085.959958145395
+  },
+  {
+   "id": "10461",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.13342499732971191,
+   "ms": 790.1326247956604
+  },
+  {
+   "id": "10463",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.5463180243968964,
+   "ms": 798.6306669190526
+  },
+  {
+   "id": "10542",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.7604887187480927,
+   "ms": 573.3927499968559
+  },
+  {
+   "id": "10711",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.4484573006629944,
+   "ms": 803.0300419777632
+  },
+  {
+   "id": "10800",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.6277488172054291,
+   "ms": 814.9449999909848
+  },
+  {
+   "id": "10815",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.8073290884494781,
+   "ms": 623.9098329097033
+  },
+  {
+   "id": "10816",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.022324323654174805,
+   "ms": 646.2812919635326
+  },
+  {
+   "id": "10820",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.005949676036834717,
+   "ms": 898.5664169304073
+  },
+  {
+   "id": "10821",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0330427885055542,
+   "ms": 965.2803339995444
+  },
+  {
+   "id": "11104",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.09478288888931274,
+   "ms": 721.709500066936
+  },
+  {
+   "id": "11105",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.03200143575668335,
+   "ms": 706.0642500873655
+  },
+  {
+   "id": "11182",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.013469278812408447,
+   "ms": 839.5786250475794
+  },
+  {
+   "id": "11288",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.03815579414367676,
+   "ms": 1045.5258339643478
+  },
+  {
+   "id": "11290",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.22477185726165771,
+   "ms": 1219.2535831127316
+  },
+  {
+   "id": "11293",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9545170739293098,
+   "ms": 778.3362499903888
+  },
+  {
+   "id": "11446",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.03868365287780762,
+   "ms": 1263.6187919415534
+  },
+  {
+   "id": "11451",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.015301048755645752,
+   "ms": 773.7876251339912
+  },
+  {
+   "id": "11458",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.011838793754577637,
+   "ms": 1315.7132919877768
+  },
+  {
+   "id": "11485",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9493098743259907,
+   "ms": 767.3039170913398
+  },
+  {
+   "id": "11487",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.047870635986328125,
+   "ms": 776.3094999827445
+  },
+  {
+   "id": "5673",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.07159221172332764,
+   "ms": 868.6937920283526
+  },
+  {
+   "id": "5688",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8703460395336151,
+   "ms": 1047.4456250667572
+  },
+  {
+   "id": "5731",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9825679063796997,
+   "ms": 1149.8571659903973
+  },
+  {
+   "id": "5740",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.03928321599960327,
+   "ms": 942.7523340564221
+  },
+  {
+   "id": "5762",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.03367573022842407,
+   "ms": 660.4800838977098
+  },
+  {
+   "id": "5763",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8336473554372787,
+   "ms": 543.7050838954747
+  },
+  {
+   "id": "5764",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.011868953704833984,
+   "ms": 611.3152499310672
+  },
+  {
+   "id": "5765",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.05756080150604248,
+   "ms": 561.6329580079764
+  },
+  {
+   "id": "5823",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.01521146297454834,
+   "ms": 782.8197919297963
+  },
+  {
+   "id": "5825",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.05496859550476074,
+   "ms": 858.9250829536468
+  },
+  {
+   "id": "5831",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.1726784110069275,
+   "ms": 737.0707080699503
+  },
+  {
+   "id": "6138",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9785011447966099,
+   "ms": 981.774624902755
+  },
+  {
+   "id": "6139",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9842239115387201,
+   "ms": 1346.2092080153525
+  },
+  {
+   "id": "6142",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.7133560180664062,
+   "ms": 1744.7258329484612
+  },
+  {
+   "id": "6143",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.915767028927803,
+   "ms": 1095.1153340283781
+  },
+  {
+   "id": "6171",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.01772993803024292,
+   "ms": 719.3722911179066
+  },
+  {
+   "id": "6238",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.3837207555770874,
+   "ms": 726.5441669151187
+  },
+  {
+   "id": "6255",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.41538065671920776,
+   "ms": 721.7441671527922
+  },
+  {
+   "id": "6256",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.04503375291824341,
+   "ms": 734.8061248194426
+  },
+  {
+   "id": "6278",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.014584481716156006,
+   "ms": 1229.1666250675917
+  },
+  {
+   "id": "6280",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.008003771305084229,
+   "ms": 1336.6980000864714
+  },
+  {
+   "id": "6284",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.020854473114013672,
+   "ms": 911.0811250284314
+  },
+  {
+   "id": "6416",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0030077695846557617,
+   "ms": 796.1990418843925
+  },
+  {
+   "id": "6633",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.2637485861778259,
+   "ms": 616.6759578045458
+  },
+  {
+   "id": "6684",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.6878495812416077,
+   "ms": 643.0580001324415
+  },
+  {
+   "id": "6686",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.26706141233444214,
+   "ms": 623.8705420400947
+  },
+  {
+   "id": "6717",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.6914084851741791,
+   "ms": 711.9349159765989
+  },
+  {
+   "id": "6768",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.8677517920732498,
+   "ms": 738.0655840970576
+  },
+  {
+   "id": "6773",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.13653022050857544,
+   "ms": 906.3501248601824
+  },
+  {
+   "id": "6776",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.018692731857299805,
+   "ms": 806.6193340346217
+  },
+  {
+   "id": "6779",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.038621723651885986,
+   "ms": 706.1150001827627
+  },
+  {
+   "id": "6781",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9116195812821388,
+   "ms": 1846.5495409909636
+  },
+  {
+   "id": "6782",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.013126909732818604,
+   "ms": 1601.2585000135005
+  },
+  {
+   "id": "6784",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.016914665699005127,
+   "ms": 1655.5916669312865
+  },
+  {
+   "id": "6843",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.2700875401496887,
+   "ms": 660.7270420063287
+  },
+  {
+   "id": "6844",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.33718621730804443,
+   "ms": 770.7387919072062
+  },
+  {
+   "id": "6857",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.015192151069641113,
+   "ms": 803.2337909098715
+  },
+  {
+   "id": "6903",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.6516225934028625,
+   "ms": 597.5578748621047
+  },
+  {
+   "id": "6904",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.048949599266052246,
+   "ms": 633.8886248413473
+  },
+  {
+   "id": "6920",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.7692299038171768,
+   "ms": 584.6518750768155
+  },
+  {
+   "id": "6933",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.030979692935943604,
+   "ms": 719.1796670667827
+  },
+  {
+   "id": "6972",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9407580494880676,
+   "ms": 781.1788329854608
+  },
+  {
+   "id": "6973",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.857760563492775,
+   "ms": 879.8982091248035
+  },
+  {
+   "id": "6974",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.012502193450927734,
+   "ms": 846.1819167714566
+  },
+  {
+   "id": "6978",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.7932490259408951,
+   "ms": 766.0514579620212
+  },
+  {
+   "id": "7001",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.016086101531982422,
+   "ms": 667.2734171152115
+  },
+  {
+   "id": "7004",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.014957189559936523,
+   "ms": 896.2506249081343
+  },
+  {
+   "id": "7009",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.084541916847229,
+   "ms": 1656.714583048597
+  },
+  {
+   "id": "7010",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.01239478588104248,
+   "ms": 1503.8805832155049
+  },
+  {
+   "id": "7011",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.7934685498476028,
+   "ms": 1442.6309999544173
+  },
+  {
+   "id": "7013",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.2107601761817932,
+   "ms": 1599.1112501360476
+  },
+  {
+   "id": "7014",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9658405184745789,
+   "ms": 759.0937919449061
+  },
+  {
+   "id": "7024",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.012135088443756104,
+   "ms": 783.4004170726985
+  },
+  {
+   "id": "7028",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.5561525523662567,
+   "ms": 1251.5804159920663
+  },
+  {
+   "id": "7029",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.4276602864265442,
+   "ms": 1342.1085001900792
+  },
+  {
+   "id": "7035",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.07465285062789917,
+   "ms": 626.681833062321
+  },
+  {
+   "id": "7037",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.3104981780052185,
+   "ms": 630.9242078568786
+  },
+  {
+   "id": "7092",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.9603382013738155,
+   "ms": 770.2665419783443
+  },
+  {
+   "id": "7093",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9952142788097262,
+   "ms": 814.47683298029
+  },
+  {
+   "id": "7094",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0026125311851501465,
+   "ms": 714.3704169429839
+  },
+  {
+   "id": "7096",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.010760307312011719,
+   "ms": 779.4731250032783
+  },
+  {
+   "id": "7098",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.9586855173110962,
+   "ms": 1049.1189581807703
+  },
+  {
+   "id": "7102",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.025789976119995117,
+   "ms": 1172.541000181809
+  },
+  {
+   "id": "7134",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9812313821166754,
+   "ms": 658.2726249471307
+  },
+  {
+   "id": "7145",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.01833099126815796,
+   "ms": 587.3012500815094
+  },
+  {
+   "id": "7153",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.106864333152771,
+   "ms": 766.8513329699636
+  },
+  {
+   "id": "7162",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.020699262619018555,
+   "ms": 661.2831659149379
+  },
+  {
+   "id": "7201",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9929835023358464,
+   "ms": 1431.352499872446
+  },
+  {
+   "id": "7212",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8329119086265564,
+   "ms": 637.2441661078483
+  },
+  {
+   "id": "7213",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.010563850402832031,
+   "ms": 701.6261660028249
+  },
+  {
+   "id": "7214",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.024778664112091064,
+   "ms": 594.4117088802159
+  },
+  {
+   "id": "7217",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.007925868034362793,
+   "ms": 656.2310829758644
+  },
+  {
+   "id": "7240",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.028087258338928223,
+   "ms": 831.964666955173
+  },
+  {
+   "id": "7241",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.060738563537597656,
+   "ms": 801.7434580251575
+  },
+  {
+   "id": "7257",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.018126606941223145,
+   "ms": 879.8188751097769
+  },
+  {
+   "id": "7258",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.007737517356872559,
+   "ms": 1032.1475421078503
+  },
+  {
+   "id": "7261",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.9687563367187977,
+   "ms": 793.0083749815822
+  },
+  {
+   "id": "7278",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8857379779219627,
+   "ms": 658.8461250066757
+  },
+  {
+   "id": "7290",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.6840179264545441,
+   "ms": 948.7442919053137
+  },
+  {
+   "id": "7299",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.3138226270675659,
+   "ms": 593.2272090576589
+  },
+  {
+   "id": "7314",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9277772083878517,
+   "ms": 835.8389169443399
+  },
+  {
+   "id": "7322",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.12547731399536133,
+   "ms": 806.0017500538379
+  },
+  {
+   "id": "7446",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.04809385538101196,
+   "ms": 983.742207987234
+  },
+  {
+   "id": "7507",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.38938218355178833,
+   "ms": 825.7665829733014
+  },
+  {
+   "id": "7511",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.6156679391860962,
+   "ms": 651.7119170166552
+  },
+  {
+   "id": "7582",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.06954813003540039,
+   "ms": 952.2836671676487
+  },
+  {
+   "id": "7600",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.09411466121673584,
+   "ms": 1030.5559581611305
+  },
+  {
+   "id": "7784",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.16778719425201416,
+   "ms": 1014.3355000764132
+  },
+  {
+   "id": "7916",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.016597628593444824,
+   "ms": 841.1139999516308
+  },
+  {
+   "id": "7919",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.13656437397003174,
+   "ms": 826.7393331043422
+  },
+  {
+   "id": "7950",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.88376085460186,
+   "ms": 669.8565830010921
+  },
+  {
+   "id": "7954",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.014866828918457031,
+   "ms": 679.6134170144796
+  },
+  {
+   "id": "7980",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.6973728239536285,
+   "ms": 636.4218750968575
+  },
+  {
+   "id": "8052",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.022022366523742676,
+   "ms": 1483.350666007027
+  },
+  {
+   "id": "8076",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.08228713274002075,
+   "ms": 967.8242499940097
+  },
+  {
+   "id": "8077",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9911714289337397,
+   "ms": 972.5052090361714
+  },
+  {
+   "id": "8149",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9226866140961647,
+   "ms": 1132.9900841228664
+  },
+  {
+   "id": "8218",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.07691973447799683,
+   "ms": 834.4482919201255
+  },
+  {
+   "id": "8239",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.01353389024734497,
+   "ms": 905.2835409529507
+  },
+  {
+   "id": "8241",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.6929355561733246,
+   "ms": 810.8805001247674
+  },
+  {
+   "id": "8316",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.049256324768066406,
+   "ms": 723.2250000815839
+  },
+  {
+   "id": "8319",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0061577558517456055,
+   "ms": 853.0707499012351
+  },
+  {
+   "id": "8463",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8405293673276901,
+   "ms": 722.4747082218528
+  },
+  {
+   "id": "8464",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.06030231714248657,
+   "ms": 855.2615409716964
+  },
+  {
+   "id": "8476",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.04463469982147217,
+   "ms": 851.2150831520557
+  },
+  {
+   "id": "8477",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.023198962211608887,
+   "ms": 805.6451249867678
+  },
+  {
+   "id": "8510",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.010014653205871582,
+   "ms": 680.5437090806663
+  },
+  {
+   "id": "8511",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.02262592315673828,
+   "ms": 626.4001249801368
+  },
+  {
+   "id": "8512",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.01120680570602417,
+   "ms": 695.3849589917809
+  },
+  {
+   "id": "8558",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0189705491065979,
+   "ms": 825.2377500757575
+  },
+  {
+   "id": "8560",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0191228985786438,
+   "ms": 867.6652500871569
+  },
+  {
+   "id": "8627",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.01120901107788086,
+   "ms": 673.8940421491861
+  },
+  {
+   "id": "8663",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9865042502060533,
+   "ms": 758.9886668138206
+  },
+  {
+   "id": "8669",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8470263630151749,
+   "ms": 977.7838340960443
+  },
+  {
+   "id": "8674",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.024499237537384033,
+   "ms": 730.1329160109162
+  },
+  {
+   "id": "8725",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.41097021102905273,
+   "ms": 1092.2942908946425
+  },
+  {
+   "id": "8726",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.14526444673538208,
+   "ms": 975.6342500913888
+  },
+  {
+   "id": "8727",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.00553363561630249,
+   "ms": 943.1066249962896
+  },
+  {
+   "id": "8766",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.9665609858930111,
+   "ms": 946.9978751149029
+  },
+  {
+   "id": "8768",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.5574123859405518,
+   "ms": 858.2769169006497
+  },
+  {
+   "id": "8769",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.011939287185668945,
+   "ms": 841.1047088447958
+  },
+  {
+   "id": "8778",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9831285960972309,
+   "ms": 1355.3286250680685
+  },
+  {
+   "id": "8783",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.44973069429397583,
+   "ms": 1303.4394171554595
+  },
+  {
+   "id": "8786",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0513797402381897,
+   "ms": 740.7106249593198
+  },
+  {
+   "id": "8905",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.4456980228424072,
+   "ms": 602.5826670229435
+  },
+  {
+   "id": "8908",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.015036165714263916,
+   "ms": 664.8269591387361
+  },
+  {
+   "id": "8909",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.007623732089996338,
+   "ms": 690.6765419989824
+  },
+  {
+   "id": "8935",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.958352942019701,
+   "ms": 718.9845000393689
+  },
+  {
+   "id": "8937",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.018308162689208984,
+   "ms": 635.7630419079214
+  },
+  {
+   "id": "8939",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.016740798950195312,
+   "ms": 659.3327920418233
+  },
+  {
+   "id": "9066",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.02469545602798462,
+   "ms": 799.2197091225535
+  },
+  {
+   "id": "9072",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8241567611694336,
+   "ms": 727.1774171385914
+  },
+  {
+   "id": "9075",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.8178088217973709,
+   "ms": 731.0409999918193
+  },
+  {
+   "id": "9083",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.47811639308929443,
+   "ms": 1040.3677080757916
+  },
+  {
+   "id": "9157",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8929872661828995,
+   "ms": 852.1888749673963
+  },
+  {
+   "id": "9161",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.2693524956703186,
+   "ms": 768.527208128944
+  },
+  {
+   "id": "9203",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.8149856925010681,
+   "ms": 755.5978749878705
+  },
+  {
+   "id": "9213",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.894211545586586,
+   "ms": 669.9183341115713
+  },
+  {
+   "id": "9527",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.5617853999137878,
+   "ms": 629.7743748873472
+  },
+  {
+   "id": "9552",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.019024133682250977,
+   "ms": 718.3590000495315
+  },
+  {
+   "id": "9579",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.8822411373257637,
+   "ms": 697.3523329943419
+  },
+  {
+   "id": "9582",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.7720009535551071,
+   "ms": 705.0330829806626
+  },
+  {
+   "id": "9583",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9240027442574501,
+   "ms": 786.9319999590516
+  },
+  {
+   "id": "9586",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.0312952995300293,
+   "ms": 699.638833058998
+  },
+  {
+   "id": "9678",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.14444494247436523,
+   "ms": 583.2044999115169
+  },
+  {
+   "id": "9683",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.040459275245666504,
+   "ms": 580.145708983764
+  },
+  {
+   "id": "9726",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.03164023160934448,
+   "ms": 1144.182041985914
+  },
+  {
+   "id": "9772",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.20760297775268555,
+   "ms": 687.3201250564307
+  },
+  {
+   "id": "9776",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.04162156581878662,
+   "ms": 1454.5464999973774
+  },
+  {
+   "id": "9779",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.021568357944488525,
+   "ms": 1232.9181670211256
+  },
+  {
+   "id": "9840",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.07624316215515137,
+   "ms": 633.9145838283002
+  },
+  {
+   "id": "9845",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.30012428760528564,
+   "ms": 625.8947909809649
+  },
+  {
+   "id": "9870",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9616902135312557,
+   "ms": 645.9508340340108
+  },
+  {
+   "id": "9871",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.4977185130119324,
+   "ms": 695.6428331322968
+  },
+  {
+   "id": "9875",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.27295970916748047,
+   "ms": 611.7499589454383
+  },
+  {
+   "id": "9876",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9650225937366486,
+   "ms": 658.0036249943078
+  },
+  {
+   "id": "9880",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.2874569296836853,
+   "ms": 663.1938749924302
+  },
+  {
+   "id": "9917",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.9358797892928123,
+   "ms": 966.2088339682668
+  },
+  {
+   "id": "9936",
+   "task_type": "Data2txt",
+   "hallucinated": false,
+   "support": 0.48290544748306274,
+   "ms": 845.3669999726117
+  },
+  {
+   "id": "9938",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.14231246709823608,
+   "ms": 815.7202498987317
+  },
+  {
+   "id": "9940",
+   "task_type": "Data2txt",
+   "hallucinated": true,
+   "support": 0.016544699668884277,
+   "ms": 918.1816671043634
+  },
+  {
+   "id": "11904",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9830883909016848,
+   "ms": 379.0793751832098
+  },
+  {
+   "id": "11906",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9990682264324278,
+   "ms": 284.14399991743267
+  },
+  {
+   "id": "12013",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.6423088014125824,
+   "ms": 448.731750017032
+  },
+  {
+   "id": "12015",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9950218135491014,
+   "ms": 471.69254207983613
+  },
+  {
+   "id": "12018",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9992156046791933,
+   "ms": 432.85824987106025
+  },
+  {
+   "id": "12022",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9992209922056645,
+   "ms": 400.4362500272691
+  },
+  {
+   "id": "12043",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9990618137526326,
+   "ms": 225.1421669498086
+  },
+  {
+   "id": "12069",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.952646616846323,
+   "ms": 356.83958302251995
+  },
+  {
+   "id": "12102",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9981499561108649,
+   "ms": 522.9560409206897
+  },
+  {
+   "id": "12105",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8081770241260529,
+   "ms": 570.8815418183804
+  },
+  {
+   "id": "12106",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9659143649041653,
+   "ms": 544.6422919631004
+  },
+  {
+   "id": "12134",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.986561874859035,
+   "ms": 248.18279198370874
+  },
+  {
+   "id": "12180",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9991674069897272,
+   "ms": 569.3643330596387
+  },
+  {
+   "id": "12181",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9992166664451361,
+   "ms": 523.2196249999106
+  },
+  {
+   "id": "12183",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.918882705271244,
+   "ms": 577.5962921325117
+  },
+  {
+   "id": "12185",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8475152254104614,
+   "ms": 727.0347499288619
+  },
+  {
+   "id": "12216",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9965999154374003,
+   "ms": 282.64583298005164
+  },
+  {
+   "id": "12217",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9989958956139162,
+   "ms": 215.07100015878677
+  },
+  {
+   "id": "12218",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9951967522501945,
+   "ms": 284.6204580273479
+  },
+  {
+   "id": "12219",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.35011106729507446,
+   "ms": 415.97908292897046
+  },
+  {
+   "id": "12221",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8867722451686859,
+   "ms": 344.2494999617338
+  },
+  {
+   "id": "12228",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9869220843538642,
+   "ms": 321.973959216848
+  },
+  {
+   "id": "12241",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9966605959925801,
+   "ms": 392.28412485681474
+  },
+  {
+   "id": "12294",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.998606059816666,
+   "ms": 215.43879201635718
+  },
+  {
+   "id": "12333",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7022198736667633,
+   "ms": 484.13600004278123
+  },
+  {
+   "id": "12334",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.22564756870269775,
+   "ms": 563.4027922060341
+  },
+  {
+   "id": "12344",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9949364787898958,
+   "ms": 460.1659579202533
+  },
+  {
+   "id": "12345",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.6379477977752686,
+   "ms": 612.4217079486698
+  },
+  {
+   "id": "12442",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7387316823005676,
+   "ms": 378.64370783790946
+  },
+  {
+   "id": "12443",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9258236214518547,
+   "ms": 369.91224996745586
+  },
+  {
+   "id": "12448",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8660760521888733,
+   "ms": 487.00095782987773
+  },
+  {
+   "id": "12470",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9973114186432213,
+   "ms": 482.0039998739958
+  },
+  {
+   "id": "12472",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.2633891701698303,
+   "ms": 666.2570838816464
+  },
+  {
+   "id": "12517",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.949779387563467,
+   "ms": 263.5931670665741
+  },
+  {
+   "id": "12526",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7385953664779663,
+   "ms": 303.54525009170175
+  },
+  {
+   "id": "12555",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8841295167803764,
+   "ms": 437.8158748149872
+  },
+  {
+   "id": "12604",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.5192313492298126,
+   "ms": 444.1073329653591
+  },
+  {
+   "id": "12619",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9926662598736584,
+   "ms": 318.8545419834554
+  },
+  {
+   "id": "12621",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9017236232757568,
+   "ms": 367.9947501514107
+  },
+  {
+   "id": "12705",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.6305842101573944,
+   "ms": 392.09762518294156
+  },
+  {
+   "id": "12840",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9981799657689407,
+   "ms": 697.1062091179192
+  },
+  {
+   "id": "12901",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9991738802054897,
+   "ms": 324.15029196999967
+  },
+  {
+   "id": "12916",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9990612410474569,
+   "ms": 258.7365841027349
+  },
+  {
+   "id": "13040",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.988138884305954,
+   "ms": 421.44683306105435
+  },
+  {
+   "id": "13041",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9581332840025425,
+   "ms": 541.8513750191778
+  },
+  {
+   "id": "13042",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.0385514497756958,
+   "ms": 518.6264580115676
+  },
+  {
+   "id": "13043",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9925861614756286,
+   "ms": 538.5687919333577
+  },
+  {
+   "id": "13071",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8334477990865707,
+   "ms": 537.0349159929901
+  },
+  {
+   "id": "13073",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9843940613791347,
+   "ms": 438.9031247701496
+  },
+  {
+   "id": "13109",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.30888503789901733,
+   "ms": 590.5505421105772
+  },
+  {
+   "id": "13158",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9984712578589097,
+   "ms": 441.373375011608
+  },
+  {
+   "id": "13159",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.752873420715332,
+   "ms": 490.55954115465283
+  },
+  {
+   "id": "13162",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.3269813656806946,
+   "ms": 520.2973340637982
+  },
+  {
+   "id": "13163",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.04583275318145752,
+   "ms": 570.408167084679
+  },
+  {
+   "id": "13209",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.6896707713603973,
+   "ms": 416.7177500203252
+  },
+  {
+   "id": "13234",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8869732916355133,
+   "ms": 496.12812511622906
+  },
+  {
+   "id": "13293",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.04281890392303467,
+   "ms": 492.7220409736037
+  },
+  {
+   "id": "13294",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9951764671131968,
+   "ms": 459.8376250360161
+  },
+  {
+   "id": "13310",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.6234510838985443,
+   "ms": 373.5980421770364
+  },
+  {
+   "id": "13312",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9971695409622043,
+   "ms": 415.54004210047424
+  },
+  {
+   "id": "13340",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.003590404987335205,
+   "ms": 419.3417080678046
+  },
+  {
+   "id": "13376",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.0975990891456604,
+   "ms": 376.7035419587046
+  },
+  {
+   "id": "13443",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.11420798301696777,
+   "ms": 453.03524984046817
+  },
+  {
+   "id": "13488",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9945364128798246,
+   "ms": 450.24899998679757
+  },
+  {
+   "id": "13490",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.12494289875030518,
+   "ms": 407.1568329818547
+  },
+  {
+   "id": "13533",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9500874690711498,
+   "ms": 306.5264578908682
+  },
+  {
+   "id": "13716",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9992729934165254,
+   "ms": 492.64641711488366
+  },
+  {
+   "id": "13721",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9942668778821826,
+   "ms": 488.53445798158646
+  },
+  {
+   "id": "13742",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9920106790959835,
+   "ms": 201.7205827869475
+  },
+  {
+   "id": "13745",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9813100006431341,
+   "ms": 239.5815420895815
+  },
+  {
+   "id": "13909",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9869773332029581,
+   "ms": 244.21654222533107
+  },
+  {
+   "id": "13910",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.130074143409729,
+   "ms": 240.21270801313221
+  },
+  {
+   "id": "13912",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7183510363101959,
+   "ms": 307.56699992343783
+  },
+  {
+   "id": "13917",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.1419837474822998,
+   "ms": 260.1208339910954
+  },
+  {
+   "id": "13918",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.05450475215911865,
+   "ms": 258.9369579218328
+  },
+  {
+   "id": "13943",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7887759953737259,
+   "ms": 416.8098329100758
+  },
+  {
+   "id": "14055",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8757293298840523,
+   "ms": 719.5089999586344
+  },
+  {
+   "id": "14056",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8908869326114655,
+   "ms": 678.6323750857264
+  },
+  {
+   "id": "14132",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.4986073970794678,
+   "ms": 271.3474160991609
+  },
+  {
+   "id": "14211",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.26637786626815796,
+   "ms": 287.4257080256939
+  },
+  {
+   "id": "14280",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9957782044075429,
+   "ms": 395.50450001843274
+  },
+  {
+   "id": "14281",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8618287891149521,
+   "ms": 373.25804214924574
+  },
+  {
+   "id": "14282",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9990693922154605,
+   "ms": 344.93283298797905
+  },
+  {
+   "id": "14286",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9992410949198529,
+   "ms": 399.12987500429153
+  },
+  {
+   "id": "14297",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.022143542766571045,
+   "ms": 331.52454206719995
+  },
+  {
+   "id": "14324",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.03525024652481079,
+   "ms": 397.41012500599027
+  },
+  {
+   "id": "14353",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9499480165541172,
+   "ms": 304.65750000439584
+  },
+  {
+   "id": "14354",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9989724432816729,
+   "ms": 326.6869999933988
+  },
+  {
+   "id": "14355",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.0802534818649292,
+   "ms": 425.0797079876065
+  },
+  {
+   "id": "14357",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8304628729820251,
+   "ms": 349.17179215699434
+  },
+  {
+   "id": "14364",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9960399875417352,
+   "ms": 463.5094578843564
+  },
+  {
+   "id": "14380",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.6352545022964478,
+   "ms": 390.7011249102652
+  },
+  {
+   "id": "14396",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.11409515142440796,
+   "ms": 347.687958041206
+  },
+  {
+   "id": "14397",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.9012926146388054,
+   "ms": 388.80712492391467
+  },
+  {
+   "id": "14469",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.0034736990928649902,
+   "ms": 375.3649580758065
+  },
+  {
+   "id": "14471",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.09669661521911621,
+   "ms": 444.9027918744832
+  },
+  {
+   "id": "14700",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8661227524280548,
+   "ms": 401.22908307239413
+  },
+  {
+   "id": "14701",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9759793914854527,
+   "ms": 437.841999810189
+  },
+  {
+   "id": "14702",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.043684542179107666,
+   "ms": 440.9138329792768
+  },
+  {
+   "id": "14704",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.3867722749710083,
+   "ms": 494.1288339905441
+  },
+  {
+   "id": "14712",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9992742376634851,
+   "ms": 348.2114998623729
+  },
+  {
+   "id": "14716",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9980346015654504,
+   "ms": 349.1956249345094
+  },
+  {
+   "id": "14742",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9975517091806978,
+   "ms": 280.83520801737905
+  },
+  {
+   "id": "14753",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9948142091743648,
+   "ms": 354.8137079924345
+  },
+  {
+   "id": "14761",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9918844858184457,
+   "ms": 374.9010420870036
+  },
+  {
+   "id": "14776",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8047057241201401,
+   "ms": 570.7494169473648
+  },
+  {
+   "id": "14803",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8191343545913696,
+   "ms": 242.90566705167294
+  },
+  {
+   "id": "14814",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9991724398569204,
+   "ms": 444.7012080345303
+  },
+  {
+   "id": "14815",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.999120888998732,
+   "ms": 398.3020829036832
+  },
+  {
+   "id": "14816",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.999082968395669,
+   "ms": 418.23125001974404
+  },
+  {
+   "id": "14819",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9957896610721946,
+   "ms": 480.25604197755456
+  },
+  {
+   "id": "14860",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.7955964207649231,
+   "ms": 496.363541809842
+  },
+  {
+   "id": "14861",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9985249505843967,
+   "ms": 417.8599170409143
+  },
+  {
+   "id": "14889",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9271910414099693,
+   "ms": 442.3796671908349
+  },
+  {
+   "id": "14890",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8739064037799835,
+   "ms": 443.93691699951887
+  },
+  {
+   "id": "14995",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.998770447797142,
+   "ms": 305.82350003533065
+  },
+  {
+   "id": "15006",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9980784135404974,
+   "ms": 345.74587480165064
+  },
+  {
+   "id": "15102",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.10014033317565918,
+   "ms": 390.77283279038966
+  },
+  {
+   "id": "15129",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.11442625522613525,
+   "ms": 554.6886250376701
+  },
+  {
+   "id": "15174",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8912042677402496,
+   "ms": 324.1111251991242
+  },
+  {
+   "id": "15194",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9990749047137797,
+   "ms": 255.3792919497937
+  },
+  {
+   "id": "15198",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.998101313249208,
+   "ms": 443.5060420073569
+  },
+  {
+   "id": "15205",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9874164024367929,
+   "ms": 398.472375003621
+  },
+  {
+   "id": "15209",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.21631383895874023,
+   "ms": 423.1126660015434
+  },
+  {
+   "id": "15274",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9814546499401331,
+   "ms": 257.77425011619925
+  },
+  {
+   "id": "15346",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.6390495002269745,
+   "ms": 278.9907499682158
+  },
+  {
+   "id": "15464",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9870962034910917,
+   "ms": 348.0915001127869
+  },
+  {
+   "id": "15482",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7147700488567352,
+   "ms": 444.9757500551641
+  },
+  {
+   "id": "15485",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.04571801424026489,
+   "ms": 482.50741604715586
+  },
+  {
+   "id": "15552",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9988465828355402,
+   "ms": 342.9344170726836
+  },
+  {
+   "id": "15556",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.021699488162994385,
+   "ms": 516.2419171538204
+  },
+  {
+   "id": "15624",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9973948849365115,
+   "ms": 348.7726249732077
+  },
+  {
+   "id": "15648",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9329781010746956,
+   "ms": 402.286791941151
+  },
+  {
+   "id": "15672",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9136477336287498,
+   "ms": 449.558624997735
+  },
+  {
+   "id": "15673",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9966393322683871,
+   "ms": 418.8306250143796
+  },
+  {
+   "id": "15685",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9909187965095043,
+   "ms": 345.01824993640184
+  },
+  {
+   "id": "15712",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.746688574552536,
+   "ms": 467.67587517388165
+  },
+  {
+   "id": "15715",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9911123616620898,
+   "ms": 326.96225005201995
+  },
+  {
+   "id": "15717",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.720394104719162,
+   "ms": 401.43408393487334
+  },
+  {
+   "id": "15726",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8814599439501762,
+   "ms": 324.90220898762345
+  },
+  {
+   "id": "15729",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.2530399560928345,
+   "ms": 449.83708392828703
+  },
+  {
+   "id": "15777",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.004343986511230469,
+   "ms": 517.6486670970917
+  },
+  {
+   "id": "15778",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.4707459807395935,
+   "ms": 437.37804098054767
+  },
+  {
+   "id": "15784",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.07028037309646606,
+   "ms": 308.2072918768972
+  },
+  {
+   "id": "15785",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.1584652066230774,
+   "ms": 278.6118749063462
+  },
+  {
+   "id": "15788",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9944350463338196,
+   "ms": 301.52904195711017
+  },
+  {
+   "id": "15789",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.21043097972869873,
+   "ms": 301.659082993865
+  },
+  {
+   "id": "15790",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7088583111763,
+   "ms": 305.01812510192394
+  },
+  {
+   "id": "15902",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9951952863484621,
+   "ms": 394.6947921067476
+  },
+  {
+   "id": "15904",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.6604176163673401,
+   "ms": 536.488417070359
+  },
+  {
+   "id": "15935",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9972330622840673,
+   "ms": 302.544082980603
+  },
+  {
+   "id": "15971",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.030690252780914307,
+   "ms": 462.9186661913991
+  },
+  {
+   "id": "16061",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8091351687908173,
+   "ms": 282.00337500311434
+  },
+  {
+   "id": "16120",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9418948441743851,
+   "ms": 281.2001670245081
+  },
+  {
+   "id": "16147",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7421786487102509,
+   "ms": 217.69650001078844
+  },
+  {
+   "id": "16148",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9477790109813213,
+   "ms": 281.1829170677811
+  },
+  {
+   "id": "16149",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9764424227178097,
+   "ms": 299.330041045323
+  },
+  {
+   "id": "16416",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9601867347955704,
+   "ms": 304.6492920257151
+  },
+  {
+   "id": "16418",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.07759332656860352,
+   "ms": 463.8655420858413
+  },
+  {
+   "id": "16419",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.014113187789916992,
+   "ms": 418.9170841127634
+  },
+  {
+   "id": "16452",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9991013437975198,
+   "ms": 236.7092501372099
+  },
+  {
+   "id": "16457",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9818979483097792,
+   "ms": 240.44666695408523
+  },
+  {
+   "id": "16466",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9288401156663895,
+   "ms": 255.3768341895193
+  },
+  {
+   "id": "16507",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9618882685899734,
+   "ms": 240.514500066638
+  },
+  {
+   "id": "16510",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.011166036128997803,
+   "ms": 325.5914170295
+  },
+  {
+   "id": "16511",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.001833498477935791,
+   "ms": 425.04479200579226
+  },
+  {
+   "id": "16561",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9981415050569922,
+   "ms": 242.38941702060401
+  },
+  {
+   "id": "16563",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.250524640083313,
+   "ms": 336.9850420858711
+  },
+  {
+   "id": "16565",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9066841825842857,
+   "ms": 280.29837482608855
+  },
+  {
+   "id": "16662",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.987792793661356,
+   "ms": 244.02533285319805
+  },
+  {
+   "id": "16686",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9962672549299896,
+   "ms": 217.2008748166263
+  },
+  {
+   "id": "16689",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.5668601989746094,
+   "ms": 264.6777501795441
+  },
+  {
+   "id": "16775",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.38793492317199707,
+   "ms": 261.2597499974072
+  },
+  {
+   "id": "16795",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.997139769140631,
+   "ms": 240.0139169767499
+  },
+  {
+   "id": "16799",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.7062601745128632,
+   "ms": 301.4454171061516
+  },
+  {
+   "id": "16853",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.00102996826171875,
+   "ms": 444.6993749588728
+  },
+  {
+   "id": "16881",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.10998088121414185,
+   "ms": 660.7058749068528
+  },
+  {
+   "id": "16895",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.015804171562194824,
+   "ms": 258.46725003793836
+  },
+  {
+   "id": "16902",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9749234337359667,
+   "ms": 280.1330001093447
+  },
+  {
+   "id": "16935",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.19412893056869507,
+   "ms": 347.0356250181794
+  },
+  {
+   "id": "17052",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9969477977138013,
+   "ms": 446.6495839878917
+  },
+  {
+   "id": "17053",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9974088184535503,
+   "ms": 418.653666973114
+  },
+  {
+   "id": "17056",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9884056067094207,
+   "ms": 423.13466710038483
+  },
+  {
+   "id": "17100",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9825608972460032,
+   "ms": 448.8024169113487
+  },
+  {
+   "id": "17105",
+   "task_type": "QA",
+   "hallucinated": true,
+   "support": 0.010209143161773682,
+   "ms": 560.9850829932839
+  },
+  {
+   "id": "17112",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9807845130562782,
+   "ms": 326.02041587233543
+  },
+  {
+   "id": "17200",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9601479135453701,
+   "ms": 382.57574988529086
+  },
+  {
+   "id": "17234",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9829972609877586,
+   "ms": 302.24533285945654
+  },
+  {
+   "id": "17237",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9987145941704512,
+   "ms": 320.36770787090063
+  },
+  {
+   "id": "17280",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.994505675509572,
+   "ms": 443.38483293540776
+  },
+  {
+   "id": "17285",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9168275222182274,
+   "ms": 446.14283298142254
+  },
+  {
+   "id": "17394",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.997080568689853,
+   "ms": 259.747332893312
+  },
+  {
+   "id": "17395",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.8710123747587204,
+   "ms": 213.72679201886058
+  },
+  {
+   "id": "17399",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9113090112805367,
+   "ms": 243.6193749308586
+  },
+  {
+   "id": "17514",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9945760774426162,
+   "ms": 485.87758280336857
+  },
+  {
+   "id": "17518",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9966155637521297,
+   "ms": 492.18837497755885
+  },
+  {
+   "id": "17567",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9644975066184998,
+   "ms": 241.69787485152483
+  },
+  {
+   "id": "17754",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9725658148527145,
+   "ms": 419.5772500243038
+  },
+  {
+   "id": "17756",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9983090657042339,
+   "ms": 395.8639169577509
+  },
+  {
+   "id": "17758",
+   "task_type": "QA",
+   "hallucinated": false,
+   "support": 0.9758015125989914,
+   "ms": 520.443334011361
+  },
+  {
+   "id": "1000",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.3229299783706665,
+   "ms": 1126.6243341378868
+  },
+  {
+   "id": "1050",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9897423190996051,
+   "ms": 570.1464999001473
+  },
+  {
+   "id": "1055",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9905624259263277,
+   "ms": 463.8249999843538
+  },
+  {
+   "id": "1105",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9591263271868229,
+   "ms": 1516.284374985844
+  },
+  {
+   "id": "1108",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.4210354685783386,
+   "ms": 1361.3102501258254
+  },
+  {
+   "id": "1112",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.02275538444519043,
+   "ms": 254.4467078987509
+  },
+  {
+   "id": "1115",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9729421343654394,
+   "ms": 221.35787503793836
+  },
+  {
+   "id": "1171",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.20753556489944458,
+   "ms": 430.66645809449255
+  },
+  {
+   "id": "1174",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.288229763507843,
+   "ms": 397.70633401349187
+  },
+  {
+   "id": "1183",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.6531277298927307,
+   "ms": 1664.3182919360697
+  },
+  {
+   "id": "1184",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.27953821420669556,
+   "ms": 1529.7796251252294
+  },
+  {
+   "id": "120",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.5291668474674225,
+   "ms": 268.93262518569827
+  },
+  {
+   "id": "1236",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8344247788190842,
+   "ms": 523.818917106837
+  },
+  {
+   "id": "1237",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9929796634241939,
+   "ms": 517.7334998734295
+  },
+  {
+   "id": "1239",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9511521942913532,
+   "ms": 493.786167120561
+  },
+  {
+   "id": "1240",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7753810286521912,
+   "ms": 491.2520002108067
+  },
+  {
+   "id": "1241",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8747907876968384,
+   "ms": 514.136416837573
+  },
+  {
+   "id": "125",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8383328765630722,
+   "ms": 283.58962503261864
+  },
+  {
+   "id": "1338",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9874839195981622,
+   "ms": 2468.726625200361
+  },
+  {
+   "id": "1339",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9737024903297424,
+   "ms": 2588.454958051443
+  },
+  {
+   "id": "1341",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.4263688325881958,
+   "ms": 2414.6266251336783
+  },
+  {
+   "id": "1342",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.008647263050079346,
+   "ms": 2383.1411660648882
+  },
+  {
+   "id": "1355",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9981311847222969,
+   "ms": 913.7249579653144
+  },
+  {
+   "id": "1454",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.31114649772644043,
+   "ms": 2395.075459033251
+  },
+  {
+   "id": "1479",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8952909931540489,
+   "ms": 1365.1418329682201
+  },
+  {
+   "id": "148",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8489718437194824,
+   "ms": 359.3732500448823
+  },
+  {
+   "id": "1512",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9640971943736076,
+   "ms": 1500.8570831269026
+  },
+  {
+   "id": "1513",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.934163510799408,
+   "ms": 1469.0000829286873
+  },
+  {
+   "id": "1568",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.025912225246429443,
+   "ms": 804.2740419041365
+  },
+  {
+   "id": "1569",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.25405991077423096,
+   "ms": 810.4092911817133
+  },
+  {
+   "id": "1586",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.021360039710998535,
+   "ms": 249.09545783884823
+  },
+  {
+   "id": "1602",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7811746448278427,
+   "ms": 350.275541190058
+  },
+  {
+   "id": "1604",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.7916425913572311,
+   "ms": 337.0151659473777
+  },
+  {
+   "id": "1607",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9426755756139755,
+   "ms": 331.6456670872867
+  },
+  {
+   "id": "1646",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.06417685747146606,
+   "ms": 1208.2779579795897
+  },
+  {
+   "id": "1675",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.5059834420681,
+   "ms": 516.0915001761168
+  },
+  {
+   "id": "1682",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.017995238304138184,
+   "ms": 1102.6980420574546
+  },
+  {
+   "id": "1685",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9698934275656939,
+   "ms": 1137.7894170582294
+  },
+  {
+   "id": "1699",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9007021710276604,
+   "ms": 1229.854250093922
+  },
+  {
+   "id": "1747",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9263718351721764,
+   "ms": 328.69641692377627
+  },
+  {
+   "id": "1825",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7624202966690063,
+   "ms": 394.3923751357943
+  },
+  {
+   "id": "185",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.8056175708770752,
+   "ms": 1352.6884580496699
+  },
+  {
+   "id": "1964",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.610933929681778,
+   "ms": 573.1062090490013
+  },
+  {
+   "id": "1986",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.8952735960483551,
+   "ms": 221.5139998588711
+  },
+  {
+   "id": "1987",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8336499631404877,
+   "ms": 231.926083099097
+  },
+  {
+   "id": "1988",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.5930716693401337,
+   "ms": 278.5607911646366
+  },
+  {
+   "id": "1989",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7696664482355118,
+   "ms": 224.59249990060925
+  },
+  {
+   "id": "205",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7742097973823547,
+   "ms": 547.1830409951508
+  },
+  {
+   "id": "2064",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9678219817578793,
+   "ms": 1169.1412499640137
+  },
+  {
+   "id": "207",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9771376494318247,
+   "ms": 521.6811669524759
+  },
+  {
+   "id": "2141",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9065940156579018,
+   "ms": 309.2318749986589
+  },
+  {
+   "id": "215",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9692425914108753,
+   "ms": 613.188249990344
+  },
+  {
+   "id": "2168",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.6709489822387695,
+   "ms": 402.13287505321205
+  },
+  {
+   "id": "2169",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9796895887702703,
+   "ms": 379.4736668933183
+  },
+  {
+   "id": "2239",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9858989948406816,
+   "ms": 1881.5754579845816
+  },
+  {
+   "id": "2246",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.016461491584777832,
+   "ms": 199.58216603845358
+  },
+  {
+   "id": "2359",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9940633056685328,
+   "ms": 868.0681250989437
+  },
+  {
+   "id": "2360",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9827131051570177,
+   "ms": 827.2429169155657
+  },
+  {
+   "id": "2370",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.979435546323657,
+   "ms": 330.46183292753994
+  },
+  {
+   "id": "2372",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.539626806974411,
+   "ms": 346.2538330350071
+  },
+  {
+   "id": "24",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9884453481063247,
+   "ms": 396.21754200197756
+  },
+  {
+   "id": "2447",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9580982774496078,
+   "ms": 186.00308313034475
+  },
+  {
+   "id": "2470",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9679789692163467,
+   "ms": 770.5257500056177
+  },
+  {
+   "id": "249",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9874823037534952,
+   "ms": 731.2118750996888
+  },
+  {
+   "id": "250",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.013333141803741455,
+   "ms": 720.4407090321183
+  },
+  {
+   "id": "2537",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9717100597918034,
+   "ms": 717.2467079944909
+  },
+  {
+   "id": "2653",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9969535209238529,
+   "ms": 384.0305421035737
+  },
+  {
+   "id": "2664",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.43168389797210693,
+   "ms": 1060.681583127007
+  },
+  {
+   "id": "2667",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.26460397243499756,
+   "ms": 1151.4746251050383
+  },
+  {
+   "id": "2670",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8596282750368118,
+   "ms": 970.7208750769496
+  },
+  {
+   "id": "2672",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.01830124855041504,
+   "ms": 908.8990408927202
+  },
+  {
+   "id": "2673",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.921850897371769,
+   "ms": 912.527667125687
+  },
+  {
+   "id": "2675",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8935892730951309,
+   "ms": 1104.0051660966128
+  },
+  {
+   "id": "273",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9725570939481258,
+   "ms": 1107.3918750043958
+  },
+  {
+   "id": "2736",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9297768324613571,
+   "ms": 894.2466250155121
+  },
+  {
+   "id": "275",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9826190415769815,
+   "ms": 1168.6503749806434
+  },
+  {
+   "id": "2876",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.8849262446165085,
+   "ms": 960.9794579446316
+  },
+  {
+   "id": "2877",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.23205649852752686,
+   "ms": 1008.8768748100847
+  },
+  {
+   "id": "3078",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9722844641655684,
+   "ms": 2078.5617500077933
+  },
+  {
+   "id": "3148",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.6430485844612122,
+   "ms": 420.70691590197384
+  },
+  {
+   "id": "316",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9731348864734173,
+   "ms": 373.92912502400577
+  },
+  {
+   "id": "317",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.12461316585540771,
+   "ms": 383.20887507870793
+  },
+  {
+   "id": "3246",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9961162500549108,
+   "ms": 1517.0422499068081
+  },
+  {
+   "id": "3250",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9500364512205124,
+   "ms": 1687.9138750955462
+  },
+  {
+   "id": "351",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8995504081249237,
+   "ms": 1082.0479579269886
+  },
+  {
+   "id": "354",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.922319695353508,
+   "ms": 219.39562493935227
+  },
+  {
+   "id": "3560",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.01220560073852539,
+   "ms": 950.242375023663
+  },
+  {
+   "id": "3561",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9528655931353569,
+   "ms": 1013.7007918674499
+  },
+  {
+   "id": "3562",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9940687310881913,
+   "ms": 1012.8469590563327
+  },
+  {
+   "id": "357",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.831714078783989,
+   "ms": 236.6749169304967
+  },
+  {
+   "id": "358",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9314272329211235,
+   "ms": 214.23766599036753
+  },
+  {
+   "id": "3638",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.056479692459106445,
+   "ms": 973.2783329673111
+  },
+  {
+   "id": "3768",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.5966068804264069,
+   "ms": 411.13399993628263
+  },
+  {
+   "id": "3769",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9496383816003799,
+   "ms": 397.49716594815254
+  },
+  {
+   "id": "3811",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9630336202681065,
+   "ms": 553.672790993005
+  },
+  {
+   "id": "3813",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8346346318721771,
+   "ms": 543.3596249204129
+  },
+  {
+   "id": "3874",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9811660777777433,
+   "ms": 464.37695901840925
+  },
+  {
+   "id": "3875",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9818414319306612,
+   "ms": 494.0971250180155
+  },
+  {
+   "id": "3882",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9457957707345486,
+   "ms": 520.8501669112593
+  },
+  {
+   "id": "3884",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.2688719630241394,
+   "ms": 512.1527500450611
+  },
+  {
+   "id": "3886",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8746434301137924,
+   "ms": 492.0237499754876
+  },
+  {
+   "id": "3914",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9937300677411258,
+   "ms": 452.2187081165612
+  },
+  {
+   "id": "3916",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9974847421981394,
+   "ms": 447.4419169127941
+  },
+  {
+   "id": "3951",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8705236613750458,
+   "ms": 529.4487499631941
+  },
+  {
+   "id": "3953",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9845144292339683,
+   "ms": 532.5741248670965
+  },
+  {
+   "id": "4010",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9862782806158066,
+   "ms": 409.26745906472206
+  },
+  {
+   "id": "4013",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.411526620388031,
+   "ms": 475.3203750588
+  },
+  {
+   "id": "4018",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.03345602750778198,
+   "ms": 351.9670411478728
+  },
+  {
+   "id": "4019",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.6562817096710205,
+   "ms": 381.3535841181874
+  },
+  {
+   "id": "4026",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9780696555972099,
+   "ms": 524.895790964365
+  },
+  {
+   "id": "4029",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9943523588590324,
+   "ms": 524.7349999845028
+  },
+  {
+   "id": "4052",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9659264385700226,
+   "ms": 443.99604201316833
+  },
+  {
+   "id": "4053",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9852045588195324,
+   "ms": 429.088749922812
+  },
+  {
+   "id": "4063",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9719876516610384,
+   "ms": 522.5182920694351
+  },
+  {
+   "id": "4064",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9776764623820782,
+   "ms": 470.21183418110013
+  },
+  {
+   "id": "4067",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.1448879837989807,
+   "ms": 520.5850000493228
+  },
+  {
+   "id": "4078",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8878878876566887,
+   "ms": 487.5876670703292
+  },
+  {
+   "id": "4116",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9829297456890345,
+   "ms": 554.9835420679301
+  },
+  {
+   "id": "4195",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.996127593331039,
+   "ms": 565.1515841018409
+  },
+  {
+   "id": "4198",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9966817507520318,
+   "ms": 538.3330420590937
+  },
+  {
+   "id": "4211",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.14378517866134644,
+   "ms": 333.75200000591576
+  },
+  {
+   "id": "4221",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.6114593744277954,
+   "ms": 398.5679999459535
+  },
+  {
+   "id": "4228",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9626565650105476,
+   "ms": 555.1190830301493
+  },
+  {
+   "id": "4262",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9670594558119774,
+   "ms": 410.1042919792235
+  },
+  {
+   "id": "4297",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9978294956963509,
+   "ms": 544.2446670494974
+  },
+  {
+   "id": "432",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9942373111844063,
+   "ms": 1912.513584131375
+  },
+  {
+   "id": "4345",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9876105273142457,
+   "ms": 514.0332500450313
+  },
+  {
+   "id": "436",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.016019821166992188,
+   "ms": 1884.637416806072
+  },
+  {
+   "id": "444",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9762708712369204,
+   "ms": 1239.7644580341876
+  },
+  {
+   "id": "4440",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9966583985369653,
+   "ms": 550.0637500081211
+  },
+  {
+   "id": "4444",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9013276100158691,
+   "ms": 547.6225421298295
+  },
+  {
+   "id": "445",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9653448723256588,
+   "ms": 1345.6905840430409
+  },
+  {
+   "id": "4473",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7579207569360733,
+   "ms": 435.6334169860929
+  },
+  {
+   "id": "4479",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.05226939916610718,
+   "ms": 705.008750082925
+  },
+  {
+   "id": "448",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9545315206050873,
+   "ms": 1343.7845830339938
+  },
+  {
+   "id": "4525",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9748872071504593,
+   "ms": 410.16266704536974
+  },
+  {
+   "id": "4534",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9965066569857299,
+   "ms": 468.13162486068904
+  },
+  {
+   "id": "4573",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9757282976061106,
+   "ms": 412.5366660300642
+  },
+  {
+   "id": "4575",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.976588997989893,
+   "ms": 360.06829096004367
+  },
+  {
+   "id": "4584",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9838971849530935,
+   "ms": 512.2200828045607
+  },
+  {
+   "id": "4587",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9332450851798058,
+   "ms": 521.6864580288529
+  },
+  {
+   "id": "4777",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9957555015571415,
+   "ms": 550.2952500246465
+  },
+  {
+   "id": "4778",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.0978657603263855,
+   "ms": 539.4986669998616
+  },
+  {
+   "id": "4796",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9415283352136612,
+   "ms": 518.6495000962168
+  },
+  {
+   "id": "4797",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.044244587421417236,
+   "ms": 542.7220838610083
+  },
+  {
+   "id": "480",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7818395346403122,
+   "ms": 516.2659159395844
+  },
+  {
+   "id": "4800",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9682292938232422,
+   "ms": 381.1062090098858
+  },
+  {
+   "id": "4801",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9964598000515252,
+   "ms": 394.69270780682564
+  },
+  {
+   "id": "4805",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9962998412083834,
+   "ms": 373.99058300070465
+  },
+  {
+   "id": "482",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9143083617091179,
+   "ms": 583.3857089746743
+  },
+  {
+   "id": "4953",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9331241920590401,
+   "ms": 447.13366706855595
+  },
+  {
+   "id": "5019",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.950779527425766,
+   "ms": 429.7262921463698
+  },
+  {
+   "id": "5037",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9442723132669926,
+   "ms": 431.8780000321567
+  },
+  {
+   "id": "5060",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9426415786147118,
+   "ms": 391.9765828177333
+  },
+  {
+   "id": "5063",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9662667326629162,
+   "ms": 376.81774981319904
+  },
+  {
+   "id": "5082",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9801951609551907,
+   "ms": 335.11708304286003
+  },
+  {
+   "id": "5083",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9979448926169425,
+   "ms": 328.1632501166314
+  },
+  {
+   "id": "5278",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9524846971035004,
+   "ms": 374.5166249573231
+  },
+  {
+   "id": "5388",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9808635618537664,
+   "ms": 372.85208282992244
+  },
+  {
+   "id": "5389",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9955089194700122,
+   "ms": 389.77579213678837
+  },
+  {
+   "id": "5392",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.8088865876197815,
+   "ms": 373.73558315448463
+  },
+  {
+   "id": "5412",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9974394638556987,
+   "ms": 426.7302080988884
+  },
+  {
+   "id": "5415",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.012636363506317139,
+   "ms": 418.36820798926055
+  },
+  {
+   "id": "544",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9935500393621624,
+   "ms": 1576.7760830931365
+  },
+  {
+   "id": "5479",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9351710006594658,
+   "ms": 390.9345830325037
+  },
+  {
+   "id": "5480",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.7574795782566071,
+   "ms": 372.9232500772923
+  },
+  {
+   "id": "5482",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9676158837974072,
+   "ms": 392.64466683380306
+  },
+  {
+   "id": "55",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9766445644199848,
+   "ms": 1426.426999969408
+  },
+  {
+   "id": "5527",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9944492061622441,
+   "ms": 395.3378750011325
+  },
+  {
+   "id": "5564",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.08361607789993286,
+   "ms": 469.02766707353294
+  },
+  {
+   "id": "58",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.013134181499481201,
+   "ms": 1117.1957501210272
+  },
+  {
+   "id": "584",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.966140691190958,
+   "ms": 1356.2306251842529
+  },
+  {
+   "id": "591",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.6855694055557251,
+   "ms": 1195.610250113532
+  },
+  {
+   "id": "593",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.40551841259002686,
+   "ms": 1193.2707498781383
+  },
+  {
+   "id": "603",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.18080198764801025,
+   "ms": 633.9214590843767
+  },
+  {
+   "id": "609",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9816618673503399,
+   "ms": 1093.9102910924703
+  },
+  {
+   "id": "613",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9383117370307446,
+   "ms": 925.7609590422362
+  },
+  {
+   "id": "621",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.871109738945961,
+   "ms": 595.4623750876635
+  },
+  {
+   "id": "646",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9892034409567714,
+   "ms": 821.9151659868658
+  },
+  {
+   "id": "67",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9871725691482425,
+   "ms": 695.7094168756157
+  },
+  {
+   "id": "690",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9983485322445631,
+   "ms": 1511.108584003523
+  },
+  {
+   "id": "691",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.8887114822864532,
+   "ms": 1592.4569589551538
+  },
+  {
+   "id": "694",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9471406154334545,
+   "ms": 1615.4340831562877
+  },
+  {
+   "id": "724",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9747148212045431,
+   "ms": 404.7092078253627
+  },
+  {
+   "id": "729",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.12843692302703857,
+   "ms": 222.3179170396179
+  },
+  {
+   "id": "730",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.151323139667511,
+   "ms": 223.9738330245018
+  },
+  {
+   "id": "836",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9978206125088036,
+   "ms": 321.40300003811717
+  },
+  {
+   "id": "840",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9904182218015194,
+   "ms": 336.4734589122236
+  },
+  {
+   "id": "843",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.8088895082473755,
+   "ms": 320.9664160385728
+  },
+  {
+   "id": "856",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9406115896999836,
+   "ms": 248.29050013795495
+  },
+  {
+   "id": "879",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.4661474823951721,
+   "ms": 202.4479159153998
+  },
+  {
+   "id": "880",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.973558908328414,
+   "ms": 235.00483413226902
+  },
+  {
+   "id": "881",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.24197149276733398,
+   "ms": 217.68579096533358
+  },
+  {
+   "id": "885",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.026129603385925293,
+   "ms": 615.5722921248525
+  },
+  {
+   "id": "886",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.3868418335914612,
+   "ms": 597.8901248890907
+  },
+  {
+   "id": "908",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.010866343975067139,
+   "ms": 1292.2474581282586
+  },
+  {
+   "id": "927",
+   "task_type": "Summary",
+   "hallucinated": true,
+   "support": 0.9447913318872452,
+   "ms": 877.9664169996977
+  },
+  {
+   "id": "964",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.7024709582328796,
+   "ms": 286.4584580529481
+  },
+  {
+   "id": "996",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9753273390233517,
+   "ms": 834.1000410728157
+  },
+  {
+   "id": "998",
+   "task_type": "Summary",
+   "hallucinated": false,
+   "support": 0.9195133596658707,
+   "ms": 974.5362501125783
+  }
+ ]
+}

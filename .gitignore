@@ -12,6 +12,7 @@ week-1-plan.md
 __pycache__/
 *.py[cod]
 .venv/
+.venv-tf5/
 venv/
 *.egg-info/
 dist/
