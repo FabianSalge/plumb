@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 from api.logging import RequestLoggingMiddleware, setup_logging
 from api.schemas import ClaimResult, VerifyRequest, VerifyResponse
 from engine.config import SignalModelConfig, load_config
-from engine.scoring import HHEMScorer, Scorer
+from engine.scoring import LettuceDetectScorer, Scorer
 from engine.verdict import gate_decision, judge_claim
 
 logger = logging.getLogger("plumb.api")
@@ -31,7 +31,7 @@ def create_app(
     setup_logging()
     cfg = load_config(config_path or os.environ.get("PLUMB_CONFIG", DEFAULT_CONFIG_PATH))
     engine_version = package_version("plumb")
-    factory: ScorerFactory = scorer_factory or HHEMScorer.load
+    factory: ScorerFactory = scorer_factory or LettuceDetectScorer.load
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:

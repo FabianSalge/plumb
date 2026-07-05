@@ -70,6 +70,14 @@ def test_version_fields_present(client):
     assert body["config_version"] == "test-1"
 
 
+def test_response_shape_carries_no_span_fields(client):
+    """Span detail is observability (structured logs) only — it must not leak
+    into the response contract before calibration (#29)."""
+    body = verify(client).json()
+    assert set(body) == {"claims", "gate", "engine_version", "config_version"}
+    assert set(body["claims"][0]) == {"text", "verdict", "score", "evidence_index"}
+
+
 def test_contradicted_absent_from_vocabulary(make_client):
     """Tier-1 verdicts are exactly supported/unsupported until the NLI signal lands."""
     for scores in ([0.0], [1.0]):

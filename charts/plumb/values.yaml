@@ -8,25 +8,25 @@ image:
 service:
   port: 8000
 
-# Sized from the spike's measured baseline (docs/spikes/2026-07-04-fastapi-hhem.md):
-# ~610 MB RSS with HHEM loaded, CPU-bound inference. Re-derive when the
-# groundedness model changes (#18).
+# Sized from a measured baseline: ~1.1 GiB peak RSS with LettuceDetect v2
+# loaded and serving verify-shaped requests on CPU (macOS, torch CPU wheels).
+# Re-derive when the groundedness model changes (ADR-0006).
 resources:
   requests:
     cpu: 500m
-    memory: 768Mi
-  limits:
     memory: 1536Mi
+  limits:
+    memory: 2560Mi
 
 # Rendered into the ConfigMap the API reads via PLUMB_CONFIG. Defaults must
 # stay identical to config/verifier.yaml — a render test fails on drift.
 # Bump version on any change; it is echoed as config_version in every response.
 verifier:
-  version: "0.1.0"
+  version: "0.2.0"
   signals:
     groundedness:
-      model: vectara/hallucination_evaluation_model
-      revision: "8e4a2e6e96c708cc76c2344f7e4757df2515292c"
+      model: KRLabsOrg/lettucedect-v2-mmbert-base
+      revision: "0f85c7a15b17aee6e8f794dae7cb4e42e2b8fdac"
       threshold: 0.5
 
 networkPolicy:

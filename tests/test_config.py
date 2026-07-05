@@ -79,5 +79,5 @@ def test_repo_default_config_is_valid_and_pins_a_revision():
     """The checked-in config must always load and carry a real revision pin."""
     cfg = load_config("config/verifier.yaml")
     assert cfg.version
-    assert cfg.groundedness.model == "vectara/hallucination_evaluation_model"
+    assert cfg.groundedness.model == "KRLabsOrg/lettucedect-v2-mmbert-base"
     assert len(cfg.groundedness.revision) == 40, "expected a full git revision hash"
