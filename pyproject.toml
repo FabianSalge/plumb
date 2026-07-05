@@ -54,8 +54,9 @@ packages = ["api", "engine"]
 testpaths = ["tests"]
 markers = [
     "model: loads the real HHEM weights; needs the 'hhem' extra and a model download",
+    "e2e: golden verify request against a deployed instance; needs PLUMB_URL reachable",
 ]
-addopts = "-m 'not model'"
+addopts = "-m 'not model and not e2e'"
 
 [tool.coverage.run]
 source = ["engine", "api"]

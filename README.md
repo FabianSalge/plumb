@@ -67,7 +67,11 @@ To see it live on a local [kind](https://kind.sigs.k8s.io) cluster (requires doc
 ```sh
 make kind-up   # create the cluster
 make deploy    # build the image, load it into kind, install the chart
+make e2e       # golden verify request against the deployed chart
 ```
+
+CI runs this same flow on every PR: kind cluster, chart install, one golden
+verify request asserting a `supported` verdict.
 
 ## Development
 
