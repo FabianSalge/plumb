@@ -111,6 +111,9 @@ jobs:
       - uses: helm/kind-action@v1.14.0
         with:
           install_only: true
+          # Must match the kind release whose node image the Makefile pins —
+          # an older CLI cannot load images into a newer node's containerd.
+          version: v0.32.0
       - run: make kind-up
       # `make deploy` minus the rebuild — plumb:dev already exists from the
       # cached buildx step above.
