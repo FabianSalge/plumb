@@ -19,4 +19,4 @@
 ## 4. Close out
 
 - [x] 4.1 Coverage floor configured in CI for `engine/` (agree number in the PR, e.g. 80%)
-- [ ] 4.2 All acceptance criteria on issue #8 checked; OpenSpec change validated and archived
+- [x] 4.2 All acceptance criteria on issue #8 checked; OpenSpec change validated and archived
