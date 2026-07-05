@@ -18,7 +18,7 @@
 
 - [x] 3.1 `make kind-up`: create the `plumb` kind cluster with a pinned node image
 - [x] 3.2 `make deploy`: `make image`, `kind load docker-image`, `helm upgrade --install --wait`
-- [ ] 3.3 Verify the tracer bullet live: `curl` the in-cluster Service with a supported claim + inline evidence, confirm verdict, `engine_version`, `config_version`
+- [x] 3.3 Verify the tracer bullet live: `curl` the in-cluster Service with a supported claim + inline evidence, confirm verdict, `engine_version`, `config_version`
 
 ## 4. CI
 
