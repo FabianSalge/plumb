@@ -44,5 +44,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Run tests
-        run: echo "No test suite yet — it lands with the language decision (#7)."
+      - uses: astral-sh/setup-uv@v8.3.0
+        with:
+          enable-cache: true
+      - run: uv sync
+      - run: uv run mypy
+      - name: Run tests with coverage floor
+        run: uv run pytest --cov

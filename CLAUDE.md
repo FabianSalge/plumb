@@ -58,5 +58,10 @@ says how it was verified.
 
 - pre-commit install --hook-type commit-msg --hook-type pre-commit  (once per clone)
 - pre-commit run --all-files
-- make targets (test/lint/run/kind-up/deploy/e2e) arrive with the language
-  decision (#7) — keep this list current; agents rely on it.
+- make test       — pytest with the coverage floor (model-marked tests excluded)
+- make test-model — integration test against the real HHEM weights
+- make lint       — ruff check + format check
+- make typecheck  — mypy (strict)
+- make run        — serve the API locally with the real model
+- kind-up/deploy/e2e targets arrive with the Helm work (#9–#11) — keep this
+  list current; agents rely on it.

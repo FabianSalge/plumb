@@ -32,3 +32,6 @@ node_modules/
 # misc
 .env
 *.log
+
+# agent worktrees — never commit
+.claude/worktrees/
