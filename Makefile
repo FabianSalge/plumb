@@ -1,4 +1,4 @@
-.PHONY: test test-model lint typecheck run image kind-up deploy
+.PHONY: test test-model lint typecheck run image kind-up deploy e2e
 
 KIND_CLUSTER = plumb
 # Digest-pinned default node image of the kind release in use (v0.32.0) —
@@ -30,3 +30,12 @@ deploy: image  ## build the image, load it into kind, and install the chart
 	kind load docker-image plumb:dev --name $(KIND_CLUSTER)
 	helm upgrade --install plumb charts/plumb \
 		--kube-context kind-$(KIND_CLUSTER) --wait --timeout 10m
+
+e2e:  ## golden verify request against the chart in kind (run after `make deploy`)
+	@set -e; \
+	kubectl --context kind-$(KIND_CLUSTER) port-forward svc/plumb 8000:8000 >/dev/null & \
+	pf=$$!; trap 'kill $$pf 2>/dev/null' EXIT; \
+	for _ in $$(seq 30); do \
+		curl -fsS -o /dev/null http://127.0.0.1:8000/healthz 2>/dev/null && break; sleep 1; \
+	done; \
+	PLUMB_URL=http://127.0.0.1:8000 uv run pytest -m e2e --no-cov

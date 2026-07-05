@@ -66,4 +66,5 @@ says how it was verified.
 - make image      — build the container image (CPU-only torch, no baked weights)
 - make kind-up    — create the local kind cluster
 - make deploy     — build the image, load it into kind, install the chart
-- the e2e target arrives with #11 — keep this list current; agents rely on it.
+- make e2e        — golden verify request against the chart in kind
+- keep this list current; agents rely on it.
