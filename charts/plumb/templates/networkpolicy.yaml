@@ -1,0 +1,28 @@
+{{- if .Values.networkPolicy.enabled }}
+# Default-deny egress — the sovereignty claim in code. The only holes are DNS
+# and, while networkPolicy.allowModelDownload is true, TCP 443 for the pinned
+# model weight download at first start.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "plumb.fullname" . }}
+  labels:
+    {{- include "plumb.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "plumb.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    {{- if .Values.networkPolicy.allowModelDownload }}
+    - ports:
+        - protocol: TCP
+          port: 443
+    {{- end }}
+{{- end }}

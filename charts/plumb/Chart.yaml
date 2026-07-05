@@ -1,0 +1,9 @@
+apiVersion: v2
+name: plumb
+description: The self-hostable groundedness gate — verifies AI-generated answers against your evidence, in-cluster.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+maintainers:
+  - name: FabianSalge
+    url: https://github.com/FabianSalge

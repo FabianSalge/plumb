@@ -1,0 +1,16 @@
+Plumb is installing. The pod reports ready once the pinned model weights are
+loaded (first start downloads ~420 MB, so give it a few minutes).
+
+Try the tracer bullet:
+
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "plumb.fullname" . }} 8000:{{ .Values.service.port }}
+
+  curl -s localhost:8000/v1/verify -H 'content-type: application/json' -d '{
+    "text": "The capital of France is Paris.",
+    "context": ["Paris is the capital and largest city of France."],
+    "mode": "fast"
+  }'
+
+Egress is default-deny except DNS and (while networkPolicy.allowModelDownload
+is true) TCP 443 for the weight download. Set it false once weights are
+mirrored in-cluster.

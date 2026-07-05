@@ -1,4 +1,9 @@
-.PHONY: test test-model lint typecheck run image
+.PHONY: test test-model lint typecheck run image kind-up deploy
+
+KIND_CLUSTER = plumb
+# Digest-pinned default node image of the kind release in use (v0.32.0) —
+# the kind project guarantees node images only for the release they ship with.
+KIND_NODE_IMAGE = kindest/node:v1.36.1@sha256:3489c7674813ba5d8b1a9977baea8a6e553784dab7b84759d1014dbd78f7ebd5
 
 test:
 	uv run pytest --cov
@@ -17,3 +22,11 @@ run:  ## serve the API locally (needs the model extra)
 
 image:  ## build the container image (CPU-only torch; weights download at start)
 	docker build -t plumb:dev .
+
+kind-up:  ## create the local kind cluster
+	kind create cluster --name $(KIND_CLUSTER) --image $(KIND_NODE_IMAGE)
+
+deploy: image  ## build the image, load it into kind, and install the chart
+	kind load docker-image plumb:dev --name $(KIND_CLUSTER)
+	helm upgrade --install plumb charts/plumb \
+		--kube-context kind-$(KIND_CLUSTER) --wait --timeout 10m
