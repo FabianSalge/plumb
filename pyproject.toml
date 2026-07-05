@@ -75,6 +75,8 @@ python_version = "3.13"
 files = ["engine", "api"]
 strict = true
 
+# The scoring stack lives behind the 'model' extra; typecheck must pass in
+# envs (like CI) that don't install it.
 [[tool.mypy.overrides]]
-module = "transformers.*"
+module = ["transformers.*", "torch.*"]
 ignore_missing_imports = true
