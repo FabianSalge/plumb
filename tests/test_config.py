@@ -49,8 +49,12 @@ def test_missing_file_fails_loudly(tmp_path):
 
 @pytest.mark.parametrize(
     "field",
-    ["version", "signals.groundedness.model", "signals.groundedness.revision",
-     "signals.groundedness.threshold"],
+    [
+        "version",
+        "signals.groundedness.model",
+        "signals.groundedness.revision",
+        "signals.groundedness.threshold",
+    ],
 )
 def test_missing_field_fails_loudly_naming_the_field(tmp_path, field):
     with pytest.raises(ConfigError, match=field.rsplit(".", 1)[-1]):
