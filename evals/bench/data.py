@@ -1,0 +1,77 @@
+"""RAGTruth test-split loading and deterministic slice construction.
+
+Source: wandb/RAGTruth-processed (MIT), the RAGTruth corpus with per-response
+hallucination span counts. Label: a response is hallucinated iff it carries at
+least one annotated span (evident conflict or baseless info).
+"""
+
+import random
+from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+
+# Published split statistics for wandb/RAGTruth-processed — the load fails
+# loudly if the download does not match them.
+EXPECTED_TEST_SIZE = 2700
+EXPECTED_TEST_POSITIVES = 943
+
+
+class DataError(Exception):
+    """The dataset is not what the benchmark expects — stop, don't benchmark garbage."""
+
+
+@dataclass(frozen=True)
+class Example:
+    id: str
+    task_type: str
+    query: str
+    context: str
+    response: str
+    hallucinated: bool
+
+
+def is_hallucinated(span_counts: Mapping[str, int]) -> bool:
+    try:
+        return span_counts["evident_conflict"] + span_counts["baseless_info"] > 0
+    except KeyError as exc:
+        raise DataError(f"hallucination span counts missing key: {exc}") from exc
+
+
+def stratified_slice(examples: Sequence[Example], per_task: int, seed: int) -> list[Example]:
+    """Draw per_task examples from each task type, deterministically for a given seed."""
+    by_task: dict[str, list[Example]] = {}
+    for example in examples:
+        by_task.setdefault(example.task_type, []).append(example)
+
+    sliced: list[Example] = []
+    for task_type in sorted(by_task):
+        group = sorted(by_task[task_type], key=lambda e: e.id)
+        if len(group) < per_task:
+            raise DataError(f"task type {task_type!r} has {len(group)} examples, need {per_task}")
+        random.Random(seed).shuffle(group)
+        sliced.extend(group[:per_task])
+    return sorted(sliced, key=lambda e: (e.task_type, e.id))
+
+
+def load_ragtruth_test() -> list[Example]:
+    from datasets import load_dataset
+
+    rows = load_dataset("wandb/RAGTruth-processed", split="test")
+    examples = [
+        Example(
+            id=row["id"],
+            task_type=row["task_type"],
+            query=row["query"],
+            context=row["context"],
+            response=row["output"],
+            hallucinated=is_hallucinated(row["hallucination_labels_processed"]),
+        )
+        for row in rows
+    ]
+    positives = sum(e.hallucinated for e in examples)
+    if len(examples) != EXPECTED_TEST_SIZE or positives != EXPECTED_TEST_POSITIVES:
+        raise DataError(
+            f"RAGTruth test split mismatch: {len(examples)} examples "
+            f"({positives} hallucinated), expected {EXPECTED_TEST_SIZE} "
+            f"({EXPECTED_TEST_POSITIVES} hallucinated)"
+        )
+    return examples
