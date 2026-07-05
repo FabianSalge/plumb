@@ -67,4 +67,6 @@ says how it was verified.
 - make kind-up    — create the local kind cluster
 - make deploy     — build the image, load it into kind, install the chart
 - make e2e        — golden verify request against the chart in kind
+- evals/ is its own uv project (model benchmarks): from evals/,
+  uv run --extra tf4|tf5 python -m bench.run — see evals/RESULTS.md
 - keep this list current; agents rely on it.
