@@ -1,0 +1,10 @@
+# Allowlist: the image needs exactly the installable package, its lockfile,
+# and the default verifier config.
+*
+!api/
+!engine/
+!config/
+!pyproject.toml
+!uv.lock
+!README.md
+**/__pycache__

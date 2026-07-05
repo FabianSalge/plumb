@@ -31,6 +31,18 @@ dev = [
     "types-pyyaml>=6",
 ]
 
+[tool.uv.sources]
+# On Linux the default PyPI torch wheels bundle CUDA (~5 GB installed); HHEM
+# serves on CPU, so the container image resolves torch from the CPU wheel
+# index instead. macOS keeps PyPI (its wheels are CPU/MPS already). Revisit
+# alongside the vLLM/GPU work.
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
