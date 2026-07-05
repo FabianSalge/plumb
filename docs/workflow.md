@@ -20,4 +20,4 @@ I develop with Claude Code under the rules in `CLAUDE.md`:
 
 ## Board
 
-The public project board tracks the current milestone: Backlog → This week → In review → Done. Cards move by hand: In review when the PR opens, Done on merge.
+The public project board tracks the current milestone: Backlog → This week → In progress → In review → Done. Cards move by hand: In progress the moment a session starts on an issue — before any code exists, so two parallel sessions never pick up the same ticket — In review when the PR opens, Done on merge.
