@@ -4,3 +4,6 @@ description: The self-hostable groundedness gate — verifies AI-generated answe
 type: application
 version: 0.1.0
 appVersion: "0.1.0"
+maintainers:
+  - name: FabianSalge
+    url: https://github.com/FabianSalge

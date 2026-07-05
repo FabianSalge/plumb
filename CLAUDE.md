@@ -64,5 +64,6 @@ says how it was verified.
 - make typecheck  — mypy (strict)
 - make run        — serve the API locally with the real model
 - make image      — build the container image (CPU-only torch, no baked weights)
-- kind-up/deploy/e2e targets arrive with the Helm work (#10–#11) — keep this
-  list current; agents rely on it.
+- make kind-up    — create the local kind cluster
+- make deploy     — build the image, load it into kind, install the chart
+- the e2e target arrives with #11 — keep this list current; agents rely on it.

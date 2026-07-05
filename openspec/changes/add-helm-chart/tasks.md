@@ -16,15 +16,15 @@
 
 ## 3. kind targets
 
-- [ ] 3.1 `make kind-up`: create the `plumb` kind cluster with a pinned node image
-- [ ] 3.2 `make deploy`: `make image`, `kind load docker-image`, `helm upgrade --install --wait`
+- [x] 3.1 `make kind-up`: create the `plumb` kind cluster with a pinned node image
+- [x] 3.2 `make deploy`: `make image`, `kind load docker-image`, `helm upgrade --install --wait`
 - [ ] 3.3 Verify the tracer bullet live: `curl` the in-cluster Service with a supported claim + inline evidence, confirm verdict, `engine_version`, `config_version`
 
 ## 4. CI
 
-- [ ] 4.1 Add chart job to `.github/workflows/ci.yml`: `helm lint` + `ct lint`, pinned action versions, additive only
+- [x] 4.1 Add chart job to `.github/workflows/ci.yml`: `helm lint` + `ct lint`, pinned action versions, additive only
 
 ## 5. Docs
 
-- [ ] 5.1 README: install-from-chart section (helm install, values highlights, sovereign mode note)
-- [ ] 5.2 CLAUDE.md command list: add `kind-up`/`deploy`, drop the "arrive with the Helm work" note
+- [x] 5.1 README: install-from-chart section (helm install, values highlights, sovereign mode note)
+- [x] 5.2 CLAUDE.md command list: add `kind-up`/`deploy`, drop the "arrive with the Helm work" note
