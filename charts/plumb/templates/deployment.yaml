@@ -18,6 +18,10 @@ spec:
     spec:
       securityContext:
         runAsNonRoot: true
+        # The image's USER is the name "plumb"; the kubelet can only verify
+        # non-root against the numeric UID baked into the Dockerfile.
+        runAsUser: 10001
+        runAsGroup: 10001
         seccompProfile:
           type: RuntimeDefault
       containers:

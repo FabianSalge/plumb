@@ -72,6 +72,13 @@ class TestDeployment:
         assert resources["requests"], "resource requests must be set"
         assert resources["limits"], "resource limits must be set"
 
+    def test_runs_as_numeric_non_root_user(self, default_render):
+        # runAsNonRoot is only verifiable against a numeric UID: the image's
+        # USER is a name, so the kubelet rejects the pod without runAsUser.
+        pod = only(default_render, "Deployment")["spec"]["template"]["spec"]
+        assert pod["securityContext"]["runAsNonRoot"] is True
+        assert pod["securityContext"]["runAsUser"] == 10001
+
     def test_config_injected_via_plumb_config(self, default_render):
         deployment = only(default_render, "Deployment")
         c = container(deployment)
