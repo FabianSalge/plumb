@@ -2,9 +2,9 @@
 
 ## 1. Checks first
 
-- [ ] 1.1 Add chart render tests (pytest shelling out to `helm template`): deployment carries liveness/readiness/startup probes and resource requests/limits; Service is ClusterIP on the API port — failing while the chart doesn't exist
-- [ ] 1.2 Add render test: ConfigMap rendered with default values equals `config/verifier.yaml`, and a threshold override lands in the rendered config
-- [ ] 1.3 Add render tests for the NetworkPolicy: default values allow DNS + 443 only; `allowModelDownload: false` renders DNS-only egress; `networkPolicy.enabled: false` renders no policy
+- [x] 1.1 Add chart render tests (pytest shelling out to `helm template`): deployment carries liveness/readiness/startup probes and resource requests/limits; Service is ClusterIP on the API port — failing while the chart doesn't exist
+- [x] 1.2 Add render test: ConfigMap rendered with default values equals `config/verifier.yaml`, and a threshold override lands in the rendered config
+- [x] 1.3 Add render tests for the NetworkPolicy: default values allow DNS + 443 only; `allowModelDownload: false` renders DNS-only egress; `networkPolicy.enabled: false` renders no policy
 
 ## 2. Chart
 
