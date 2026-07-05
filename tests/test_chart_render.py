@@ -5,6 +5,7 @@ rendered manifests — no cluster involved.
 """
 
 import subprocess
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -15,12 +16,21 @@ CHART = REPO_ROOT / "charts" / "plumb"
 VERIFIER_CONFIG = REPO_ROOT / "config" / "verifier.yaml"
 
 
-def render(*set_args: str) -> dict[str, list[dict]]:
-    """helm template with optional --set overrides, returning manifests grouped by kind."""
+def render(*set_args: str, values: dict | None = None) -> dict[str, list[dict]]:
+    """helm template with optional overrides, returning manifests grouped by kind.
+
+    Overrides go through --set, or through a values file (`values`) for types
+    --set cannot express — helm parses floats on the CLI as strings.
+    """
     cmd = ["helm", "template", "plumb", str(CHART)]
     for arg in set_args:
         cmd += ["--set", arg]
-    completed = subprocess.run(cmd, capture_output=True, text=True)
+    with tempfile.NamedTemporaryFile("w", suffix=".yaml") as override:
+        if values is not None:
+            yaml.safe_dump(values, override)
+            override.flush()
+            cmd += ["-f", override.name]
+        completed = subprocess.run(cmd, capture_output=True, text=True)
     if completed.returncode != 0:
         raise AssertionError(f"helm template failed:\n{completed.stderr}")
     manifests: dict[str, list[dict]] = {}
@@ -92,7 +102,8 @@ class TestVerifierConfig:
         )
 
     def test_threshold_override_lands(self):
-        manifests = render("verifier.signals.groundedness.threshold=0.7")
+        override = {"verifier": {"signals": {"groundedness": {"threshold": 0.7}}}}
+        manifests = render(values=override)
         (rendered,) = only(manifests, "ConfigMap")["data"].values()
         assert yaml.safe_load(rendered)["signals"]["groundedness"]["threshold"] == 0.7
 

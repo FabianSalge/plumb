@@ -8,11 +8,11 @@
 
 ## 2. Chart
 
-- [ ] 2.1 Scaffold `charts/plumb/` (Chart.yaml, values.yaml, _helpers.tpl, NOTES.txt) with values for image repository/tag/pullPolicy, replicas, resources, verifier config, networkPolicy toggles
-- [ ] 2.2 Deployment template: probes per design (startupProbe absorbing the weight download), resources, ConfigMap mount + `PLUMB_CONFIG`, checksum annotation so config changes roll pods
-- [ ] 2.3 Service (ClusterIP) and verifier ConfigMap templates
-- [ ] 2.4 NetworkPolicy template: default-deny egress, DNS allowance, 443 behind `allowModelDownload`
-- [ ] 2.5 All render tests from group 1 pass; `helm lint charts/plumb` clean
+- [x] 2.1 Scaffold `charts/plumb/` (Chart.yaml, values.yaml, _helpers.tpl, NOTES.txt) with values for image repository/tag/pullPolicy, replicas, resources, verifier config, networkPolicy toggles
+- [x] 2.2 Deployment template: probes per design (startupProbe absorbing the weight download), resources, ConfigMap mount + `PLUMB_CONFIG`, checksum annotation so config changes roll pods
+- [x] 2.3 Service (ClusterIP) and verifier ConfigMap templates
+- [x] 2.4 NetworkPolicy template: default-deny egress, DNS allowance, 443 behind `allowModelDownload`
+- [x] 2.5 All render tests from group 1 pass; `helm lint charts/plumb` clean
 
 ## 3. kind targets
 

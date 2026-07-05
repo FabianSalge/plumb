@@ -20,6 +20,9 @@ repos:
     rev: v1.38.0
     hooks:
       - id: yamllint
+        # Go-templated manifests are not YAML until rendered; helm lint and
+        # the CI chart job cover them. Chart.yaml/values.yaml stay linted.
+        exclude: ^charts/[^/]+/templates/
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.49.0
     hooks:
