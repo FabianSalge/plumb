@@ -1,4 +1,4 @@
-.PHONY: test test-model lint typecheck run
+.PHONY: test test-model lint typecheck run image
 
 test:
 	uv run pytest --cov
@@ -14,3 +14,6 @@ typecheck:
 
 run:  ## serve the API locally (needs the model extra)
 	uv run --extra hhem uvicorn api.main:app
+
+image:  ## build the container image (CPU-only torch; weights download at start)
+	docker build -t plumb:dev .

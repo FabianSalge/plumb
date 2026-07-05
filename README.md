@@ -39,6 +39,15 @@ curl -s localhost:8000/v1/verify \
 
 The whole input is treated as one claim and checked against the caller-provided evidence with a single grounding signal (HHEM-2.1-open, pinned by revision in [config/verifier.yaml](config/verifier.yaml)). Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Claim decomposition, retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
 
+### Container
+
+```sh
+make image   # build plumb:dev
+docker run --rm -p 8000:8000 plumb:dev
+```
+
+The image runs as a non-root user with CPU-only torch. Model weights are not baked in: the container downloads them on first start (~420 MB, cached under `HF_HOME`), and `/readyz` returns 503 until the model is loaded.
+
 ## Development
 
 ```sh
