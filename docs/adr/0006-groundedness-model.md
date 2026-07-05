@@ -61,7 +61,7 @@ multilingual, Apache-2.0, and the line upstream actively develops.
   decomposition can surface in observability output.
 - The tracer bullet (#8) ships on HHEM as-is; the wrapper migration,
   config change, and retirement of the `hhem` extra are follow-up work
-  tracked in their own issue.
+  tracked in #27.
 - Accuracy on unseen tenant domains is a bet informed by an in-domain
   benchmark; the evals harness exists so the slot gets re-benchmarked
   when the field moves, and the product's accuracy claim continues to
