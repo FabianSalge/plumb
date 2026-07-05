@@ -18,7 +18,7 @@ default torch threads.
 ## Latency (single check, laptop CPU)
 
 | Measurement | Result |
-|---|---|
+| --- | --- |
 | One check, short pair (~15-word evidence), median of 30 | 31 ms (p95 32–37 ms) |
 | One check, 500-word evidence, median of 30 | 285 ms (p95 ~320 ms) |
 | Cold first request after startup | 41–67 ms |
