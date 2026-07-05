@@ -18,11 +18,15 @@ The system SHALL expose `POST /v1/verify` accepting a JSON body with `text` (str
 - **THEN** the API responds 400 with a JSON error explaining which field is invalid
 
 ### Requirement: Verdicts map from score via versioned config
-The verdict SHALL be derived by comparing the grounding score against a threshold read from a versioned config file, never a hardcoded constant. The verdict vocabulary in Tier-1 is exactly `supported` and `unsupported`; `contradicted` MUST NOT appear until an NLI signal exists.
+The verdict SHALL be derived by comparing the grounding score against a threshold read from a versioned config file, never a hardcoded constant. The config SHALL identify the signal model by name and pinned revision hash, and the threshold SHALL be defined per-model — a later model swap is a config-version bump by construction, never a silent verdict change. The verdict vocabulary in Tier-1 is exactly `supported` and `unsupported`; `contradicted` MUST NOT appear until an NLI signal exists.
 
 #### Scenario: Threshold comes from config
 - **WHEN** the threshold in the config file changes and the service reloads
 - **THEN** the same request can yield a different verdict without any code change, and `config_version` in the response reflects the new config
+
+#### Scenario: Config names the model it calibrates
+- **WHEN** the config file is loaded
+- **THEN** it carries the signal model's name and revision hash alongside the threshold, and loading fails loudly if either is missing
 
 ### Requirement: Gate decision
 The response SHALL include a `gate` field. The gate is `pass` when every claim's verdict is `supported`, and `block` otherwise.

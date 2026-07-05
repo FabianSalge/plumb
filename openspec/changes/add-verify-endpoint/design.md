@@ -18,6 +18,7 @@ First feature after repo bootstrap. Nothing exists yet: no API framework, no eng
 
 - **Single signal, HHEM-2.1-open**: a small cross-encoder that runs on laptop CPU; scored per (claim, passage) pair, max over passages wins. Alternatives (NLI model, LLM judge) are deferred to the multi-signal work in phase 2 — orchestrating them is the product, but not yet.
 - **Threshold in a versioned config file**, injected at startup; the file carries its own `version` field which is echoed as `config_version`. Alternative (env var) rejected: not versionable, not auditable.
+- **Config identifies the signal model** (name + pinned revision hash) with the threshold defined per-model. HHEM-2.1-open is frozen upstream (#18); when the groundedness model is re-decided, the swap must surface as a config-version bump rather than a silent verdict change. The revision pin also closes the unpinned `trust_remote_code` hole from the spike.
 - **Gate rule is conjunctive**: all claims supported → `pass`, else `block`. `flag` is deferred until per-tenant policy exists.
 - **Reject unknown modes** rather than falling back to fast: silent degradation would lie about what was verified.
 - **API framework**: decided by ADR-0001; the spec and tests are written against the HTTP contract so they survive the decision either way.
