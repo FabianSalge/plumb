@@ -63,5 +63,6 @@ says how it was verified.
 - make lint       — ruff check + format check
 - make typecheck  — mypy (strict)
 - make run        — serve the API locally with the real model
-- kind-up/deploy/e2e targets arrive with the Helm work (#9–#11) — keep this
+- make image      — build the container image (CPU-only torch, no baked weights)
+- kind-up/deploy/e2e targets arrive with the Helm work (#10–#11) — keep this
   list current; agents rely on it.
