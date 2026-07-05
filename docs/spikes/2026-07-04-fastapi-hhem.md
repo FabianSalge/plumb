@@ -61,3 +61,18 @@ default torch threads.
 - Deployment weight to keep in mind for the in-cluster story: ~610 MB resident
   per replica, ~1 GB of image (venv + weights), and the model either gets baked
   into the image or pulled from HF on first boot.
+
+## Postscript (2026-07-05): HHEM-2.1-open is frozen upstream
+
+Checked after the spike: HHEM-2.1-open shipped mid-2024 on a flan-t5-base
+foundation and is still the latest open release of the series — newer HHEM
+versions sit behind Vectara's API only. The `transformers<5` pin is therefore
+permanent, not a temporary bump, and the model choice needs its own decision
+before the engine hardens. Candidates to evaluate: LettuceDetect v2
+(ModernBERT-based, MIT, actively maintained as of July 2026, span-level output
+that would suit decomposition), MiniCheck / Bespoke-MiniCheck-7B, IBM Granite
+Guardian. For the language comparison itself HHEM stays the fixed variable so #6
+measures the same thing; the latency numbers here are HHEM-specific, while
+the serving-shape findings (lifespan load, threadpool, image weight) transfer.
+Same note for the runtime: 3.12.1 was the local pyenv default and is in
+security-only maintenance — real code should target current Python (3.13+).
