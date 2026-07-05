@@ -4,9 +4,9 @@
 
 The open-source, self-hostable groundedness gate — one calibrated verifier that checks AI-generated answers against your own knowledge base and gates both CI and production on the result, without data leaving your cluster.
 
-> **Status:** early development — a first `/v1/verify` endpoint exists and deploys to Kubernetes via the Helm chart.
+> **Status:** early development — the tracer bullet works end to end: `/v1/verify` scores answers against provided context with a benchmarked LettuceDetect groundedness signal and deploys to Kubernetes via the Helm chart. Scores are not yet calibrated.
 
-Work is planned and tracked publicly via [milestones](https://github.com/FabianSalge/plumb/milestones) and [issues](https://github.com/FabianSalge/plumb/issues).
+Work is planned and tracked publicly via [milestones](https://github.com/FabianSalge/plumb/milestones) and [issues](https://github.com/FabianSalge/plumb/issues); progress is journaled in [docs/devlog/](docs/devlog/).
 
 ## Try it locally
 
