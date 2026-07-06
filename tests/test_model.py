@@ -14,8 +14,9 @@ from engine.scoring import LettuceDetectScorer
 def test_score_direction_through_real_model():
     cfg = load_config("config/verifier.yaml")
     scorer = LettuceDetectScorer.load(cfg.groundedness)
-    evidence = ["Paris is the capital of France."]
-    supported = scorer.score("The capital of France is Paris.", evidence)[0]
-    contradicted = scorer.score("The capital of France is Berlin.", evidence)[0]
-    assert supported >= cfg.groundedness.threshold
-    assert contradicted < cfg.groundedness.threshold
+    evidence = ["Paris is the capital of France.", "The Eiffel Tower is in Paris."]
+    supported = scorer.score("The capital of France is Paris.", evidence)
+    contradicted = scorer.score("The capital of France is Berlin.", evidence)
+    assert supported.support >= cfg.groundedness.threshold
+    assert contradicted.support < cfg.groundedness.threshold
+    assert contradicted.spans, "a contradicted claim should localize unsupported spans"

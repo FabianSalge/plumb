@@ -1,12 +1,6 @@
-# verify-api
+# verify-api — delta
 
-## Purpose
-
-The HTTP contract of `/v1/verify` — request/response shapes, verdict semantics,
-gate decision, version stamping, and health probes. Tier-1 scope: the input
-text is one claim, checked against caller-provided evidence.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Verify a claim against inline evidence
 The system SHALL expose `POST /v1/verify` accepting a JSON body with `text` (string, the
@@ -52,38 +46,3 @@ construction, never a silent verdict change. The verdict vocabulary in Tier-1 is
 #### Scenario: Config names the model it calibrates
 - **WHEN** the config file is loaded
 - **THEN** it carries the signal model's name and revision hash alongside the verdict and span-flagging thresholds, and loading fails loudly if any is missing
-
-### Requirement: Gate decision
-The response SHALL include a `gate` field. The gate is `pass` when every claim's verdict is `supported`, and `block` otherwise.
-
-#### Scenario: Gate blocks on unsupported claim
-- **WHEN** any claim in the response has verdict `unsupported`
-- **THEN** `gate` is `block`
-
-### Requirement: Only fast mode is accepted
-Tier-1 supports `mode: "fast"` only. Any other mode value SHALL be rejected, not silently degraded.
-
-#### Scenario: Thorough mode requested too early
-- **WHEN** the request carries `mode: "thorough"` (or any unknown mode)
-- **THEN** the API responds 400 stating that only `fast` is currently supported
-
-### Requirement: Version stamping
-Every successful response SHALL carry `engine_version` (the build/release identifier of the engine) and `config_version` (the version of the threshold config used). This is the seed of verdict pinning.
-
-#### Scenario: Versions present
-- **WHEN** any verify request succeeds
-- **THEN** the response contains non-empty `engine_version` and `config_version` fields
-
-### Requirement: Health probes
-The service SHALL expose `GET /healthz` (liveness: 200 whenever the process is serving) and `GET /readyz` (readiness: 200 only once the scoring model is loaded and a verification can succeed).
-
-#### Scenario: Not ready before model load
-- **WHEN** the service has started but the model is not yet loaded
-- **THEN** `/healthz` returns 200 and `/readyz` returns a non-200 status
-
-### Requirement: Structured request logging
-Every request SHALL emit structured JSON log lines carrying a request ID. If the caller provides an `X-Request-ID` header it SHALL be propagated; otherwise one is generated.
-
-#### Scenario: Request ID propagation
-- **WHEN** a request arrives with header `X-Request-ID: abc-123`
-- **THEN** all log lines for that request carry `abc-123` as the request ID

@@ -6,10 +6,13 @@
 # English-only deployments wanting higher in-domain accuracy can swap to
 # KRLabsOrg/lettucedect-large-modernbert-en-v1
 # revision 22296c700ef0ba4ab3e5c9afffa0185caaf61e52 (ADR-0006); thresholds
-# are per-model, so recheck the threshold when swapping.
-version: "0.2.0"
+# are per-model, so recheck both thresholds when swapping.
+version: "0.3.0"
 signals:
   groundedness:
     model: KRLabsOrg/lettucedect-v2-mmbert-base
     revision: 0f85c7a15b17aee6e8f794dae7cb4e42e2b8fdac
     threshold: 0.5
+    # Flags claim tokens into unsupported spans; independent from the verdict
+    # threshold above — an unsupported claim with zero spans is legal (ADR-0007).
+    span_threshold: 0.5
