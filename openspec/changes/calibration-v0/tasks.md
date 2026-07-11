@@ -6,11 +6,11 @@ the plan; nothing there moves outside it.
 
 ## 1. Reliability metrics (evals)
 
-- [ ] 1.1 Failing unit tests for ECE and reliability-bin data in `evals/tests`: 10
+- [x] 1.1 Failing unit tests for ECE and reliability-bin data in `evals/tests`: 10
       equal-width bins; per-bin mean confidence, empirical support rate, count; ECE as
       the count-weighted mean absolute gap; refuses empty input per the `MetricError`
       convention
-- [ ] 1.2 Implement `ece` and `reliability_bins` in `evals/bench/metrics.py`
+- [x] 1.2 Implement `ece` and `reliability_bins` in `evals/bench/metrics.py`
 
 ## 2. Platt fit (evals)
 
