@@ -14,7 +14,7 @@ from engine.decomposition import (
     reduce_claim,
     segment,
 )
-from engine.scoring import TokenScores
+from engine.signals import TokenScores
 from engine.verdict import gate_decision, judge_claim
 
 

@@ -14,7 +14,7 @@ import logging
 import re
 from dataclasses import asdict, dataclass
 
-from engine.scoring import TokenScores
+from engine.signals import TokenScores
 
 logger = logging.getLogger("plumb.engine.decomposition")
 

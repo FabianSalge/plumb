@@ -22,7 +22,7 @@ from bench.data import load_ragtruth_test, stratified_slice
 from bench.metrics import auroc
 from bench.sentence import sentence_scores
 from engine.config import load_config
-from engine.scoring import LettuceDetectScorer
+from engine.signals.groundedness import LettuceDetectScorer
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG = REPO_ROOT / "config" / "verifier.yaml"

@@ -10,7 +10,7 @@ from collections.abc import Iterator, Sequence
 
 from bench.data import Example
 from engine.decomposition import decompose
-from engine.scoring import Scorer
+from engine.signals import Scorer
 
 
 def sentence_hallucinated(start: int, end: int, spans: Sequence[tuple[int, int]]) -> bool:

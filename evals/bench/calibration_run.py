@@ -30,7 +30,8 @@ from bench.data import Example, load_ragtruth_test, stratified_slice
 from bench.metrics import auroc, ece, reliability_bins
 from bench.sentence import sentence_hallucinated
 from engine.decomposition import CLAIM_UNIT, decompose
-from engine.scoring import INFERENCE_MODE, LettuceDetectScorer, Scorer
+from engine.signals import Scorer
+from engine.signals.groundedness import INFERENCE_MODE, LettuceDetectScorer
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG = REPO_ROOT / "config" / "verifier.yaml"

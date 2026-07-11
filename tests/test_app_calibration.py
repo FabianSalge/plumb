@@ -6,7 +6,7 @@ import yaml
 
 from api.app import create_app
 from engine.calibration import CalibrationError
-from engine.scoring import TokenScores
+from engine.signals import TokenScores
 from tests.conftest import FakeScorer, _config, make_artifact, write_config
 
 

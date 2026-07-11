@@ -24,7 +24,7 @@ from bench.aggrefact import load_aggrefact_test, stratified_claims
 from bench.metrics import auroc, ece, reliability_bins
 from engine.calibration import platt_confidence
 from engine.decomposition import Claim, reduce_claim
-from engine.scoring import LettuceDetectScorer
+from engine.signals.groundedness import LettuceDetectScorer
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG = REPO_ROOT / "config" / "verifier.yaml"

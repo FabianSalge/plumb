@@ -15,7 +15,7 @@ from engine.calibration import (
 )
 from engine.config import SignalModelConfig
 from engine.decomposition import CLAIM_UNIT
-from engine.scoring import INFERENCE_MODE
+from engine.signals.groundedness import INFERENCE_MODE
 
 
 def test_identity_coefficients_return_the_raw_support():

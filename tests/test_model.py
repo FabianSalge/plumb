@@ -8,7 +8,7 @@ import pytest
 
 from engine.config import load_config
 from engine.decomposition import decompose
-from engine.scoring import LettuceDetectScorer
+from engine.signals.groundedness import LettuceDetectScorer
 
 
 @pytest.mark.model

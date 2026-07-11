@@ -1,4 +1,4 @@
-"""Scoring wrapper speaking LettuceDetect's token-classification protocol.
+"""The groundedness signal: LettuceDetect's token-classification protocol.
 
 The prompt format and pair-tokenization layout are vendored from the
 lettucedetect package (0.2.1) the pinned model ships with — the engine must not
@@ -7,12 +7,12 @@ re-verify this protocol against the package version that trained it.
 """
 
 import logging
-from dataclasses import dataclass
-from typing import Any, Protocol
+from typing import Any
 
 from engine.config import SignalModelConfig
+from engine.signals import ScorerError, TokenClassifier, TokenScores
 
-logger = logging.getLogger("plumb.engine.scoring")
+logger = logging.getLogger("plumb.engine.signals.groundedness")
 
 # The scoring protocol's identity, bound into every calibration artifact
 # (ADR-0008). Bump it whenever inference behaviour changes — prompt template,
@@ -29,30 +29,6 @@ _PROMPT_TEMPLATE = "Summarize the following text:\n{context}\noutput:"
 # lettucedetect's training-time sequence window; not a tunable — inputs beyond
 # it were never seen by the model, so raising it doesn't buy longer context.
 _MAX_LENGTH = 4096
-
-
-class ScorerError(Exception):
-    """The scoring model is unavailable or returned something it must not."""
-
-
-@dataclass(frozen=True)
-class TokenScores:
-    """Per-token hallucination probabilities over the whole answer, aligned with
-    answer-relative character offsets (zero-length offsets are special tokens);
-    `truncated` marks a context that was cut to fit the model window. Reduction to
-    per-claim support and spans happens in `engine.decomposition`."""
-
-    probs: list[float]
-    offsets: list[tuple[int, int]]
-    truncated: bool = False
-
-
-class TokenClassifier(Protocol):
-    def token_probs(self, prompt: str, claim: str) -> TokenScores: ...
-
-
-class Scorer(Protocol):
-    def score(self, text: str, passages: list[str]) -> TokenScores: ...
 
 
 def render_prompt(passages: list[str]) -> str:

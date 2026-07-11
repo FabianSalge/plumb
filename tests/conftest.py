@@ -7,7 +7,8 @@ from fastapi.testclient import TestClient
 
 from api.app import create_app
 from engine.decomposition import CLAIM_UNIT
-from engine.scoring import INFERENCE_MODE, TokenScores
+from engine.signals import TokenScores
+from engine.signals.groundedness import INFERENCE_MODE
 
 
 class FakeScorer:
