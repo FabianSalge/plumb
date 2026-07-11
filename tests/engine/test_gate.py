@@ -1,4 +1,4 @@
-"""Unit tests for verdict mapping and the conjunctive gate (engine/verdict.py)."""
+"""Unit tests for verdict mapping and the conjunctive gate (engine/gate.py)."""
 
 from engine.gate import gate_decision, judge_claim
 

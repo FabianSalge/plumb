@@ -7,7 +7,8 @@ import yaml
 from api.app import create_app
 from engine.calibration import CalibrationError
 from engine.signals import TokenScores
-from tests.conftest import FakeScorer, _config, make_artifact, write_config
+from tests.engine.factories import make_artifact, make_config, write_config
+from tests.engine.signals.fakes import FakeScorer
 
 
 def scorer_factory(cfg):
@@ -15,7 +16,7 @@ def scorer_factory(cfg):
 
 
 def test_mismatched_revision_refuses_startup(tmp_path):
-    config = _config()
+    config = make_config()
     config["signals"]["groundedness"]["revision"] = "cafebabe"
     path = write_config(tmp_path, config=config, artifact=make_artifact())
     with pytest.raises(CalibrationError) as excinfo:
@@ -33,7 +34,7 @@ def test_mismatched_claim_unit_refuses_startup(tmp_path):
 
 def test_missing_artifact_file_refuses_startup(tmp_path):
     path = tmp_path / "verifier.yaml"
-    path.write_text(yaml.safe_dump(_config()))  # config only — no artifact beside it
+    path.write_text(yaml.safe_dump(make_config()))  # config only — no artifact beside it
     with pytest.raises(CalibrationError, match="calibration.yaml"):
         create_app(config_path=path, scorer_factory=scorer_factory)
 

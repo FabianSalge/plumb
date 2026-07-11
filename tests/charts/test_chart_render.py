@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-REPO_ROOT = Path(__file__).parents[1]
+REPO_ROOT = Path(__file__).parents[2]
 CHART = REPO_ROOT / "charts" / "plumb"
 VERIFIER_CONFIG = REPO_ROOT / "config" / "verifier.yaml"
 CHART_ARTIFACT = CHART / "files" / "calibration-artifact.yaml"
