@@ -10,15 +10,14 @@ short/500-word protocol), memory, and weights-on-disk size.
 
 import argparse
 import json
-import platform
 import statistics
-import subprocess
 import time
 from pathlib import Path
 
 import psutil
 
 from bench.data import Example, load_ragtruth_test, stratified_slice
+from bench.harness import environment, percentile, progress, write_results
 from bench.metrics import auroc, balanced_accuracy, f1_score, precision_recall
 
 THRESHOLD = 0.5  # pred_hallucinated = support < THRESHOLD, every candidate alike
@@ -81,8 +80,7 @@ def timed_scores(candidate, examples: list[Example]) -> tuple[list[float], list[
         start = time.perf_counter()
         supports.append(candidate.support_score(example))
         millis.append((time.perf_counter() - start) * 1000)
-        if (i + 1) % 50 == 0:
-            print(f"  {i + 1}/{len(examples)} scored", flush=True)
+        progress(i + 1, len(examples), noun="examples", every=50)
     return supports, millis
 
 
@@ -95,12 +93,6 @@ def fixed_pair_latency(candidate, evidence: str, claim: str) -> dict:
         candidate.support_score(example)
         millis.append((time.perf_counter() - start) * 1000)
     return {"median_ms": statistics.median(millis), "p95_ms": percentile(millis, 95)}
-
-
-def percentile(values: list[float], pct: float) -> float:
-    ordered = sorted(values)
-    index = min(len(ordered) - 1, round(pct / 100 * len(ordered) + 0.5) - 1)
-    return ordered[index]
 
 
 def weights_on_disk_bytes(repos: list[tuple[str, str | None]]) -> int | None:
@@ -120,18 +112,7 @@ def weights_on_disk_bytes(repos: list[tuple[str, str | None]]) -> int | None:
     return total
 
 
-def hardware_info() -> dict:
-    brand = subprocess.run(
-        ["sysctl", "-n", "machdep.cpu.brand_string"], capture_output=True, text=True
-    ).stdout.strip()
-    memory_gb = round(psutil.virtual_memory().total / 2**30)
-    return {"platform": platform.platform(), "cpu": brand, "memory_gb": memory_gb}
-
-
 def main() -> None:
-    import torch
-    import transformers
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate", required=True, choices=sorted(CANDIDATES))
     parser.add_argument("--per-task", type=int, default=200)
@@ -190,12 +171,7 @@ def main() -> None:
             ),
         },
         "sanity": sanity,
-        "environment": {
-            **hardware_info(),
-            "python": platform.python_version(),
-            "torch": torch.__version__,
-            "transformers": transformers.__version__,
-        },
+        "environment": environment(hardware=True),
         "per_example": [
             {
                 "id": e.id,
@@ -208,8 +184,7 @@ def main() -> None:
         ],
     }
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(result, indent=1) + "\n")
+    write_results(args.out, result)
     print(json.dumps({k: result[k] for k in ("candidate", "metrics", "latency")}, indent=1))
 
 

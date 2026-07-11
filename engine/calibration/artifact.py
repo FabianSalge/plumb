@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from engine.calibration.platt import CalibrationError, platt_confidence
 from engine.config import SignalModelConfig
 from engine.decomposition import CLAIM_UNIT
-from engine.scoring import INFERENCE_MODE
+from engine.signals.groundedness import INFERENCE_MODE
 
 # Artifact schema versions this engine can serve. The ε clamp and the meaning of
 # the coefficients are pinned to the schema version, so an unknown version is a

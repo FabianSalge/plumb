@@ -16,8 +16,9 @@ from api.schemas import ClaimResult, SpanResult, VerifyRequest, VerifyResponse
 from engine.calibration import load_artifact, validate_bindings
 from engine.config import SignalModelConfig, load_config
 from engine.decomposition import decompose
-from engine.scoring import LettuceDetectScorer, Scorer
-from engine.verdict import gate_decision, judge_claim
+from engine.gate import gate_decision, judge_claim
+from engine.signals import Scorer
+from engine.signals.groundedness import LettuceDetectScorer
 
 logger = logging.getLogger("plumb.api")
 

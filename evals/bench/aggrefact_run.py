@@ -16,24 +16,18 @@ Usage (from evals/):
 
 import argparse
 import json
-import platform
 from dataclasses import asdict
 from pathlib import Path
 
 from bench.aggrefact import load_aggrefact_test, stratified_claims
+from bench.harness import DEFAULT_CONFIG, environment, progress, write_results
 from bench.metrics import auroc, ece, reliability_bins
 from engine.calibration import platt_confidence
 from engine.decomposition import Claim, reduce_claim
-from engine.scoring import LettuceDetectScorer
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONFIG = REPO_ROOT / "config" / "verifier.yaml"
+from engine.signals.groundedness import LettuceDetectScorer
 
 
 def main() -> None:
-    import torch
-    import transformers
-
     from engine.config import load_config
 
     parser = argparse.ArgumentParser(description=__doc__)
@@ -71,8 +65,7 @@ def main() -> None:
         reduced = reduce_claim(whole, scores, cfg.groundedness.span_threshold)
         outcomes.append(int(example.supported))
         supports.append(reduced.support)
-        if (i + 1) % 100 == 0:
-            print(f"  {i + 1}/{len(sliced)} claims scored", flush=True)
+        progress(i + 1, len(sliced), noun="claims", every=100)
 
     confidences = [platt_confidence(s, a=a, b=b) for s in supports]
     result = {
@@ -96,16 +89,10 @@ def main() -> None:
             "reliability": [asdict(bin) for bin in reliability_bins(outcomes, confidences)],
             "reliability_raw": [asdict(bin) for bin in reliability_bins(outcomes, supports)],
         },
-        "environment": {
-            "platform": platform.platform(),
-            "python": platform.python_version(),
-            "torch": torch.__version__,
-            "transformers": transformers.__version__,
-        },
+        "environment": environment(),
     }
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(result, indent=1) + "\n")
+    write_results(args.out, result)
     summary = dict(result["out_of_domain"])
     summary.pop("reliability")
     summary.pop("reliability_raw")

@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, Field
 
-from engine.verdict import GateDecision, Verdict
+from engine.gate import GateDecision, Verdict
 
 
 class VerifyRequest(BaseModel):

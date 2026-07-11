@@ -2,7 +2,7 @@
 
 import pytest
 
-from tests.conftest import char_scores
+from tests.engine.signals.fakes import char_scores
 
 
 def verify(client, **overrides):

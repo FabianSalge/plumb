@@ -3,7 +3,7 @@
 Segment-after-score (ADR-0009) moves reduction and span attribution to
 `engine.decomposition`; the scorer's job is now one whole-answer forward pass
 returning per-token risk with answer-relative offsets. Those live in
-`tests/test_decomposition.py`.
+`tests/engine/decomposition/` (test_segmentation.py and test_reduction.py).
 """
 
 import logging
@@ -12,7 +12,8 @@ import sys
 import pytest
 
 from engine.config import SignalModelConfig
-from engine.scoring import LettuceDetectScorer, ScorerError, TokenScores, render_prompt
+from engine.signals import ScorerError, TokenScores
+from engine.signals.groundedness import LettuceDetectScorer, render_prompt
 
 
 class FakePipeline:
@@ -98,7 +99,7 @@ def test_missing_dependency_error_names_the_extra(monkeypatch):
 
 def test_truncated_context_is_logged_with_passage_count(caplog):
     result = TokenScores(probs=[0.1], offsets=[(0, 1)], truncated=True)
-    with caplog.at_level(logging.WARNING, logger="plumb.engine.scoring"):
+    with caplog.at_level(logging.WARNING, logger="plumb.engine.signals.groundedness"):
         scorer([result]).score("c", ["p1", "p2", "p3"])
     truncations = [r for r in caplog.records if "truncated" in r.getMessage()]
     assert len(truncations) == 1

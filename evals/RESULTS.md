@@ -119,7 +119,7 @@ segmenter and question-less scorer, one whole-answer pass per response.
   labelled hallucinated iff its character range overlaps an annotated span
   (`hallucination_labels` offsets) → 4,240 sentences, 363 (8.6%) hallucinated.
 - **Scoring:** one whole-answer forward pass per response through the shipping
-  scorer (`engine.scoring`, passages only — no question, exactly as `/v1/verify`
+  scorer (`engine.signals.groundedness`, passages only — no question, exactly as `/v1/verify`
   runs), reduced per sentence by `engine.decomposition.decompose`. Sentence risk
   = 1 − support. AUROC over sentence risk vs the overlap label
   (`bench/sentence_run.py`).
