@@ -25,12 +25,12 @@
 
 ## 4. Evals — sentence-level discrimination
 
-- [ ] 4.1 Add the engine as a path dependency to `evals/` so the benchmark uses the same segmenter; parse RAGTruth `hallucination_labels` span offsets
-- [ ] 4.2 Sentence-level run: segment each response, label a sentence positive iff it overlaps an annotated span, score per-claim from the one whole-answer pass, compute AUROC over sentences
-- [ ] 4.3 `evals/RESULTS.md`: publish the sentence-level discrimination number with a stated floor and its protocol
+- [x] 4.1 Add the engine as a path dependency to `evals/` so the benchmark uses the same segmenter; parse RAGTruth `hallucination_labels` span offsets
+- [x] 4.2 Sentence-level run: segment each response, label a sentence positive iff it overlaps an annotated span, score per-claim from the one whole-answer pass, compute AUROC over sentences
+- [x] 4.3 `evals/RESULTS.md`: publish the sentence-level discrimination number (AUROC 0.926, 600 responses / 4,240 sentences) with a stated floor (≥ 0.70) and its protocol
 
 ## 5. Docs and verification
 
-- [ ] 5.1 README response example updated to the multi-claim shape with `start`/`end`; check the chart/e2e golden request still passes
-- [ ] 5.2 `make test`, `make lint`, `make typecheck` green; run `make test-model` for the real-weights integration path
-- [ ] 5.3 OpenSpec validate + sync delta specs; archive after merge
+- [x] 5.1 README response example updated to the multi-claim shape with `start`/`end`; chart golden render test passes
+- [x] 5.2 `make test`, `make lint`, `make typecheck` green; `make test-model` real-weights integration path green
+- [x] 5.3 OpenSpec validate (strict) passes; sync delta specs + archive after merge
