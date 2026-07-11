@@ -14,11 +14,11 @@ the plan; nothing there moves outside it.
 
 ## 2. Platt fit (evals)
 
-- [ ] 2.1 Failing unit tests for the two-parameter logistic MLE: recovers known
+- [x] 2.1 Failing unit tests for the two-parameter logistic MLE: recovers known
       coefficients on synthetic data, applies the ε-clamped logit, refuses single-class
       labels
-- [ ] 2.2 Implement the fit (Newton–Raphson on log-loss) in `evals/bench/calibration.py`
-- [ ] 2.3 Fit script `evals/bench/calibration_run.py`: load RAGTruth test, exclude the
+- [x] 2.2 Implement the fit (Newton–Raphson on log-loss) in `evals/bench/calibration.py`
+- [x] 2.3 Fit script `evals/bench/calibration_run.py`: load RAGTruth test, exclude the
       seed-18 slice by the same `stratified_slice` call the benchmark uses, score the
       remaining responses through the shipping scorer, label sentences by span overlap,
       fit, and emit the artifact YAML (schema, method, coefficients, bindings, fit-set
