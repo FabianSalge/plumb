@@ -26,7 +26,7 @@ the plan; nothing there moves outside it.
 
 ## 3. Out-of-domain evaluation (evals)
 
-- [ ] 3.1 LLM-AggreFact loader in `evals/bench/`: RAGTruth subset excluded, remaining
+- [x] 3.1 LLM-AggreFact loader in `evals/bench/`: RAGTruth subset excluded, remaining
       subsets checked against the pinned model card's documented training mix, the
       check's outcome recorded in the results JSON; loud failure on split-stat mismatch
       per the `data.py` convention
