@@ -14,6 +14,13 @@ import yaml
 REPO_ROOT = Path(__file__).parents[1]
 CHART = REPO_ROOT / "charts" / "plumb"
 VERIFIER_CONFIG = REPO_ROOT / "config" / "verifier.yaml"
+CHART_ARTIFACT = CHART / "files" / "calibration-artifact.yaml"
+
+
+def repo_artifact_path() -> Path:
+    """The calibration artifact config/verifier.yaml references, repo-relative."""
+    config = yaml.safe_load(VERIFIER_CONFIG.read_text())
+    return REPO_ROOT / "config" / config["signals"]["groundedness"]["calibration"]
 
 
 def render(*set_args: str, values: dict | None = None) -> dict[str, list[dict]]:
@@ -103,7 +110,7 @@ class TestService:
 class TestVerifierConfig:
     def test_default_render_equals_repo_config(self, default_render):
         configmap = only(default_render, "ConfigMap")
-        (rendered,) = configmap["data"].values()
+        rendered = configmap["data"]["verifier.yaml"]
         assert yaml.safe_load(rendered) == yaml.safe_load(VERIFIER_CONFIG.read_text()), (
             "chart default verifier config drifted from config/verifier.yaml"
         )
@@ -111,8 +118,22 @@ class TestVerifierConfig:
     def test_threshold_override_lands(self):
         override = {"verifier": {"signals": {"groundedness": {"threshold": 0.7}}}}
         manifests = render(values=override)
-        (rendered,) = only(manifests, "ConfigMap")["data"].values()
+        rendered = only(manifests, "ConfigMap")["data"]["verifier.yaml"]
         assert yaml.safe_load(rendered)["signals"]["groundedness"]["threshold"] == 0.7
+
+    def test_chart_artifact_equals_repo_artifact(self, default_render):
+        rendered = only(default_render, "ConfigMap")["data"]["calibration.yaml"]
+        assert yaml.safe_load(rendered) == yaml.safe_load(repo_artifact_path().read_text()), (
+            "chart calibration artifact drifted from config/calibration/"
+        )
+
+    def test_artifact_mounts_at_the_path_the_config_references(self, default_render):
+        volumes = only(default_render, "Deployment")["spec"]["template"]["spec"]["volumes"]
+        (config_volume,) = volumes
+        items = {i["key"]: i["path"] for i in config_volume["configMap"]["items"]}
+        config = yaml.safe_load(VERIFIER_CONFIG.read_text())
+        assert items["calibration.yaml"] == config["signals"]["groundedness"]["calibration"]
+        assert items["verifier.yaml"] == "verifier.yaml"
 
 
 def egress_ports(policy: dict) -> set[int]:

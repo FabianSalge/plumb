@@ -18,6 +18,12 @@ from engine.scoring import TokenScores
 
 logger = logging.getLogger("plumb.engine.decomposition")
 
+# The claim unit's identity, bound into every calibration artifact (ADR-0008).
+# Bump it whenever segmentation rules or the token-to-claim reduction change —
+# the golden segmentation tests changing in the same diff is the reviewer's
+# signal — so a calibrator fitted to the old unit refuses to serve.
+CLAIM_UNIT = "sentence-maxrisk-v1"
+
 
 class DecompositionError(Exception):
     """Segmentation produced claims that do not honor the substring invariant, or

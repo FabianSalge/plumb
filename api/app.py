@@ -13,6 +13,7 @@ from fastapi.responses import JSONResponse
 
 from api.logging import RequestLoggingMiddleware, setup_logging
 from api.schemas import ClaimResult, SpanResult, VerifyRequest, VerifyResponse
+from engine.calibration import load_artifact, validate_bindings
 from engine.config import SignalModelConfig, load_config
 from engine.decomposition import decompose
 from engine.scoring import LettuceDetectScorer, Scorer
@@ -30,7 +31,13 @@ def create_app(
     scorer_factory: ScorerFactory | None = None,
 ) -> FastAPI:
     setup_logging()
-    cfg = load_config(config_path or os.environ.get("PLUMB_CONFIG", DEFAULT_CONFIG_PATH))
+    resolved_config = Path(config_path or os.environ.get("PLUMB_CONFIG", DEFAULT_CONFIG_PATH))
+    cfg = load_config(resolved_config)
+    # The artifact travels with the config; its path resolves against the config
+    # file's directory. A missing or mismatched calibrator is a startup failure —
+    # the engine never serves raw scores (ADR-0008).
+    artifact = load_artifact(resolved_config.parent / cfg.groundedness.calibration)
+    validate_bindings(artifact, cfg.groundedness)
     engine_version = package_version("plumb")
     factory: ScorerFactory = scorer_factory or LettuceDetectScorer.load
 
@@ -70,9 +77,27 @@ def create_app(
         scorer: Scorer = app.state.scorer
         scores = scorer.score(request.text, request.context)
         assessed = decompose(request.text, scores, cfg.groundedness.span_threshold)
+        confidences = [artifact.confidence(claim.support) for claim in assessed]
         verdicts = [
-            judge_claim(claim.text, claim.support, cfg.groundedness.threshold) for claim in assessed
+            judge_claim(claim.text, confidence, cfg.groundedness.threshold)
+            for claim, confidence in zip(assessed, confidences, strict=True)
         ]
+        # The raw support is log-only detail: the response carries the calibrated
+        # confidence, and anyone thresholding must threshold that.
+        logger.info(
+            "claims calibrated",
+            extra={
+                "claims": [
+                    {
+                        "start": claim.start,
+                        "end": claim.end,
+                        "raw_support": claim.support,
+                        "confidence": confidence,
+                    }
+                    for claim, confidence in zip(assessed, confidences, strict=True)
+                ]
+            },
+        )
         return VerifyResponse(
             claims=[
                 ClaimResult(
@@ -80,7 +105,7 @@ def create_app(
                     start=claim.start,
                     end=claim.end,
                     verdict=verdict.verdict,
-                    score=verdict.score,
+                    confidence=verdict.confidence,
                     spans=[
                         SpanResult(start=span.start, end=span.end, text=span.text)
                         for span in claim.spans

@@ -14,6 +14,13 @@ from engine.config import SignalModelConfig
 
 logger = logging.getLogger("plumb.engine.scoring")
 
+# The scoring protocol's identity, bound into every calibration artifact
+# (ADR-0008). Bump it whenever inference behaviour changes — prompt template,
+# passage rendering, tokenization layout — so a calibrator fitted to the old
+# behaviour refuses to serve; the golden prompt test changing in the same diff
+# is the reviewer's signal.
+INFERENCE_MODE = "joint-questionless-v1"
+
 # lettucedetect's English summary template (the question-less input shape),
 # verbatim from prompts/summary_prompt_en.txt. Any drift silently degrades
 # scores instead of erroring, so a test pins the rendered output byte-for-byte.

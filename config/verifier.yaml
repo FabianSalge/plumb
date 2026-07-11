@@ -1,18 +1,29 @@
 # Verifier engine config. `version` is echoed as config_version in every
 # response — bump it on any change here. The signal model is pinned by
 # revision and its threshold is defined per-model, so a model swap (#18)
-# is a config-version bump, never a silent verdict change.
+# is a config-version bump, never a silent verdict change — and since
+# ADR-0008 it also demands a refitted calibration artifact, or the engine
+# refuses to start.
 #
 # English-only deployments wanting higher in-domain accuracy can swap to
 # KRLabsOrg/lettucedect-large-modernbert-en-v1
 # revision 22296c700ef0ba4ab3e5c9afffa0185caaf61e52 (ADR-0006); thresholds
-# are per-model, so recheck both thresholds when swapping.
-version: "0.4.0"
+# are per-model and the calibration artifact is per-model — refit both
+# when swapping.
+version: "0.5.0"
 signals:
   groundedness:
     model: KRLabsOrg/lettucedect-v2-mmbert-base
     revision: 0f85c7a15b17aee6e8f794dae7cb4e42e2b8fdac
+    # Thresholds the calibrated confidence (ADR-0008): 0.5 means "more likely
+    # supported than not" under the artifact below.
     threshold: 0.5
     # Flags claim tokens into unsupported spans; independent from the verdict
     # threshold above — an unsupported claim with zero spans is legal (ADR-0007).
+    # Applies to raw token risks — span confidences are uncalibrated until #40.
     span_threshold: 0.5
+    # Platt calibration artifact, relative to this file. Fitted on held-out
+    # RAGTruth at the sentence claim unit; the engine refuses to start if the
+    # artifact's bindings mismatch the model/revision above or the engine's
+    # declared inference mode and claim unit.
+    calibration: calibration/lettucedect-v2-mmbert-base-sentence-v1.yaml

@@ -7,3 +7,9 @@ metadata:
 data:
   verifier.yaml: |
     {{- toYaml .Values.verifier | nindent 4 }}
+  # The calibration artifact ships with the chart (a copy of the repo's
+  # config/calibration/ file — a render test fails on drift) and is mounted at
+  # the path the verifier config references. The engine refuses to start if
+  # its bindings mismatch the configured model.
+  calibration.yaml: |
+    {{- .Files.Get "files/calibration-artifact.yaml" | nindent 4 }}

@@ -22,7 +22,7 @@ def test_supported_claim(make_client):
     assert claim["start"] == 0
     assert claim["end"] == 16
     assert claim["verdict"] == "supported"
-    assert claim["score"] == 0.9
+    assert claim["confidence"] == pytest.approx(0.9)
     assert claim["spans"] == []
     assert body["gate"] == "pass"
 
@@ -34,7 +34,7 @@ def test_unsupported_claim_carries_spans(make_client):
     body = resp.json()
     claim = body["claims"][0]
     assert claim["verdict"] == "unsupported"
-    assert claim["score"] == pytest.approx(0.2)
+    assert claim["confidence"] == pytest.approx(0.2)
     assert claim["spans"] == [{"start": 4, "end": 15, "text": "sky is blue"}]
     assert body["gate"] == "block"
 
@@ -82,7 +82,7 @@ def test_no_boundary_answer_is_one_whole_text_claim(make_client):
     assert (body["claims"][0]["start"], body["claims"][0]["end"]) == (0, 15)
 
 
-def test_score_at_threshold_is_supported(make_client):
+def test_confidence_at_threshold_is_supported(make_client):
     client = make_client(char_scores("The sky is blue.", base=0.5))
     body = verify(client).json()
     assert body["claims"][0]["verdict"] == "supported"
@@ -121,12 +121,12 @@ def test_version_fields_present(client):
 
 
 def test_response_shape_is_exactly_the_contract(make_client):
-    """Claims carry start/end; spans carry positions and text only — no confidence
-    field until calibration (#32) produces one worth shipping."""
+    """Claims carry calibrated confidence, never the raw score; spans carry positions
+    and text only — span confidences wait for #40."""
     client = make_client(char_scores("The sky is blue.", flag=(0, 3)))
     body = verify(client).json()
     assert set(body) == {"claims", "gate", "engine_version", "config_version"}
-    assert set(body["claims"][0]) == {"text", "start", "end", "verdict", "score", "spans"}
+    assert set(body["claims"][0]) == {"text", "start", "end", "verdict", "confidence", "spans"}
     assert set(body["claims"][0]["spans"][0]) == {"start", "end", "text"}
 
 
@@ -135,3 +135,48 @@ def test_contradicted_absent_from_vocabulary(make_client):
     for base in (0.0, 1.0):
         body = verify(make_client(char_scores("The sky is blue.", base=base))).json()
         assert body["claims"][0]["verdict"] in {"supported", "unsupported"}
+
+
+def test_confidence_is_calibrated_not_raw(make_client):
+    """A non-identity artifact visibly moves the number: with a=1, b=1 a raw support
+    of 0.5 becomes sigmoid(1) ≈ 0.731 — and the verdict thresholds that."""
+    client = make_client(char_scores("The sky is blue.", base=0.5), a=1.0, b=1.0)
+    claim = verify(client).json()["claims"][0]
+    assert claim["confidence"] == pytest.approx(0.7310585786300049)
+    assert claim["verdict"] == "supported"
+
+
+def test_calibration_can_flip_the_verdict_at_the_same_raw_score(make_client):
+    """The gate thresholds calibrated confidence: a downward map turns a raw 0.6
+    into a confidence below the 0.5 threshold."""
+    client = make_client(char_scores("The sky is blue.", base=0.4), a=1.0, b=-1.0)
+    body = verify(client).json()
+    assert body["claims"][0]["verdict"] == "unsupported"
+    assert body["gate"] == "block"
+
+
+def test_confidence_never_exactly_zero_or_one(make_client):
+    """Saturated raw supports stay strictly inside (0, 1) — the engine never
+    prints certainty."""
+    for base, bound in ((0.0, 1.0), (1.0, 0.0)):
+        body = verify(make_client(char_scores("The sky is blue.", base=base))).json()
+        confidence = body["claims"][0]["confidence"]
+        assert confidence != bound
+        assert 0.0 < confidence < 1.0
+
+
+def test_raw_support_goes_to_logs_not_the_response(make_client, capsys):
+    """Structured logs carry raw support alongside the calibrated confidence; the
+    response carries only the confidence."""
+    import json
+
+    client = make_client(char_scores("The sky is blue.", base=0.5), a=1.0, b=1.0)
+    body = verify(client).json()
+    assert "score" not in body["claims"][0]
+    lines = [json.loads(line) for line in capsys.readouterr().out.splitlines() if line]
+    calibrated = [line for line in lines if line.get("message") == "claims calibrated"]
+    assert len(calibrated) == 1
+    (logged,) = calibrated[0]["claims"]
+    assert logged["raw_support"] == pytest.approx(0.5)
+    assert logged["confidence"] == pytest.approx(0.7310585786300049)
+    assert calibrated[0]["request_id"]

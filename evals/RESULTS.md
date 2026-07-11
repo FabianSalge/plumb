@@ -4,6 +4,106 @@ Raw per-run output lives in `results/*.json`; the harness is `bench/` (see
 `bench/run.py` for the exact protocol and invocation). Numbers below are
 rendered from those JSONs.
 
+## Calibration v0, Platt scaling on held-out RAGTruth (#32, ADR-0008)
+
+2026-07-11. The raw support score becomes a calibrated confidence: among
+claims the engine scores c, about a fraction c should be fully supported.
+This section measures how close the shipping calibrator gets — in-domain and,
+honestly, out of it. The fitted artifact is
+`config/calibration/lettucedect-v2-mmbert-base-sentence-v1.yaml`.
+
+### Fit
+
+- **Data:** every RAGTruth test response *outside* the seed-18 benchmark
+  slice — 2,100 responses, excluded by the same `stratified_slice` call the
+  benchmark runs, so nothing the calibrator was fitted on evaluates it.
+  Scored exactly as `/v1/verify` scores (one whole-answer joint pass,
+  the engine's segmenter and reduction) → 14,589 sentences, 91.8% supported
+  (a sentence is supported iff it overlaps no annotated span, the #45
+  convention). Fit-set SHA-256 is recorded in the artifact.
+- **Method:** two-parameter Platt scaling on the ε-clamped logit of the raw
+  support, plain MLE by Newton–Raphson (`bench/calibration.py`); the map
+  applied is the engine's own `engine.calibration.platt_confidence`, so
+  fit-time and serve-time arithmetic are the same code. Fitted
+  a = 0.829, b = 0.506. Monotone, so AUROC is untouched — the run aborts
+  if it moves.
+- **Hardware:** MacBook, Apple M4, CPU only. Python 3.13.7, torch 2.12.1,
+  transformers 5.13.0 (`tf5`). `bench/calibration_run.py`.
+
+### Reliability
+
+| Slice | Unit | n | ECE raw | ECE calibrated | AUROC |
+| --- | --- | --- | --- | --- | --- |
+| RAGTruth seed-18 (in-domain) | sentence | 4,240 | 0.0179 | **0.0074** | 0.926 |
+| LLM-AggreFact ex-RAGTruth (out-of-domain) | claim | 1,000 | 0.1068 | **0.1531** | 0.847 |
+
+In-domain reliability (seed-18 sentences, calibrated confidence, 10
+equal-width bins; full diagram data in the results JSONs):
+
+| Bin | n | Mean confidence | Supported rate |
+| --- | --- | --- | --- |
+| [0.0, 0.1) | 35 | 0.071 | 0.057 |
+| [0.1, 0.2) | 62 | 0.148 | 0.113 |
+| [0.2, 0.3) | 48 | 0.252 | 0.229 |
+| [0.3, 0.4) | 50 | 0.360 | 0.380 |
+| [0.4, 0.5) | 41 | 0.453 | 0.366 |
+| [0.5, 0.6) | 55 | 0.550 | 0.745 |
+| [0.6, 0.7) | 83 | 0.653 | 0.675 |
+| [0.7, 0.8) | 128 | 0.750 | 0.750 |
+| [0.8, 0.9) | 305 | 0.857 | 0.859 |
+| [0.9, 1.0] | 3,433 | 0.978 | 0.981 |
+
+Out-of-domain reliability (LLM-AggreFact claims, calibrated confidence):
+
+| Bin | n | Mean confidence | Supported rate |
+| --- | --- | --- | --- |
+| [0.0, 0.1) | 13 | 0.070 | 0.077 |
+| [0.1, 0.2) | 34 | 0.149 | 0.059 |
+| [0.2, 0.3) | 69 | 0.257 | 0.087 |
+| [0.3, 0.4) | 70 | 0.349 | 0.214 |
+| [0.4, 0.5) | 58 | 0.453 | 0.310 |
+| [0.5, 0.6) | 45 | 0.555 | 0.289 |
+| [0.6, 0.7) | 48 | 0.651 | 0.312 |
+| [0.7, 0.8) | 64 | 0.749 | 0.578 |
+| [0.8, 0.9) | 107 | 0.856 | 0.645 |
+| [0.9, 1.0] | 492 | 0.971 | 0.852 |
+
+### Out-of-domain protocol
+
+`bench/aggrefact_run.py` on `lytang/LLM-AggreFact` test (gated; evaluation
+use only, per its terms): 100 claims per subset, seed 18 → 1,000 claims,
+59.5% supported. The RAGTruth subset is excluded because the calibrator is
+fitted on RAGTruth; every remaining subset is checked programmatically
+against the pinned model's actual training mix (the `dataset` column of the
+KR Labs unified training sets) at load time — no further overlap was found,
+and the exclusion record ships inside the artifact. Claims are scored at
+LLM-AggreFact's own claim granularity (one claim, one joint pass against its
+document), not our sentence unit — a stated mismatch, not a hidden one. Long
+documents (TofuEval meeting transcripts) truncate at the model window and
+are logged as such.
+
+### Reading the numbers
+
+- **In-domain the map earns its place:** ECE more than halves, to 0.7% —
+  the raw score was systematically pessimistic mid-range (raw 0.4–0.5
+  scores were supported 72% of the time), which is exactly the sigmoid-shaped
+  miscalibration Platt corrects. A verdict threshold of 0.5 on the calibrated
+  confidence now means "more likely supported than not"; gate policy can be
+  set against a probability instead of a model artifact.
+- **Out-of-domain the calibrated number is *overconfident*, and worse than
+  raw** (ECE 0.153 vs 0.107). The driver is base-rate shift: the fit
+  distribution is 91.8% supported RAG traffic, LLM-AggreFact is 59.5%
+  supported fact-checking-style claims, so the upward shift the map learned
+  in-domain overshoots. The claim-unit mismatch contributes. This is the
+  published answer to "what happens on my domain": on RAGTruth-style RAG
+  traffic the confidence means what it says; the further your traffic is
+  from that, the more it overstates support — the standing case for
+  per-tenant refits (ADR-0008). Discrimination stays solid OOD (AUROC 0.847),
+  so operators on shifted domains should raise the threshold, not trust the
+  absolute number.
+- The reliability diagrams show no systematic sigmoid misfit in-domain, so
+  no evidence yet for a superseding ADR (isotonic/beta).
+
 ## Sentence-level discrimination, segment-after-score (#45, ADR-0009)
 
 2026-07-11. The gate before whole-text-as-one-claim retires: sentence

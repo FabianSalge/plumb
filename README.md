@@ -4,7 +4,7 @@
 
 The open-source, self-hostable groundedness gate — one calibrated verifier that checks AI-generated answers against your own knowledge base and gates both CI and production on the result, without data leaving your cluster.
 
-> **Status:** early development — the tracer bullet works end to end: `/v1/verify` scores answers against provided context with a benchmarked LettuceDetect groundedness signal and deploys to Kubernetes via the Helm chart. Scores are not yet calibrated.
+> **Status:** early development — the tracer bullet works end to end: `/v1/verify` checks answers against provided context with a benchmarked LettuceDetect groundedness signal, returns calibrated confidences, and deploys to Kubernetes via the Helm chart.
 
 Work is planned and tracked publicly via [milestones](https://github.com/FabianSalge/plumb/milestones) and [issues](https://github.com/FabianSalge/plumb/issues); progress is journaled in [docs/devlog/](docs/devlog/).
 
@@ -29,15 +29,17 @@ curl -s localhost:8000/v1/verify \
 ```json
 {
   "claims": [
-    {"text": "The capital of France is Paris.", "start": 0, "end": 31, "verdict": "supported", "score": 0.9, "spans": []}
+    {"text": "The capital of France is Paris.", "start": 0, "end": 31, "verdict": "supported", "confidence": 0.986, "spans": []}
   ],
   "gate": "pass",
   "engine_version": "0.2.0",
-  "config_version": "0.4.0"
+  "config_version": "0.5.0"
 }
 ```
 
-The input is decomposed into claims — one verbatim sentence each — and scored in a single whole-answer pass against the union of the caller-provided evidence with one grounding signal ([LettuceDetect v2](https://huggingface.co/KRLabsOrg/lettucedect-v2-mmbert-base), pinned by revision in [config/verifier.yaml](config/verifier.yaml) — see ADR-0006 for the selection benchmark). Each claim carries answer-relative `start`/`end` (Unicode code-point offsets into the request `text`, with `text == request.text[start:end]`); text with no sentence boundary yields one whole-text claim (ADR-0009). Unsupported regions of a claim come back as `spans` — `start`/`end` code-point offsets into that claim's `text` plus the flagged substring (ADR-0007). Spans localize the problem, they are not the verdict's proof: the span-flagging threshold is a separate configured knob from the verdict threshold, so an `unsupported` claim with zero spans is possible, and a `supported` one can still carry spans. Decomposition refines attribution without moving the gate — the whole-answer score equals the minimum over per-claim scores. Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
+The input is decomposed into claims — one verbatim sentence each — and scored in a single whole-answer pass against the union of the caller-provided evidence with one grounding signal ([LettuceDetect v2](https://huggingface.co/KRLabsOrg/lettucedect-v2-mmbert-base), pinned by revision in [config/verifier.yaml](config/verifier.yaml) — see ADR-0006 for the selection benchmark). Each claim carries answer-relative `start`/`end` (Unicode code-point offsets into the request `text`, with `text == request.text[start:end]`); text with no sentence boundary yields one whole-text claim (ADR-0009). Unsupported regions of a claim come back as `spans` — `start`/`end` code-point offsets into that claim's `text` plus the flagged substring (ADR-0007). Spans localize the problem, they are not the verdict's proof: the span-flagging threshold is a separate configured knob from the verdict threshold, so an `unsupported` claim with zero spans is possible, and a `supported` one can still carry spans. Decomposition refines attribution without moving the gate — the whole-answer verdict equals the conjunction over per-claim verdicts at the same threshold. Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Retrieval and tenancy are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
+
+`confidence` is a calibrated probability, not a raw model score: among claims the engine scores `c`, about a fraction `c` are fully supported by the supplied passages, as measured on RAGTruth-style RAG traffic — out-of-domain calibration error is published alongside in [evals/RESULTS.md](evals/RESULTS.md) (ADR-0008). The verdict thresholds this confidence, the threshold lives in versioned config, and the Platt calibration artifact ([config/calibration/](config/calibration/)) is bound to the exact model revision, inference mode, and claim unit it was fitted against — the engine refuses to start with a mismatched calibrator rather than serve an uncalibrated number.
 
 ### Container
 
@@ -58,7 +60,7 @@ helm install plumb charts/plumb
 
 Highlights of [values.yaml](charts/plumb/values.yaml):
 
-- `verifier.*` — the signal model pin and threshold, rendered into a ConfigMap the API loads via `PLUMB_CONFIG`. Changing the threshold is a values change and a rollout, never an image rebuild.
+- `verifier.*` — the signal model pin, thresholds, and calibration artifact reference, rendered into a ConfigMap the API loads via `PLUMB_CONFIG`. Changing the threshold is a values change and a rollout, never an image rebuild; swapping the model demands a refitted calibration artifact or the pod refuses to become ready.
 - `networkPolicy.enabled` (default `true`) — egress is default-deny except DNS and TCP 443, the one hole that lets the pod fetch the pinned model weights on first start. On clusters that mirror or pre-bake weights, set `networkPolicy.allowModelDownload=false` to close it and run fully sovereign.
 - `image.repository` / `image.tag` — no registry is assumed; bring your own or use the kind flow below.
 

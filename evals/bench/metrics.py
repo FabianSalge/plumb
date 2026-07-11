@@ -4,9 +4,16 @@ unit-testable and free of silent library defaults.
 Convention: label 1 = hallucinated (the positive class), risk scores are
 higher-is-more-hallucinated. Adapters return support scores; callers pass
 risk = 1 - support.
+
+Calibration metrics use the opposite framing: `outcomes` are 1 iff the event the
+confidence asserts occurred (for the groundedness calibrator, 1 = supported), so
+a calibrated confidence c claims a fraction c of claims scored c are supported.
 """
 
 from collections.abc import Sequence
+from dataclasses import dataclass
+
+RELIABILITY_BINS = 10
 
 
 class MetricError(Exception):
@@ -74,3 +81,67 @@ def precision_recall(labels: Sequence[int], predicted: Sequence[bool]) -> tuple[
     precision = tp / (tp + fp) if tp + fp else 0.0
     recall = tp / (tp + fn) if tp + fn else 0.0
     return precision, recall
+
+
+@dataclass(frozen=True)
+class ReliabilityBin:
+    """One reliability-diagram bin: `[lo, hi)` (the last bin closes at 1.0 inclusive).
+    `mean_confidence` and `outcome_rate` are None for an empty bin."""
+
+    lo: float
+    hi: float
+    count: int
+    mean_confidence: float | None
+    outcome_rate: float | None
+
+
+def _check_confidences(outcomes: Sequence[int], confidences: Sequence[float]) -> None:
+    if len(outcomes) != len(confidences):
+        raise MetricError(
+            f"length mismatch: {len(outcomes)} outcomes, {len(confidences)} confidences"
+        )
+    if not confidences:
+        raise MetricError("metric undefined: no confidences")
+    for confidence in confidences:
+        if not 0.0 <= confidence <= 1.0:
+            raise MetricError(f"confidence {confidence} outside [0, 1]")
+
+
+def reliability_bins(outcomes: Sequence[int], confidences: Sequence[float]) -> list[ReliabilityBin]:
+    """Reliability-diagram data over equal-width confidence bins: per bin, how often
+    the asserted event actually occurred versus the mean confidence claimed."""
+    _check_confidences(outcomes, confidences)
+    binned: list[list[tuple[int, float]]] = [[] for _ in range(RELIABILITY_BINS)]
+    for outcome, confidence in zip(outcomes, confidences, strict=True):
+        index = min(int(confidence * RELIABILITY_BINS), RELIABILITY_BINS - 1)
+        binned[index].append((outcome, confidence))
+    bins: list[ReliabilityBin] = []
+    for i, members in enumerate(binned):
+        if members:
+            mean_confidence = sum(c for _, c in members) / len(members)
+            outcome_rate = sum(o for o, _ in members) / len(members)
+        else:
+            mean_confidence = None
+            outcome_rate = None
+        bins.append(
+            ReliabilityBin(
+                lo=i / RELIABILITY_BINS,
+                hi=(i + 1) / RELIABILITY_BINS,
+                count=len(members),
+                mean_confidence=mean_confidence,
+                outcome_rate=outcome_rate,
+            )
+        )
+    return bins
+
+
+def ece(outcomes: Sequence[int], confidences: Sequence[float]) -> float:
+    """Expected calibration error: the count-weighted mean absolute gap between
+    each bin's mean confidence and its observed outcome rate."""
+    bins = reliability_bins(outcomes, confidences)
+    total = len(confidences)
+    return sum(
+        bin.count / total * abs(bin.outcome_rate - bin.mean_confidence)
+        for bin in bins
+        if bin.count and bin.outcome_rate is not None and bin.mean_confidence is not None
+    )
