@@ -29,15 +29,15 @@ curl -s localhost:8000/v1/verify \
 ```json
 {
   "claims": [
-    {"text": "The capital of France is Paris.", "verdict": "supported", "score": 0.9, "spans": []}
+    {"text": "The capital of France is Paris.", "start": 0, "end": 31, "verdict": "supported", "score": 0.9, "spans": []}
   ],
   "gate": "pass",
-  "engine_version": "0.1.0",
-  "config_version": "0.3.0"
+  "engine_version": "0.2.0",
+  "config_version": "0.4.0"
 }
 ```
 
-The whole input is treated as one claim and checked in a single pass against the union of the caller-provided evidence with one grounding signal ([LettuceDetect v2](https://huggingface.co/KRLabsOrg/lettucedect-v2-mmbert-base), pinned by revision in [config/verifier.yaml](config/verifier.yaml) — see ADR-0006 for the selection benchmark). Unsupported regions of the claim come back as `spans` — `start`/`end` Unicode code-point offsets into the claim's `text` plus the flagged substring (ADR-0007). Spans localize the problem, they are not the verdict's proof: the span-flagging threshold is a separate configured knob from the verdict threshold, so an `unsupported` claim with zero spans is possible, and a `supported` one can still carry spans. Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Claim decomposition, retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
+The input is decomposed into claims — one verbatim sentence each — and scored in a single whole-answer pass against the union of the caller-provided evidence with one grounding signal ([LettuceDetect v2](https://huggingface.co/KRLabsOrg/lettucedect-v2-mmbert-base), pinned by revision in [config/verifier.yaml](config/verifier.yaml) — see ADR-0006 for the selection benchmark). Each claim carries answer-relative `start`/`end` (Unicode code-point offsets into the request `text`, with `text == request.text[start:end]`); text with no sentence boundary yields one whole-text claim (ADR-0009). Unsupported regions of a claim come back as `spans` — `start`/`end` code-point offsets into that claim's `text` plus the flagged substring (ADR-0007). Spans localize the problem, they are not the verdict's proof: the span-flagging threshold is a separate configured knob from the verdict threshold, so an `unsupported` claim with zero spans is possible, and a `supported` one can still carry spans. Decomposition refines attribution without moving the gate — the whole-answer score equals the minimum over per-claim scores. Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
 
 ### Container
 

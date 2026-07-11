@@ -4,6 +4,43 @@ Raw per-run output lives in `results/*.json`; the harness is `bench/` (see
 `bench/run.py` for the exact protocol and invocation). Numbers below are
 rendered from those JSONs.
 
+## Sentence-level discrimination, segment-after-score (#45, ADR-0009)
+
+2026-07-11. The gate before whole-text-as-one-claim retires: sentence
+decomposition must localize hallucinations, not just detect them at the
+response level. Measures the shipping configuration — the engine's own
+segmenter and question-less scorer, one whole-answer pass per response.
+
+### Measurement
+
+- **Data:** RAGTruth test split (`wandb/RAGTruth-processed`), same stratified
+  200-per-task slice as the model decision above (seed 18 → 600 responses).
+  Each response is segmented by `engine.decomposition.segment`; a sentence is
+  labelled hallucinated iff its character range overlaps an annotated span
+  (`hallucination_labels` offsets) → 4,240 sentences, 363 (8.6%) hallucinated.
+- **Scoring:** one whole-answer forward pass per response through the shipping
+  scorer (`engine.scoring`, passages only — no question, exactly as `/v1/verify`
+  runs), reduced per sentence by `engine.decomposition.decompose`. Sentence risk
+  = 1 − support. AUROC over sentence risk vs the overlap label
+  (`bench/sentence_run.py`).
+- **Hardware:** MacBook, Apple M4, CPU only. Python 3.13.7, torch 2.12.1,
+  transformers 5.13.0 (`tf5`).
+
+### Result
+
+| Metric | Value | Floor |
+| --- | --- | --- |
+| Sentence-level AUROC | **0.926** | ≥ 0.70 |
+| Sentences / response (mean, max) | 7.1, 22 | — |
+| Per-response latency (median / p95) | 214 / 564 ms | sub-second |
+
+**Floor:** 0.70 AUROC. Below it, per-sentence attribution would be too noisy to
+localize which sentence broke, and decomposition would not earn its place over
+the whole-text claim. The measured 0.926 clears it comfortably — and matches the
+same model's response-level AUROC (0.891, above), so refining to sentences does
+not cost discrimination. Latency stays one forward pass regardless of sentence
+count (mean 7.1, max 22 per response), median well under the sub-second contract.
+
 ## Signal model decision, groundedness slot (#18, ADR-0006)
 
 2026-07-05. Decides which model fills the groundedness slot fixed by

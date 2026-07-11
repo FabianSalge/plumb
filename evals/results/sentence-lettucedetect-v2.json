@@ -1,0 +1,29 @@
+{
+ "model": "KRLabsOrg/lettucedect-v2-mmbert-base",
+ "revision": "0f85c7a15b17aee6e8f794dae7cb4e42e2b8fdac",
+ "config_version": "0.4.0",
+ "slice": {
+  "per_task": 200,
+  "seed": 18,
+  "responses": 600,
+  "sentences": 4240,
+  "hallucinated_sentences": 363
+ },
+ "metrics": {
+  "sentence_auroc": 0.925611663330612
+ },
+ "latency": {
+  "per_response_median_ms": 214.08412558957934,
+  "per_response_p95_ms": 563.6865831911564
+ },
+ "sentences_per_response": {
+  "mean": 7.066666666666666,
+  "max": 22
+ },
+ "environment": {
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "python": "3.13.7",
+  "torch": "2.12.1",
+  "transformers": "5.13.0"
+ }
+}
