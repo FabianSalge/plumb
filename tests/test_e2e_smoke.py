@@ -25,5 +25,7 @@ def test_golden_verify_request():
     body = response.json()
     assert body["gate"] == "pass"
     assert [claim["verdict"] for claim in body["claims"]] == ["supported"]
+    # Calibrated confidence, never exact certainty (ADR-0008).
+    assert all(0.0 < claim["confidence"] < 1.0 for claim in body["claims"])
     assert body["engine_version"]
     assert body["config_version"]
