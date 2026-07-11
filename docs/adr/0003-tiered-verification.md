@@ -42,3 +42,11 @@ contracts above are targets and are labelled as such.
 - Published numbers become a regression surface: once the eval gate is
   wired into CI, a change that blows a latency budget fails the build like
   an accuracy regression does.
+
+## Measurement (2026-07-11, appended)
+
+Fast mode is measured end to end through `/v1/verify` (#36): p50 340 ms,
+p95 1,198 ms on Apple M4 CPU over the RAGTruth benchmark slice — protocol
+in `evals/RESULTS.md`. The fast-mode contract is no longer a target; it is
+measured, and **missed at p95 by ~20%**. The contract stands as the bar;
+the gap is a defect to close, not a number to renegotiate.

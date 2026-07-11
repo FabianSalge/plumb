@@ -17,18 +17,20 @@ def percentile(values: list[float], pct: float) -> float:
     return ordered[index]
 
 
-def environment(*, hardware: bool = False) -> dict:
+def environment(*, hardware: bool = False, libs: bool = True) -> dict:
     """Library and platform stamp for a results JSON; `hardware` adds CPU and
-    memory (run-level benchmarks state their hardware, calibration runs don't)."""
-    import torch
-    import transformers
-
+    memory (run-level benchmarks state their hardware, calibration runs don't);
+    `libs=False` drops torch/transformers (a pure HTTP client doesn't run them)."""
     stamp = {
         "platform": platform.platform(),
         "python": platform.python_version(),
-        "torch": torch.__version__,
-        "transformers": transformers.__version__,
     }
+    if libs:
+        import torch
+        import transformers
+
+        stamp["torch"] = torch.__version__
+        stamp["transformers"] = transformers.__version__
     if hardware:
         import psutil
 
