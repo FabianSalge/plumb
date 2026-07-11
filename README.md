@@ -29,7 +29,7 @@ curl -s localhost:8000/v1/verify \
 ```json
 {
   "claims": [
-    {"text": "The capital of France is Paris.", "start": 0, "end": 31, "verdict": "supported", "confidence": 0.93, "spans": []}
+    {"text": "The capital of France is Paris.", "start": 0, "end": 31, "verdict": "supported", "confidence": 0.986, "spans": []}
   ],
   "gate": "pass",
   "engine_version": "0.2.0",

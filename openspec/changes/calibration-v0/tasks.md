@@ -39,7 +39,7 @@ the plan; nothing there moves outside it.
       artifact under `config/calibration/` and the results JSONs under `evals/results/`
 - [x] 4.2 In-domain validation: ECE + reliability diagram of the fitted calibrator on
       the seed-18 slice's sentences
-- [ ] 4.3 `evals/RESULTS.md` calibration section: protocol, in-domain and out-of-domain
+- [x] 4.3 `evals/RESULTS.md` calibration section: protocol, in-domain and out-of-domain
       ECE, reliability-diagram tables, the granularity caveat for LLM-AggreFact, and the
       threshold picked against the reliability data
 
@@ -67,14 +67,14 @@ the plan; nothing there moves outside it.
 - [x] 6.2 Wire it: load + validate the calibrator in `create_app` lifespan, apply per
       claim before `judge_claim`, rename the response field in `api/schemas.py`, log raw
       + calibrated
-- [ ] 6.3 Ship the artifact with the config: chart configmap and image include
+- [x] 6.3 Ship the artifact with the config: chart configmap and image include
       `config/calibration/`; `make deploy` + `make e2e` green against the new response
       shape
 
 ## 7. Docs and verification
 
-- [ ] 7.1 Document the confidence docs-plain (per ADR-0008) wherever the API response is
+- [x] 7.1 Document the confidence docs-plain (per ADR-0008) wherever the API response is
       described — README and any response-shape docs — in the same PR
-- [ ] 7.2 `make test`, `make lint`, `make typecheck` clean; `make test-model` for the
+- [x] 7.2 `make test`, `make lint`, `make typecheck` clean; `make test-model` for the
       scorer-touching paths; OpenSpec change validated; PR describes how each acceptance
       criterion of #32 was verified
