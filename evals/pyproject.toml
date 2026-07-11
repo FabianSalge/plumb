@@ -10,6 +10,9 @@ dependencies = [
     "nltk>=3.9",
     "psutil>=7",
     "sentencepiece>=0.2",
+    # The engine itself, so the sentence-level benchmark (#45) segments and scores
+    # through the exact code that ships — one segmenter, no divergent copy.
+    "plumb",
 ]
 
 # HHEM-2.1-open's remote code breaks on transformers 5.x (see root pyproject),
@@ -23,6 +26,10 @@ tf5 = ["transformers>=5"]
 
 [tool.uv]
 conflicts = [[{ extra = "tf4" }, { extra = "tf5" }]]
+
+[tool.uv.sources]
+# The engine lives one directory up; the sentence-level benchmark imports it.
+plumb = { path = "..", editable = true }
 
 [dependency-groups]
 dev = [

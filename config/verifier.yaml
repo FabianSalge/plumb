@@ -7,7 +7,7 @@
 # KRLabsOrg/lettucedect-large-modernbert-en-v1
 # revision 22296c700ef0ba4ab3e5c9afffa0185caaf61e52 (ADR-0006); thresholds
 # are per-model, so recheck both thresholds when swapping.
-version: "0.3.0"
+version: "0.4.0"
 signals:
   groundedness:
     model: KRLabsOrg/lettucedect-v2-mmbert-base

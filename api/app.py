@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse
 from api.logging import RequestLoggingMiddleware, setup_logging
 from api.schemas import ClaimResult, SpanResult, VerifyRequest, VerifyResponse
 from engine.config import SignalModelConfig, load_config
+from engine.decomposition import decompose
 from engine.scoring import LettuceDetectScorer, Scorer
 from engine.verdict import gate_decision, judge_claim
 
@@ -67,21 +68,27 @@ def create_app(
                 detail=f"mode {request.mode!r} is not supported — only 'fast' is available",
             )
         scorer: Scorer = app.state.scorer
-        result = scorer.score(request.text, request.context)
-        claim = judge_claim(request.text, result.support, cfg.groundedness.threshold)
+        scores = scorer.score(request.text, request.context)
+        assessed = decompose(request.text, scores, cfg.groundedness.span_threshold)
+        verdicts = [
+            judge_claim(claim.text, claim.support, cfg.groundedness.threshold) for claim in assessed
+        ]
         return VerifyResponse(
             claims=[
                 ClaimResult(
                     text=claim.text,
-                    verdict=claim.verdict,
-                    score=claim.score,
+                    start=claim.start,
+                    end=claim.end,
+                    verdict=verdict.verdict,
+                    score=verdict.score,
                     spans=[
                         SpanResult(start=span.start, end=span.end, text=span.text)
-                        for span in result.spans
+                        for span in claim.spans
                     ],
                 )
+                for claim, verdict in zip(assessed, verdicts, strict=True)
             ],
-            gate=gate_decision([claim]),
+            gate=gate_decision(verdicts),
             engine_version=engine_version,
             config_version=cfg.version,
         )

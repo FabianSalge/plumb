@@ -5,9 +5,10 @@ hallucination span counts. Label: a response is hallucinated iff it carries at
 least one annotated span (evident conflict or baseless info).
 """
 
+import json
 import random
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # Published split statistics for wandb/RAGTruth-processed — the load fails
 # loudly if the download does not match them.
@@ -27,6 +28,10 @@ class Example:
     context: str
     response: str
     hallucinated: bool
+    # Annotated hallucination spans as (start, end) code-point offsets into
+    # `response`; empty for a supported response. Sentence-level labelling reads
+    # these, the response-level label reads only whether any exist.
+    spans: tuple[tuple[int, int], ...] = field(default=())
 
 
 def is_hallucinated(span_counts: Mapping[str, int]) -> bool:
@@ -34,6 +39,21 @@ def is_hallucinated(span_counts: Mapping[str, int]) -> bool:
         return span_counts["evident_conflict"] + span_counts["baseless_info"] > 0
     except KeyError as exc:
         raise DataError(f"hallucination span counts missing key: {exc}") from exc
+
+
+def hallucination_spans(raw: str) -> tuple[tuple[int, int], ...]:
+    """Parse the raw `hallucination_labels` JSON into (start, end) response offsets."""
+    try:
+        items = json.loads(raw)
+    except (json.JSONDecodeError, TypeError) as exc:
+        raise DataError(f"hallucination_labels is not valid JSON: {exc}") from exc
+    spans: list[tuple[int, int]] = []
+    for item in items:
+        try:
+            spans.append((int(item["start"]), int(item["end"])))
+        except (KeyError, TypeError, ValueError) as exc:
+            raise DataError(f"hallucination span missing start/end: {exc}") from exc
+    return tuple(spans)
 
 
 def stratified_slice(examples: Sequence[Example], per_task: int, seed: int) -> list[Example]:
@@ -64,6 +84,7 @@ def load_ragtruth_test() -> list[Example]:
             context=row["context"],
             response=row["output"],
             hallucinated=is_hallucinated(row["hallucination_labels_processed"]),
+            spans=hallucination_spans(row["hallucination_labels"]),
         )
         for row in rows
     ]

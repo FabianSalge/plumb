@@ -21,6 +21,10 @@ class SpanResult(BaseModel):
 
 class ClaimResult(BaseModel):
     text: str
+    # Answer-relative Unicode code-point offsets of this claim in the request `text`,
+    # with `text == request.text[start:end]`. Span offsets stay claim-relative.
+    start: int
+    end: int
     # `contradicted` is deliberately absent from the vocabulary until the NLI signal lands.
     verdict: Verdict
     score: float

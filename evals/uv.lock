@@ -247,7 +247,7 @@ name = "cuda-bindings"
 version = "13.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "cuda-pathfinder" },
+    { name = "cuda-pathfinder", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cc/6e/2394f8163360f8391f8f1b7e72d300a82724edb81a7b7084c799fbd4c91f/cuda_bindings-13.3.1-cp313-cp313-manylinux_2_24_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:9efb21c1ee64981e184b9e0ba5eb3179e5ba3d4b51665a6cb52b8ef3d01a7cbf", size = 5920504, upload-time = "2026-05-29T23:11:56.883Z" },
@@ -279,34 +279,34 @@ wheels = [
 
 [package.optional-dependencies]
 cudart = [
-    { name = "nvidia-cuda-runtime", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-cuda-runtime", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 cufft = [
-    { name = "nvidia-cufft", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-cufft", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 cufile = [
     { name = "nvidia-cufile", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 cupti = [
-    { name = "nvidia-cuda-cupti", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-cuda-cupti", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 curand = [
-    { name = "nvidia-curand", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-curand", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 cusolver = [
-    { name = "nvidia-cusolver", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-cusolver", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 cusparse = [
-    { name = "nvidia-cusparse", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-cusparse", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 nvjitlink = [
-    { name = "nvidia-nvjitlink", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-nvjitlink", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 nvrtc = [
-    { name = "nvidia-cuda-nvrtc", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-cuda-nvrtc", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 nvtx = [
-    { name = "nvidia-nvtx", marker = "sys_platform == 'linux' or sys_platform == 'win32' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-nvtx", marker = "sys_platform == 'linux' or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 
 [[package]]
@@ -360,6 +360,22 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/24/9f/d18d6b5e19244788a6d09c14a8406376b4f4bfcc008e6d17a4f4c15362e8/easydict-1.13.tar.gz", hash = "sha256:b1135dedbc41c8010e2bc1f77ec9744c7faa42bce1a1c87416791449d6c87780", size = 6809, upload-time = "2024-03-04T12:04:41.251Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/05/ec/fa6963f1198172c2b75c9ab6ecefb3045991f92f75f5eb41b6621b198123/easydict-1.13-py3-none-any.whl", hash = "sha256:6b787daf4dcaf6377b4ad9403a5cee5a86adbc0ca9a5bcf5410e9902002aeac2", size = 6804, upload-time = "2024-03-04T12:04:39.508Z" },
+]
+
+[[package]]
+name = "fastapi"
+version = "0.139.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "annotated-doc" },
+    { name = "pydantic" },
+    { name = "starlette" },
+    { name = "typing-extensions" },
+    { name = "typing-inspection" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d3/af/a5f50ccfa659ec1802cb4ca842c23f06d906a8cc9aef6016a2caeea3d4ed/fastapi-0.139.0.tar.gz", hash = "sha256:99ab7b2d92223c76d6cf10757ab3f89d45b38267fc20b2a136cf02f6beac3145", size = 423016, upload-time = "2026-07-01T16:35:33.436Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/9e/7c/8e3c6ad324ea5cb36604fc3f968554887891c316d9dfde57761611d907ad/fastapi-0.139.0-py3-none-any.whl", hash = "sha256:cf15e1e9e667ddb0ad63811e60bd11390d1aac838ca4a7a23f421807b2308189", size = 130339, upload-time = "2026-07-01T16:35:32.19Z" },
 ]
 
 [[package]]
@@ -695,7 +711,7 @@ name = "markdown-it-py"
 version = "4.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "mdurl" },
+    { name = "mdurl", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/06/ff/7841249c247aa650a76b9ee4bbaeae59370dc8bfd2f6c01f3630c35eb134/markdown_it_py-4.2.0.tar.gz", hash = "sha256:04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49", size = 82454, upload-time = "2026-05-07T12:08:28.36Z" }
 wheels = [
@@ -948,7 +964,7 @@ name = "nvidia-cublas"
 version = "13.1.1.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "nvidia-cuda-nvrtc" },
+    { name = "nvidia-cuda-nvrtc", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a7/a1/0bd24ee8c8d03adac032fd2909426a00c88f8c57961b1277ded97f91119f/nvidia_cublas-13.1.1.3-py3-none-manylinux_2_27_aarch64.whl", hash = "sha256:b7a210458267ac818974c53038fbec2e969d5c99f305ab15c72522fa9f001dd5", size = 542848918, upload-time = "2026-04-08T18:46:22.985Z" },
@@ -991,7 +1007,7 @@ name = "nvidia-cudnn-cu13"
 version = "9.20.0.48"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "nvidia-cublas" },
+    { name = "nvidia-cublas", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/56/c5/83384d846b2fd17c44bd499b36c75a45ed4f095fbbb2252294e89cea5c5c/nvidia_cudnn_cu13-9.20.0.48-py3-none-manylinux_2_27_aarch64.whl", hash = "sha256:e31454ae00094b0c55319d9d15b6fa2fc50a9e1c0f5c8c80fb75258234e731e1", size = 444574296, upload-time = "2026-03-09T19:28:27.751Z" },
@@ -1004,7 +1020,7 @@ name = "nvidia-cufft"
 version = "12.0.0.61"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "nvidia-nvjitlink" },
+    { name = "nvidia-nvjitlink", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/8b/ae/f417a75c0259e85c1d2f83ca4e960289a5f814ed0cea74d18c353d3e989d/nvidia_cufft-12.0.0.61-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:2708c852ef8cd89d1d2068bdbece0aa188813a0c934db3779b9b1faa8442e5f5", size = 214053554, upload-time = "2025-09-04T08:31:38.196Z" },
@@ -1036,9 +1052,9 @@ name = "nvidia-cusolver"
 version = "12.0.4.66"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "nvidia-cublas" },
-    { name = "nvidia-cusparse" },
-    { name = "nvidia-nvjitlink" },
+    { name = "nvidia-cublas", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-cusparse", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
+    { name = "nvidia-nvjitlink", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c8/c3/b30c9e935fc01e3da443ec0116ed1b2a009bb867f5324d3f2d7e533e776b/nvidia_cusolver-12.0.4.66-py3-none-manylinux_2_27_aarch64.whl", hash = "sha256:02c2457eaa9e39de20f880f4bd8820e6a1cfb9f9a34f820eb12a155aa5bc92d2", size = 223467760, upload-time = "2025-09-04T08:33:04.222Z" },
@@ -1051,7 +1067,7 @@ name = "nvidia-cusparse"
 version = "12.6.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "nvidia-nvjitlink" },
+    { name = "nvidia-nvjitlink", marker = "(sys_platform != 'emscripten' and sys_platform != 'win32') or (sys_platform == 'emscripten' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5') or (sys_platform == 'win32' and extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f8/94/5c26f33738ae35276672f12615a64bd008ed5be6d1ebcb23579285d960a9/nvidia_cusparse-12.6.3.3-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:80bcc4662f23f1054ee334a15c72b8940402975e0eab63178fc7e670aa59472c", size = 162155568, upload-time = "2025-09-04T08:33:42.864Z" },
@@ -1189,6 +1205,39 @@ wheels = [
 ]
 
 [[package]]
+name = "plumb"
+version = "0.2.0"
+source = { editable = "../" }
+dependencies = [
+    { name = "fastapi" },
+    { name = "pydantic" },
+    { name = "pyyaml" },
+    { name = "uvicorn" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "fastapi", specifier = ">=0.139" },
+    { name = "pydantic", specifier = ">=2.9" },
+    { name = "pyyaml", specifier = ">=6" },
+    { name = "torch", marker = "sys_platform == 'linux' and extra == 'model'", specifier = ">=2.12", index = "https://download.pytorch.org/whl/cpu" },
+    { name = "torch", marker = "sys_platform != 'linux' and extra == 'model'", specifier = ">=2.12" },
+    { name = "transformers", marker = "extra == 'model'", specifier = ">=5.13" },
+    { name = "uvicorn", specifier = ">=0.50" },
+]
+provides-extras = ["model"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "httpx2", specifier = ">=2.5.0" },
+    { name = "mypy", specifier = ">=1.15" },
+    { name = "pytest", specifier = ">=8" },
+    { name = "pytest-cov", specifier = ">=6" },
+    { name = "ruff", specifier = ">=0.15" },
+    { name = "types-pyyaml", specifier = ">=6" },
+]
+
+[[package]]
 name = "plumb-evals"
 version = "0.1.0"
 source = { virtual = "." }
@@ -1196,6 +1245,7 @@ dependencies = [
     { name = "datasets" },
     { name = "lettucedetect" },
     { name = "nltk" },
+    { name = "plumb" },
     { name = "psutil" },
     { name = "sentencepiece" },
     { name = "torch" },
@@ -1219,6 +1269,7 @@ requires-dist = [
     { name = "datasets", specifier = ">=4" },
     { name = "lettucedetect", specifier = ">=0.2.1" },
     { name = "nltk", specifier = ">=3.9" },
+    { name = "plumb", editable = "../" },
     { name = "psutil", specifier = ">=7" },
     { name = "sentencepiece", specifier = ">=0.2" },
     { name = "torch", specifier = ">=2.12" },
@@ -1630,8 +1681,8 @@ name = "rich"
 version = "15.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "markdown-it-py" },
-    { name = "pygments" },
+    { name = "markdown-it-py", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "pygments", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", hash = "sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36", size = 230680, upload-time = "2026-04-12T08:24:00.75Z" }
 wheels = [
@@ -1813,6 +1864,18 @@ wheels = [
 ]
 
 [[package]]
+name = "starlette"
+version = "1.3.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/eb/e3/7c1dc7381d9f8ab7d854328ebfa884e62cb3f3d8549ddfd37c7814f42afa/starlette-1.3.1.tar.gz", hash = "sha256:05d0213193f2fbaae60e2ecb593b4add4262ad4e46536b54abe36f11a71724e0", size = 2703240, upload-time = "2026-06-12T09:23:11.602Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/bb/2799cc2ede3ed41131f8975621e7213dfc7ef4acbbaadfa440f32500c370/starlette-1.3.1-py3-none-any.whl", hash = "sha256:c7372aae11c3c3f26a42df7bd626cec2f47d03483d261d369516a615a53714c6", size = 73632, upload-time = "2026-06-12T09:23:10.017Z" },
+]
+
+[[package]]
 name = "sympy"
 version = "1.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1950,15 +2013,15 @@ resolution-markers = [
     "python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "huggingface-hub", version = "1.22.0", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy" },
-    { name = "packaging" },
-    { name = "pyyaml" },
-    { name = "regex" },
-    { name = "safetensors" },
-    { name = "tokenizers" },
-    { name = "tqdm" },
-    { name = "typer" },
+    { name = "huggingface-hub", version = "1.22.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "numpy", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "packaging", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "pyyaml", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "regex", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "safetensors", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "tokenizers", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "tqdm", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "typer", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/ec/e1/720ff7ff666b04279fea5bb7ac3ef8675e98f0ddbc1b8cb8bc9f3889d62e/transformers-5.13.0.tar.gz", hash = "sha256:940c1428e42a4238f9ccf0cd41e63c590701aa63c19fd2ce3d7d602222d68495", size = 9195801, upload-time = "2026-07-03T16:05:39.362Z" }
 wheels = [
@@ -1983,10 +2046,10 @@ name = "typer"
 version = "0.26.8"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "annotated-doc" },
+    { name = "annotated-doc", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
     { name = "colorama", marker = "(sys_platform == 'win32' and extra != 'extra-11-plumb-evals-tf4') or (extra == 'extra-11-plumb-evals-tf4' and extra == 'extra-11-plumb-evals-tf5')" },
-    { name = "rich" },
-    { name = "shellingham" },
+    { name = "rich", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
+    { name = "shellingham", marker = "extra == 'extra-11-plumb-evals-tf5' or extra != 'extra-11-plumb-evals-tf4'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/7c/f7/68adc395201b20b872d68e975386832e8005ffeacedd43a1d837a32815be/typer-0.26.8.tar.gz", hash = "sha256:c244a6bd558886fe3f8780efb6bdd28bb9aff005a94eedebaa5cb32926fe2f7e", size = 202097, upload-time = "2026-06-26T09:22:45.705Z" }
 wheels = [
@@ -2030,6 +2093,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz", hash = "sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c", size = 433602, upload-time = "2026-05-07T16:13:18.596Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl", hash = "sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897", size = 131087, upload-time = "2026-05-07T16:13:17.151Z" },
+]
+
+[[package]]
+name = "uvicorn"
+version = "0.51.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "click" },
+    { name = "h11" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a2/65/b7c6c443ccc58678c91e1e973bbe2a878591538655d6e1d47f24ba1c51f3/uvicorn-0.51.0.tar.gz", hash = "sha256:f6f4b69b657c312f516dd2d268ab9ae6f254b11e4bac504f37b2ab58b24dd0b0", size = 94412, upload-time = "2026-07-08T10:59:05.962Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/45/ec/dbb7e5a6b91f86bfb9eb7d2988a2730907b6a729875b949c7f022e8b88fa/uvicorn-0.51.0-py3-none-any.whl", hash = "sha256:5d38af6cd620f2ae3849fb44fd4879e0890aa1febe8d47eb355fb45d93fe6a5b", size = 73219, upload-time = "2026-07-08T10:59:04.44Z" },
 ]
 
 [[package]]
