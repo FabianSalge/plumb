@@ -115,7 +115,7 @@ def test_empty_text_yields_one_empty_claim():
 def test_invariant_violation_fails_loud():
     """A partition that leaves a gap or whose claim text disagrees with its offsets
     must never escape — the substring invariant is enforced, not trusted."""
-    from engine.decomposition import _validate_partition
+    from engine.decomposition.segmentation import _validate_partition
 
     _validate_partition("abc", [Claim("ab", 0, 2), Claim("c", 2, 3)])  # well-formed
     with pytest.raises(DecompositionError):
@@ -199,7 +199,7 @@ def test_span_threshold_is_injected_not_hardcoded():
 def test_spans_logged_with_confidences_response_carries_positions_only(caplog):
     claim = Claim("Paris is small.", 0, 15)
     scores = token_scores((0.1, 0, 5), (0.9, 6, 8), (0.95, 9, 14), (0.2, 14, 15))
-    with caplog.at_level(logging.INFO, logger="plumb.engine.decomposition"):
+    with caplog.at_level(logging.INFO, logger="plumb.engine.decomposition.reduction"):
         result = reduce_claim(claim, scores, span_threshold=0.5)
     records = [r for r in caplog.records if hasattr(r, "spans")]
     assert len(records) == 1
