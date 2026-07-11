@@ -66,3 +66,10 @@ spec:
         - name: verifier-config
           configMap:
             name: {{ include "plumb.fullname" . }}-verifier
+            items:
+              - key: verifier.yaml
+                path: verifier.yaml
+              # Lands the artifact at exactly the config-relative path the
+              # verifier config references.
+              - key: calibration.yaml
+                path: {{ .Values.verifier.signals.groundedness.calibration }}

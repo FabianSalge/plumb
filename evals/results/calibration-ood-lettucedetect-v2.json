@@ -1,0 +1,186 @@
+{
+ "config_version": "0.5.0",
+ "fit_source": "results/calibration-fit-lettucedetect-v2.json",
+ "coefficients": {
+  "a": 0.8289509023714926,
+  "b": 0.5063190003813147
+ },
+ "slice": {
+  "dataset": "lytang/LLM-AggreFact test",
+  "per_subset": 100,
+  "seed": 18,
+  "claims": 1000,
+  "supported_claims": 595,
+  "subsets": [
+   "AggreFact-CNN",
+   "AggreFact-XSum",
+   "ClaimVerify",
+   "ExpertQA",
+   "FactCheck-GPT",
+   "Lfqa",
+   "Reveal",
+   "TofuEval-MediaS",
+   "TofuEval-MeetB",
+   "Wice"
+  ],
+  "excluded_subsets": {
+   "RAGTruth": "fitted on RAGTruth"
+  },
+  "granularity": "LLM-AggreFact's own claim unit, scored as a single claim"
+ },
+ "out_of_domain": {
+  "ece_raw": 0.10681957414798672,
+  "ece_calibrated": 0.1531429728524808,
+  "claim_auroc": 0.847303662205623,
+  "reliability": [
+   {
+    "lo": 0.0,
+    "hi": 0.1,
+    "count": 13,
+    "mean_confidence": 0.06978669246296607,
+    "outcome_rate": 0.07692307692307693
+   },
+   {
+    "lo": 0.1,
+    "hi": 0.2,
+    "count": 34,
+    "mean_confidence": 0.14862733560748906,
+    "outcome_rate": 0.058823529411764705
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.3,
+    "count": 69,
+    "mean_confidence": 0.2574825958887059,
+    "outcome_rate": 0.08695652173913043
+   },
+   {
+    "lo": 0.3,
+    "hi": 0.4,
+    "count": 70,
+    "mean_confidence": 0.34893516613979114,
+    "outcome_rate": 0.21428571428571427
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.5,
+    "count": 58,
+    "mean_confidence": 0.4530255857687112,
+    "outcome_rate": 0.3103448275862069
+   },
+   {
+    "lo": 0.5,
+    "hi": 0.6,
+    "count": 45,
+    "mean_confidence": 0.5554104449025994,
+    "outcome_rate": 0.28888888888888886
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.7,
+    "count": 48,
+    "mean_confidence": 0.6509458404113193,
+    "outcome_rate": 0.3125
+   },
+   {
+    "lo": 0.7,
+    "hi": 0.8,
+    "count": 64,
+    "mean_confidence": 0.7490857157969913,
+    "outcome_rate": 0.578125
+   },
+   {
+    "lo": 0.8,
+    "hi": 0.9,
+    "count": 107,
+    "mean_confidence": 0.8559384580749634,
+    "outcome_rate": 0.6448598130841121
+   },
+   {
+    "lo": 0.9,
+    "hi": 1.0,
+    "count": 492,
+    "mean_confidence": 0.9710647449954565,
+    "outcome_rate": 0.8516260162601627
+   }
+  ],
+  "reliability_raw": [
+   {
+    "lo": 0.0,
+    "hi": 0.1,
+    "count": 51,
+    "mean_confidence": 0.055317036077088,
+    "outcome_rate": 0.058823529411764705
+   },
+   {
+    "lo": 0.1,
+    "hi": 0.2,
+    "count": 100,
+    "mean_confidence": 0.15091729283332825,
+    "outcome_rate": 0.12
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.3,
+    "count": 63,
+    "mean_confidence": 0.24929657909605238,
+    "outcome_rate": 0.2857142857142857
+   },
+   {
+    "lo": 0.3,
+    "hi": 0.4,
+    "count": 47,
+    "mean_confidence": 0.34472905067687337,
+    "outcome_rate": 0.2978723404255319
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.5,
+    "count": 39,
+    "mean_confidence": 0.45232872932385176,
+    "outcome_rate": 0.2564102564102564
+   },
+   {
+    "lo": 0.5,
+    "hi": 0.6,
+    "count": 36,
+    "mean_confidence": 0.5492970099051794,
+    "outcome_rate": 0.3333333333333333
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.7,
+    "count": 44,
+    "mean_confidence": 0.6444804065606811,
+    "outcome_rate": 0.6136363636363636
+   },
+   {
+    "lo": 0.7,
+    "hi": 0.8,
+    "count": 54,
+    "mean_confidence": 0.7539679844070364,
+    "outcome_rate": 0.5185185185185185
+   },
+   {
+    "lo": 0.8,
+    "hi": 0.9,
+    "count": 93,
+    "mean_confidence": 0.8545452477310294,
+    "outcome_rate": 0.7096774193548387
+   },
+   {
+    "lo": 0.9,
+    "hi": 1.0,
+    "count": 473,
+    "mean_confidence": 0.9748262218181212,
+    "outcome_rate": 0.8562367864693446
+   }
+  ]
+ },
+ "environment": {
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "python": "3.13.7",
+  "torch": "2.12.1",
+  "transformers": "5.13.0"
+ }
+}

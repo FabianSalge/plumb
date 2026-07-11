@@ -22,6 +22,13 @@ import yaml
 ARTIFACT_SCHEMA = 1
 
 
+class _IndentedDumper(yaml.SafeDumper):
+    """Indents block sequences under their key, matching the repo yamllint rules."""
+
+    def increase_indent(self, flow: bool = False, indentless: bool = False) -> None:
+        return super().increase_indent(flow, False)
+
+
 def build_artifact(fit: dict, ood: dict) -> dict:
     if fit["coefficients"] != ood["coefficients"]:
         raise SystemExit(
@@ -76,7 +83,7 @@ def main() -> None:
 
     artifact = build_artifact(json.loads(args.fit.read_text()), json.loads(args.ood.read_text()))
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(yaml.safe_dump(artifact, sort_keys=False))
+    args.out.write_text(yaml.dump(artifact, Dumper=_IndentedDumper, sort_keys=False))
     print(f"wrote {args.out}")
 
 

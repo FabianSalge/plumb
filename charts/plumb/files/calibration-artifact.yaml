@@ -1,0 +1,40 @@
+schema: 1
+method: platt
+coefficients:
+  a: 0.8289509023714926
+  b: 0.5063190003813147
+bindings:
+  model: KRLabsOrg/lettucedect-v2-mmbert-base
+  revision: 0f85c7a15b17aee6e8f794dae7cb4e42e2b8fdac
+  inference_mode: joint-questionless-v1
+  claim_unit: sentence-maxrisk-v1
+fit:
+  dataset: wandb/RAGTruth-processed test
+  exclusion: stratified 200-per-task seed-18 benchmark slice removed before fitting
+  responses: 2100
+  sentences: 14589
+  sha256: c71aea4411ce121eab7e1b75b3e13b54c5085fe68e8448b7df265fb616dfcee2
+  fitted_at: '2026-07-11'
+metrics:
+  in_domain:
+    dataset: wandb/RAGTruth-processed test
+    slice: stratified 200-per-task seed-18
+    sentences: 4240
+    ece: 0.007450177803590782
+  out_of_domain:
+    dataset: lytang/LLM-AggreFact test
+    subsets:
+      - AggreFact-CNN
+      - AggreFact-XSum
+      - ClaimVerify
+      - ExpertQA
+      - FactCheck-GPT
+      - Lfqa
+      - Reveal
+      - TofuEval-MediaS
+      - TofuEval-MeetB
+      - Wice
+    excluded_subsets:
+      RAGTruth: fitted on RAGTruth
+    claims: 1000
+    ece: 0.1531429728524808

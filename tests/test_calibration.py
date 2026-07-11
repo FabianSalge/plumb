@@ -1,6 +1,8 @@
 """Unit tests for the calibration engine: the Platt map, the versioned artifact,
 and the binding validation that refuses a mismatched calibrator."""
 
+from pathlib import Path
+
 import pytest
 import yaml
 
@@ -179,6 +181,18 @@ def test_revision_mismatch_names_field_and_both_values(tmp_path):
     assert "revision" in message
     assert "deadbeef" in message
     assert "cafebabe" in message
+
+
+def test_repo_default_artifact_matches_the_repo_config():
+    """The checked-in artifact must load and bind to the checked-in config — the
+    exact validation the engine runs at startup."""
+    from engine.config import load_config
+
+    cfg = load_config("config/verifier.yaml")
+    artifact = load_artifact(Path("config") / cfg.groundedness.calibration)
+    validate_bindings(artifact, cfg.groundedness)
+    assert artifact.coefficients.a > 0, "the fitted map must be increasing"
+    assert 0 < artifact.metrics.in_domain.ece < artifact.metrics.out_of_domain.ece
 
 
 def test_every_mismatch_is_named(tmp_path):

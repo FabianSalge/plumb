@@ -30,14 +30,14 @@ the plan; nothing there moves outside it.
       subsets checked against the pinned model card's documented training mix, the
       check's outcome recorded in the results JSON; loud failure on split-stat mismatch
       per the `data.py` convention
-- [ ] 3.2 OOD run: score the LLM-AggreFact slice through the shipping scorer (each claim
+- [x] 3.2 OOD run: score the LLM-AggreFact slice through the shipping scorer (each claim
       as a single unit), apply the fitted calibrator, emit ECE + reliability data
 
 ## 4. Fit run, artifact, RESULTS.md
 
-- [ ] 4.1 Run the fit end to end (caffeinate; ~2,100 responses on the M4), commit the
+- [x] 4.1 Run the fit end to end (caffeinate; ~2,100 responses on the M4), commit the
       artifact under `config/calibration/` and the results JSONs under `evals/results/`
-- [ ] 4.2 In-domain validation: ECE + reliability diagram of the fitted calibrator on
+- [x] 4.2 In-domain validation: ECE + reliability diagram of the fitted calibrator on
       the seed-18 slice's sentences
 - [ ] 4.3 `evals/RESULTS.md` calibration section: protocol, in-domain and out-of-domain
       ECE, reliability-diagram tables, the granularity caveat for LLM-AggreFact, and the
@@ -60,11 +60,11 @@ the plan; nothing there moves outside it.
 
 ## 6. API surface
 
-- [ ] 6.1 Failing API tests: claims carry `confidence` (calibrated, strictly inside
+- [x] 6.1 Failing API tests: claims carry `confidence` (calibrated, strictly inside
       (0, 1)) and no `score`; verdict thresholds the confidence; structured logs carry
       raw support alongside calibrated confidence; app startup fails on a mismatched or
       missing artifact
-- [ ] 6.2 Wire it: load + validate the calibrator in `create_app` lifespan, apply per
+- [x] 6.2 Wire it: load + validate the calibrator in `create_app` lifespan, apply per
       claim before `judge_claim`, rename the response field in `api/schemas.py`, log raw
       + calibrated
 - [ ] 6.3 Ship the artifact with the config: chart configmap and image include
