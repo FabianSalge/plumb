@@ -82,3 +82,9 @@ make lint        # ruff check + format check
 make typecheck   # mypy (strict)
 make test-model  # integration test against the real LettuceDetect weights
 ```
+
+## Contributing
+
+Every change starts as a GitHub issue; [docs/workflow.md](docs/workflow.md)
+describes the loop. Contributors sign a one-time CLA before their first PR
+merges — [CONTRIBUTING.md](CONTRIBUTING.md) has the policy and how to sign.
