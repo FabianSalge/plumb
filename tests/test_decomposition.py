@@ -44,6 +44,21 @@ GOLDENS: list[tuple[str, str, list[str]]] = [
         ["Steps:\n", "1. Preheat the oven.\n", "2. Bake the cake."],
     ),
     (
+        "indented list markers still split, indentation joins the prior claim",
+        "Items:\n  1. First\n  2. Second",
+        ["Items:\n  ", "1. First\n  ", "2. Second"],
+    ),
+    (
+        "exclamation and question marks end sentences",
+        "Really? Yes! Done.",
+        ["Really? ", "Yes! ", "Done."],
+    ),
+    (
+        "a blank line breaks a paragraph even without terminal punctuation",
+        "First line\n\nSecond line",
+        ["First line\n\n", "Second line"],
+    ),
+    (
         "fenced code blocks stay atomic",
         "Run this:\n```\nx = 1. y = 2.\n```\nDone.",
         ["Run this:\n", "```\nx = 1. y = 2.\n```\n", "Done."],
@@ -91,6 +106,12 @@ def test_no_boundary_yields_one_whole_text_claim():
     assert claims == [Claim(text="the sky is blue", start=0, end=15)]
 
 
+def test_empty_text_yields_one_empty_claim():
+    """The API forbids empty text, but the engine must degrade to the whole-text
+    floor rather than crash for an empty answer."""
+    assert segment("") == [Claim(text="", start=0, end=0)]
+
+
 def test_invariant_violation_fails_loud():
     """A partition that leaves a gap or whose claim text disagrees with its offsets
     must never escape — the substring invariant is enforced, not trusted."""
@@ -99,6 +120,8 @@ def test_invariant_violation_fails_loud():
     _validate_partition("abc", [Claim("ab", 0, 2), Claim("c", 2, 3)])  # well-formed
     with pytest.raises(DecompositionError):
         _validate_partition("abc", [Claim("ab", 0, 2)])  # gap: does not reach the end
+    with pytest.raises(DecompositionError):
+        _validate_partition("abc", [Claim("a", 0, 1), Claim("c", 2, 3)])  # mid gap
     with pytest.raises(DecompositionError):
         _validate_partition("abc", [Claim("xx", 0, 2), Claim("c", 2, 3)])  # text mismatch
 

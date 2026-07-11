@@ -135,8 +135,6 @@ def segment(text: str) -> list[Claim]:
         for a, b in zip(bounds, bounds[1:], strict=False)
         if a < b
     ]
-    if not claims:
-        claims = [Claim(text=text, start=0, end=len(text))]
     _validate_partition(text, claims)
     return claims
 
