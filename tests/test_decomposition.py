@@ -14,8 +14,8 @@ from engine.decomposition import (
     reduce_claim,
     segment,
 )
+from engine.gate import gate_decision, judge_claim
 from engine.signals import TokenScores
-from engine.verdict import gate_decision, judge_claim
 
 
 def token_scores(*tokens: tuple[float, int, int]) -> TokenScores:
