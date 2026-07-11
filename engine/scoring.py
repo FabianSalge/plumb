@@ -1,9 +1,9 @@
 """Scoring wrapper speaking LettuceDetect's token-classification protocol.
 
 The prompt format and pair-tokenization layout are vendored from the
-lettucedetect package (0.1.11) the pinned model was trained with — the engine
-must not depend on the package itself (ADR-0006). When the model revision is
-bumped, re-verify this protocol against the package version that trained it.
+lettucedetect package (0.2.1) the pinned model ships with — the engine must not
+depend on the package itself (ADR-0006). When the model revision is bumped,
+re-verify this protocol against the package version that trained it.
 """
 
 import logging
@@ -23,16 +23,9 @@ _PROMPT_TEMPLATE = "Summarize the following text:\n{context}\noutput:"
 # it were never seen by the model, so raising it doesn't buy longer context.
 _MAX_LENGTH = 4096
 
-# argmax over the two token classes, expressed on the hallucination probability.
-_FLAG_THRESHOLD = 0.5
-
 
 class ScorerError(Exception):
     """The scoring model is unavailable or returned something it must not."""
-
-
-class Scorer(Protocol):
-    def score(self, claim: str, passages: list[str]) -> list[float]: ...
 
 
 @dataclass(frozen=True)
@@ -52,17 +45,35 @@ class TokenClassifier(Protocol):
 
 @dataclass(frozen=True)
 class Span:
+    """An unsupported region of the claim; start/end are Unicode code-point
+    offsets into the claim text. `confidence` is the raw maximum token
+    probability — structured-log detail only until calibration (#32)."""
+
     start: int
     end: int
     text: str
     confidence: float
 
 
-def render_prompt(passage: str) -> str:
-    return _PROMPT_TEMPLATE.format(context=f"passage 1: {passage}")
+@dataclass(frozen=True)
+class ClaimScore:
+    """One claim's support by the union of all passages, with the spans the
+    model flagged as unsupported."""
+
+    support: float
+    spans: list[Span]
 
 
-def spans_from_token_scores(claim: str, scores: TokenScores) -> list[Span]:
+class Scorer(Protocol):
+    def score(self, claim: str, passages: list[str]) -> ClaimScore: ...
+
+
+def render_prompt(passages: list[str]) -> str:
+    context = "\n".join(f"passage {i + 1}: {passage}" for i, passage in enumerate(passages))
+    return _PROMPT_TEMPLATE.format(context=context)
+
+
+def spans_from_token_scores(claim: str, scores: TokenScores, threshold: float) -> list[Span]:
     """Merge contiguous flagged tokens into character spans over the claim."""
     open_span: dict[str, float] | None = None
     closed: list[tuple[int, int, float]] = []
@@ -76,7 +87,7 @@ def spans_from_token_scores(claim: str, scores: TokenScores) -> list[Span]:
     for prob, (start, end) in zip(scores.probs, scores.offsets, strict=True):
         if start == end:  # special token — scores, but has no claim characters
             continue
-        if prob >= _FLAG_THRESHOLD:
+        if prob >= threshold:
             if open_span is None:
                 open_span = {"start": start, "end": end, "conf": prob}
             else:
@@ -89,8 +100,9 @@ def spans_from_token_scores(claim: str, scores: TokenScores) -> list[Span]:
 
 
 class LettuceDetectScorer:
-    def __init__(self, pipeline: TokenClassifier) -> None:
+    def __init__(self, pipeline: TokenClassifier, span_threshold: float) -> None:
         self._pipeline = pipeline
+        self._span_threshold = span_threshold
 
     @classmethod
     def load(cls, cfg: SignalModelConfig) -> "LettuceDetectScorer":
@@ -111,30 +123,31 @@ class LettuceDetectScorer:
             cfg.model, revision=cfg.revision
         )
         model.eval()  # pragma: no cover
-        return cls(_TransformersTokenClassifier(model, tokenizer))  # pragma: no cover
+        return cls(  # pragma: no cover
+            _TransformersTokenClassifier(model, tokenizer), span_threshold=cfg.span_threshold
+        )
 
-    def score(self, claim: str, passages: list[str]) -> list[float]:
-        supports: list[float] = []
-        for index, passage in enumerate(passages):
-            result = self._pipeline.token_probs(render_prompt(passage), claim)
-            if not result.probs:
-                raise ScorerError("model returned no token probabilities for the claim")
-            if result.truncated:
-                logger.warning(
-                    "evidence passage truncated to fit the model window",
-                    extra={"passage_index": index},
-                )
-            support = 1.0 - max(result.probs)
-            if not 0.0 <= support <= 1.0:
-                raise ScorerError(f"model produced support score {support} outside [0, 1]")
-            spans = spans_from_token_scores(claim, result)
-            if spans:
-                logger.info(
-                    "claim tokens flagged as unsupported",
-                    extra={"passage_index": index, "spans": [asdict(span) for span in spans]},
-                )
-            supports.append(support)
-        return supports
+    def score(self, claim: str, passages: list[str]) -> ClaimScore:
+        if not passages:
+            raise ScorerError("cannot score a claim against zero evidence passages")
+        result = self._pipeline.token_probs(render_prompt(passages), claim)
+        if not result.probs:
+            raise ScorerError("model returned no token probabilities for the claim")
+        if result.truncated:
+            logger.warning(
+                "evidence context truncated to fit the model window",
+                extra={"passage_count": len(passages)},
+            )
+        support = 1.0 - max(result.probs)
+        if not 0.0 <= support <= 1.0:
+            raise ScorerError(f"model produced support score {support} outside [0, 1]")
+        spans = spans_from_token_scores(claim, result, self._span_threshold)
+        if spans:
+            logger.info(
+                "claim tokens flagged as unsupported",
+                extra={"spans": [asdict(span) for span in spans]},
+            )
+        return ClaimScore(support=support, spans=spans)
 
 
 class _TransformersTokenClassifier:  # pragma: no cover — exercised by `pytest -m model`

@@ -22,12 +22,13 @@ resources:
 # stay identical to config/verifier.yaml — a render test fails on drift.
 # Bump version on any change; it is echoed as config_version in every response.
 verifier:
-  version: "0.2.0"
+  version: "0.3.0"
   signals:
     groundedness:
       model: KRLabsOrg/lettucedect-v2-mmbert-base
       revision: "0f85c7a15b17aee6e8f794dae7cb4e42e2b8fdac"
       threshold: 0.5
+      span_threshold: 0.5
 
 networkPolicy:
   enabled: true

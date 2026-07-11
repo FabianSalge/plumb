@@ -1,4 +1,6 @@
-"""Contract tests for POST /v1/verify (openspec/changes/add-verify-endpoint/specs/verify-api)."""
+"""Contract tests for POST /v1/verify (openspec/specs/verify-api)."""
+
+from engine.scoring import Span
 
 
 def verify(client, **overrides):
@@ -8,7 +10,7 @@ def verify(client, **overrides):
 
 
 def test_supported_claim(make_client):
-    client = make_client([0.2, 0.9])
+    client = make_client(0.9)
     resp = verify(client, context=["irrelevant passage", "supporting passage"])
     assert resp.status_code == 200
     body = resp.json()
@@ -17,23 +19,34 @@ def test_supported_claim(make_client):
     assert claim["text"] == "The sky is blue."
     assert claim["verdict"] == "supported"
     assert claim["score"] == 0.9
-    assert claim["evidence_index"] == 1
+    assert claim["spans"] == []
     assert body["gate"] == "pass"
 
 
-def test_unsupported_claim(make_client):
-    client = make_client([0.1, 0.2])
+def test_unsupported_claim_carries_spans(make_client):
+    client = make_client(0.2, spans=[Span(start=4, end=15, text="sky is blue", confidence=0.8)])
     resp = verify(client, context=["unrelated", "also unrelated"])
     assert resp.status_code == 200
     body = resp.json()
     claim = body["claims"][0]
     assert claim["verdict"] == "unsupported"
     assert claim["score"] == 0.2
+    assert claim["spans"] == [{"start": 4, "end": 15, "text": "sky is blue"}]
+    assert body["gate"] == "block"
+
+
+def test_unsupported_claim_with_no_spans(make_client):
+    """The verdict threshold and the span-flagging threshold are independent knobs —
+    an unsupported claim with zero spans is legal."""
+    client = make_client(0.2)
+    body = verify(client).json()
+    assert body["claims"][0]["verdict"] == "unsupported"
+    assert body["claims"][0]["spans"] == []
     assert body["gate"] == "block"
 
 
 def test_score_at_threshold_is_supported(make_client):
-    client = make_client([0.5])
+    client = make_client(0.5)
     body = verify(client).json()
     assert body["claims"][0]["verdict"] == "supported"
 
@@ -70,16 +83,18 @@ def test_version_fields_present(client):
     assert body["config_version"] == "test-1"
 
 
-def test_response_shape_carries_no_span_fields(client):
-    """Span detail is observability (structured logs) only — it must not leak
-    into the response contract before calibration (#29)."""
+def test_response_shape_is_exactly_the_contract(make_client):
+    """Spans carry positions and text only — no confidence field until calibration
+    (#32) produces one worth shipping, and no evidence_index (ADR-0007)."""
+    client = make_client(0.2, spans=[Span(start=0, end=3, text="The", confidence=0.9)])
     body = verify(client).json()
     assert set(body) == {"claims", "gate", "engine_version", "config_version"}
-    assert set(body["claims"][0]) == {"text", "verdict", "score", "evidence_index"}
+    assert set(body["claims"][0]) == {"text", "verdict", "score", "spans"}
+    assert set(body["claims"][0]["spans"][0]) == {"start", "end", "text"}
 
 
 def test_contradicted_absent_from_vocabulary(make_client):
     """Tier-1 verdicts are exactly supported/unsupported until the NLI signal lands."""
-    for scores in ([0.0], [1.0]):
-        body = verify(make_client(scores)).json()
+    for support in (0.0, 1.0):
+        body = verify(make_client(support)).json()
         assert body["claims"][0]["verdict"] in {"supported", "unsupported"}

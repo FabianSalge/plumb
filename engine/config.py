@@ -1,4 +1,4 @@
-"""Versioned verifier config: which signal model runs, at which revision, with which threshold."""
+"""Versioned verifier config: which signal model runs, at which revision, with which thresholds."""
 
 from pathlib import Path
 
@@ -16,6 +16,9 @@ class SignalModelConfig(BaseModel):
     model: str
     revision: str
     threshold: float
+    # Flags claim tokens into unsupported spans; independent from the verdict
+    # threshold — an unsupported claim with zero spans is legal (ADR-0007).
+    span_threshold: float
 
 
 class SignalsConfig(BaseModel):

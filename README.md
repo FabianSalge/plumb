@@ -29,15 +29,15 @@ curl -s localhost:8000/v1/verify \
 ```json
 {
   "claims": [
-    {"text": "The capital of France is Paris.", "verdict": "supported", "score": 0.9, "evidence_index": 0}
+    {"text": "The capital of France is Paris.", "verdict": "supported", "score": 0.9, "spans": []}
   ],
   "gate": "pass",
   "engine_version": "0.1.0",
-  "config_version": "0.1.0"
+  "config_version": "0.3.0"
 }
 ```
 
-The whole input is treated as one claim and checked against the caller-provided evidence with a single grounding signal ([LettuceDetect v2](https://huggingface.co/KRLabsOrg/lettucedect-v2-mmbert-base), pinned by revision in [config/verifier.yaml](config/verifier.yaml) — see ADR-0006 for the selection benchmark). Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Claim decomposition, retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
+The whole input is treated as one claim and checked in a single pass against the union of the caller-provided evidence with one grounding signal ([LettuceDetect v2](https://huggingface.co/KRLabsOrg/lettucedect-v2-mmbert-base), pinned by revision in [config/verifier.yaml](config/verifier.yaml) — see ADR-0006 for the selection benchmark). Unsupported regions of the claim come back as `spans` — `start`/`end` Unicode code-point offsets into the claim's `text` plus the flagged substring (ADR-0007). Spans localize the problem, they are not the verdict's proof: the span-flagging threshold is a separate configured knob from the verdict threshold, so an `unsupported` claim with zero spans is possible, and a `supported` one can still carry spans. Verdicts are `supported`/`unsupported` only — `contradicted` arrives with the NLI signal. Claim decomposition, retrieval, tenancy, and calibration are on the [roadmap](https://github.com/FabianSalge/plumb/milestones).
 
 ### Container
 

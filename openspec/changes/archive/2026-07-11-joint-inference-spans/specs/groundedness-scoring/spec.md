@@ -1,26 +1,6 @@
-# groundedness-scoring
+# groundedness-scoring — delta
 
-## Purpose
-
-The engine-side contract of the groundedness signal: how the scorer loads
-(pinned revision, no remote code), the vendored multi-passage prompt format it
-must reproduce, how token-level hallucination probabilities reduce to one
-union-support score per claim behind the `Scorer` interface, span attribution
-of unsupported claim regions, and fail-loud behavior on malformed model
-output.
-
-## Requirements
-
-### Requirement: Scorer loads from a pinned revision with no remote code
-The groundedness scorer SHALL load its model and tokenizer from the single Hub repository and revision hash named in the versioned verifier config, using standard `transformers` classes only. Loading MUST NOT enable `trust_remote_code` and MUST NOT fetch any repository other than the configured one. If the scoring dependencies are not installed, loading SHALL fail with an error that names the extra to install.
-
-#### Scenario: Pinned load
-- **WHEN** the scorer is loaded from config
-- **THEN** the model weights come from exactly the configured repository at the configured revision, with remote code disabled
-
-#### Scenario: Missing dependencies fail loudly
-- **WHEN** the scoring stack (transformers/torch) is not installed
-- **THEN** loading raises a scorer error telling the operator which extra to install, rather than failing later at request time
+## MODIFIED Requirements
 
 ### Requirement: Vendored prompt format matches the model's training format
 The engine SHALL construct the scoring input itself — with no dependency on the
@@ -47,6 +27,22 @@ pinned by a regression test against a golden string, including a multi-passage r
 #### Scenario: Oversized context
 - **WHEN** the passages plus claim exceed the maximum sequence length
 - **THEN** the context is truncated to fit, the claim is scored in full, and the truncation is logged with the total passage count
+
+## REMOVED Requirements
+
+### Requirement: Per-passage support scores behind the Scorer interface
+**Reason**: ADR-0007 retires per-passage scoring — it costs one forward pass per passage,
+under-scores union-grounded claims, and deviates from the benchmarked configuration.
+**Migration**: Replaced by "Union support score behind the Scorer interface"; callers
+consume one score per claim instead of one per passage.
+
+### Requirement: Span detail is emitted for observability
+**Reason**: Spans graduate from log-only detail to the scorer's output — they are the
+attribution mechanism that lets `evidence_index` retire (ADR-0007).
+**Migration**: Replaced by "Spans mark unsupported claim regions"; structured logs keep
+span detail including raw confidences.
+
+## ADDED Requirements
 
 ### Requirement: Union support score behind the Scorer interface
 The scorer SHALL expose `score(claim, passages)` computing the claim's support by the

@@ -5,18 +5,19 @@ import yaml
 from fastapi.testclient import TestClient
 
 from api.app import create_app
+from engine.scoring import ClaimScore, Span
 
 
 class FakeScorer:
-    """Stands in for the scoring wrapper: returns one preset score per passage."""
+    """Stands in for the scoring wrapper: returns one preset ClaimScore per claim."""
 
-    def __init__(self, scores: list[float]):
-        self.scores = scores
+    def __init__(self, support: float, spans: list[Span]):
+        self.result = ClaimScore(support=support, spans=spans)
         self.calls: list[tuple[str, list[str]]] = []
 
-    def score(self, claim: str, passages: list[str]) -> list[float]:
+    def score(self, claim: str, passages: list[str]) -> ClaimScore:
         self.calls.append((claim, passages))
-        return self.scores[: len(passages)]
+        return self.result
 
 
 CONFIG = {
@@ -26,6 +27,7 @@ CONFIG = {
             "model": "fake/model",
             "revision": "deadbeef",
             "threshold": 0.5,
+            "span_threshold": 0.5,
         }
     },
 }
@@ -40,11 +42,14 @@ def config_path(tmp_path):
 
 @pytest.fixture
 def make_client(config_path):
-    """Build a TestClient over an app wired to a FakeScorer with the given scores."""
+    """Build a TestClient over an app wired to a FakeScorer with the given result."""
     clients: list[TestClient] = []
 
-    def _make(scores: list[float]) -> TestClient:
-        app = create_app(config_path=config_path, scorer_factory=lambda cfg: FakeScorer(scores))
+    def _make(support: float, spans: list[Span] | None = None) -> TestClient:
+        app = create_app(
+            config_path=config_path,
+            scorer_factory=lambda cfg: FakeScorer(support, spans or []),
+        )
         client = TestClient(app)
         client.__enter__()
         clients.append(client)
@@ -57,4 +62,4 @@ def make_client(config_path):
 
 @pytest.fixture
 def client(make_client) -> Iterator[TestClient]:
-    return make_client([0.9])
+    return make_client(0.9)

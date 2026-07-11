@@ -12,7 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from api.logging import RequestLoggingMiddleware, setup_logging
-from api.schemas import ClaimResult, VerifyRequest, VerifyResponse
+from api.schemas import ClaimResult, SpanResult, VerifyRequest, VerifyResponse
 from engine.config import SignalModelConfig, load_config
 from engine.scoring import LettuceDetectScorer, Scorer
 from engine.verdict import gate_decision, judge_claim
@@ -67,19 +67,21 @@ def create_app(
                 detail=f"mode {request.mode!r} is not supported — only 'fast' is available",
             )
         scorer: Scorer = app.state.scorer
-        scores = scorer.score(request.text, request.context)
-        claims = [judge_claim(request.text, scores, cfg.groundedness.threshold)]
+        result = scorer.score(request.text, request.context)
+        claim = judge_claim(request.text, result.support, cfg.groundedness.threshold)
         return VerifyResponse(
             claims=[
                 ClaimResult(
                     text=claim.text,
                     verdict=claim.verdict,
                     score=claim.score,
-                    evidence_index=claim.evidence_index,
+                    spans=[
+                        SpanResult(start=span.start, end=span.end, text=span.text)
+                        for span in result.spans
+                    ],
                 )
-                for claim in claims
             ],
-            gate=gate_decision(claims),
+            gate=gate_decision([claim]),
             engine_version=engine_version,
             config_version=cfg.version,
         )
