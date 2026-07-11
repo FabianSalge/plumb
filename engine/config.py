@@ -15,10 +15,15 @@ class SignalModelConfig(BaseModel):
 
     model: str
     revision: str
+    # Thresholds the calibrated confidence, not the raw score (ADR-0008).
     threshold: float
     # Flags claim tokens into unsupported spans; independent from the verdict
     # threshold — an unsupported claim with zero spans is legal (ADR-0007).
+    # Applies to raw token risks: span confidences are uncalibrated until #40.
     span_threshold: float
+    # Path to the calibration artifact, relative to this config file's directory.
+    # Required — an engine without a matching calibrator refuses to start (ADR-0008).
+    calibration: str
 
 
 class SignalsConfig(BaseModel):

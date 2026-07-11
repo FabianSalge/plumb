@@ -13,6 +13,7 @@ VALID = {
             "revision": "deadbeef",
             "threshold": 0.5,
             "span_threshold": 0.5,
+            "calibration": "calibration/test.yaml",
         }
     },
 }
@@ -41,6 +42,7 @@ def test_valid_config_loads(tmp_path):
     assert cfg.groundedness.revision == "deadbeef"
     assert cfg.groundedness.threshold == 0.5
     assert cfg.groundedness.span_threshold == 0.5
+    assert cfg.groundedness.calibration == "calibration/test.yaml"
 
 
 def test_missing_file_fails_loudly(tmp_path):
@@ -57,6 +59,7 @@ def test_missing_file_fails_loudly(tmp_path):
         "signals.groundedness.revision",
         "signals.groundedness.threshold",
         "signals.groundedness.span_threshold",
+        "signals.groundedness.calibration",
     ],
 )
 def test_missing_field_fails_loudly_naming_the_field(tmp_path, field):

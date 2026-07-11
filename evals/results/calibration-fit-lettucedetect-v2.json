@@ -1,0 +1,181 @@
+{
+ "config_version": "0.4.0",
+ "coefficients": {
+  "a": 0.8289509023714926,
+  "b": 0.5063190003813147
+ },
+ "bindings": {
+  "model": "KRLabsOrg/lettucedect-v2-mmbert-base",
+  "revision": "0f85c7a15b17aee6e8f794dae7cb4e42e2b8fdac",
+  "inference_mode": "joint-questionless-v1",
+  "claim_unit": "sentence-maxrisk-v1"
+ },
+ "fit": {
+  "dataset": "wandb/RAGTruth-processed test",
+  "exclusion": "stratified 200-per-task seed-18 benchmark slice removed before fitting",
+  "responses": 2100,
+  "sentences": 14589,
+  "supported_sentences": 13398,
+  "sha256": "c71aea4411ce121eab7e1b75b3e13b54c5085fe68e8448b7df265fb616dfcee2",
+  "fitted_at": "2026-07-11"
+ },
+ "in_domain": {
+  "slice": "stratified 200-per-task seed-18",
+  "responses": 600,
+  "sentences": 4240,
+  "supported_sentences": 3877,
+  "ece_raw": 0.017876544370951784,
+  "ece_calibrated": 0.007450177803590782,
+  "sentence_auroc": 0.925611663330612,
+  "reliability": [
+   {
+    "lo": 0.0,
+    "hi": 0.1,
+    "count": 35,
+    "mean_confidence": 0.07065546813124453,
+    "outcome_rate": 0.05714285714285714
+   },
+   {
+    "lo": 0.1,
+    "hi": 0.2,
+    "count": 62,
+    "mean_confidence": 0.1475322796701993,
+    "outcome_rate": 0.11290322580645161
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.3,
+    "count": 48,
+    "mean_confidence": 0.2517905227173361,
+    "outcome_rate": 0.22916666666666666
+   },
+   {
+    "lo": 0.3,
+    "hi": 0.4,
+    "count": 50,
+    "mean_confidence": 0.3596269003911992,
+    "outcome_rate": 0.38
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.5,
+    "count": 41,
+    "mean_confidence": 0.4530766782670343,
+    "outcome_rate": 0.36585365853658536
+   },
+   {
+    "lo": 0.5,
+    "hi": 0.6,
+    "count": 55,
+    "mean_confidence": 0.5500754272113082,
+    "outcome_rate": 0.7454545454545455
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.7,
+    "count": 83,
+    "mean_confidence": 0.6532191873762273,
+    "outcome_rate": 0.6746987951807228
+   },
+   {
+    "lo": 0.7,
+    "hi": 0.8,
+    "count": 128,
+    "mean_confidence": 0.7501871050252047,
+    "outcome_rate": 0.75
+   },
+   {
+    "lo": 0.8,
+    "hi": 0.9,
+    "count": 305,
+    "mean_confidence": 0.8571640680521514,
+    "outcome_rate": 0.8590163934426229
+   },
+   {
+    "lo": 0.9,
+    "hi": 1.0,
+    "count": 3433,
+    "mean_confidence": 0.9781035538465519,
+    "outcome_rate": 0.9810661229245558
+   }
+  ],
+  "reliability_raw": [
+   {
+    "lo": 0.0,
+    "hi": 0.1,
+    "count": 106,
+    "mean_confidence": 0.05250101381877683,
+    "outcome_rate": 0.12264150943396226
+   },
+   {
+    "lo": 0.1,
+    "hi": 0.2,
+    "count": 54,
+    "mean_confidence": 0.1495844015368709,
+    "outcome_rate": 0.2222222222222222
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.3,
+    "count": 54,
+    "mean_confidence": 0.24335675990139996,
+    "outcome_rate": 0.42592592592592593
+   },
+   {
+    "lo": 0.3,
+    "hi": 0.4,
+    "count": 45,
+    "mean_confidence": 0.3500979966587491,
+    "outcome_rate": 0.4888888888888889
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.5,
+    "count": 53,
+    "mean_confidence": 0.4559310697159677,
+    "outcome_rate": 0.7169811320754716
+   },
+   {
+    "lo": 0.5,
+    "hi": 0.6,
+    "count": 62,
+    "mean_confidence": 0.5558317798760629,
+    "outcome_rate": 0.6935483870967742
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.7,
+    "count": 84,
+    "mean_confidence": 0.6459997984625044,
+    "outcome_rate": 0.7261904761904762
+   },
+   {
+    "lo": 0.7,
+    "hi": 0.8,
+    "count": 135,
+    "mean_confidence": 0.7544989664245535,
+    "outcome_rate": 0.8
+   },
+   {
+    "lo": 0.8,
+    "hi": 0.9,
+    "count": 285,
+    "mean_confidence": 0.8590114758725752,
+    "outcome_rate": 0.8912280701754386
+   },
+   {
+    "lo": 0.9,
+    "hi": 1.0,
+    "count": 3362,
+    "mean_confidence": 0.9812907735353815,
+    "outcome_rate": 0.9824509220701964
+   }
+  ]
+ },
+ "environment": {
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "python": "3.13.7",
+  "torch": "2.12.1",
+  "transformers": "5.13.0"
+ }
+}

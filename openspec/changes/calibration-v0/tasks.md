@@ -45,16 +45,16 @@ the plan; nothing there moves outside it.
 
 ## 5. Engine calibration module
 
-- [ ] 5.1 Failing engine tests: artifact loading (complete artifact loads; missing
+- [x] 5.1 Failing engine tests: artifact loading (complete artifact loads; missing
       field / unknown schema fails naming the field), binding validation (mismatch fails
       naming every mismatched field with expected vs found; missing reference is a
       startup failure, no raw fallback), Platt application (strictly monotone, ε-clamp,
       output strictly inside (0, 1))
-- [ ] 5.2 Implement `engine/calibration/`: artifact model + loader, binding validation,
+- [x] 5.2 Implement `engine/calibration/`: artifact model + loader, binding validation,
       `PlattCalibrator.apply`
-- [ ] 5.3 Declare protocol identifiers — inference mode in `engine/scoring.py`, claim
+- [x] 5.3 Declare protocol identifiers — inference mode in `engine/scoring.py`, claim
       unit in `engine/decomposition.py` — and validate artifact bindings against them
-- [ ] 5.4 Config: `calibration` artifact path in `SignalModelConfig` (required —
+- [x] 5.4 Config: `calibration` artifact path in `SignalModelConfig` (required —
       `ConfigError` when absent); `config/verifier.yaml` references the committed
       artifact, carries the re-picked confidence threshold, and bumps `version`
 

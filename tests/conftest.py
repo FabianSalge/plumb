@@ -41,6 +41,7 @@ def _config(*, threshold: float = 0.5, span_threshold: float = 0.5) -> dict:
                 "revision": "deadbeef",
                 "threshold": threshold,
                 "span_threshold": span_threshold,
+                "calibration": "calibration.yaml",
             }
         },
     }

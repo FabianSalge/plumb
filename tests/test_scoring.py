@@ -86,7 +86,11 @@ def test_zero_passages_fails_loudly():
 def test_missing_dependency_error_names_the_extra(monkeypatch):
     monkeypatch.setitem(sys.modules, "transformers", None)
     cfg = SignalModelConfig(
-        model="fake/model", revision="deadbeef", threshold=0.5, span_threshold=0.5
+        model="fake/model",
+        revision="deadbeef",
+        threshold=0.5,
+        span_threshold=0.5,
+        calibration="calibration.yaml",
     )
     with pytest.raises(ScorerError, match="'model' extra"):
         LettuceDetectScorer.load(cfg)
