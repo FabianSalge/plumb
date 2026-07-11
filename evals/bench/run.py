@@ -171,7 +171,7 @@ def main() -> None:
             ),
         },
         "sanity": sanity,
-        "environment": {**environment(hardware=True)},
+        "environment": environment(hardware=True),
         "per_example": [
             {
                 "id": e.id,

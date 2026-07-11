@@ -3,7 +3,7 @@
 Segment-after-score (ADR-0009) moves reduction and span attribution to
 `engine.decomposition`; the scorer's job is now one whole-answer forward pass
 returning per-token risk with answer-relative offsets. Those live in
-`tests/test_decomposition.py`.
+`tests/engine/decomposition/` (test_segmentation.py and test_reduction.py).
 """
 
 import logging
