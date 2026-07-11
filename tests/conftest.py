@@ -1,11 +1,13 @@
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 import yaml
 from fastapi.testclient import TestClient
 
 from api.app import create_app
-from engine.scoring import TokenScores
+from engine.decomposition import CLAIM_UNIT
+from engine.scoring import INFERENCE_MODE, TokenScores
 
 
 class FakeScorer:
@@ -47,11 +49,56 @@ def _config(*, threshold: float = 0.5, span_threshold: float = 0.5) -> dict:
     }
 
 
+def make_artifact(*, a: float = 1.0, b: float = 0.0, **binding_overrides) -> dict:
+    """A valid calibration artifact matching `_config`'s fake model. The identity
+    coefficients (a=1, b=0) make confidence equal raw support (up to the ε clamp),
+    so threshold-behaviour tests read naturally."""
+    bindings = {
+        "model": "fake/model",
+        "revision": "deadbeef",
+        "inference_mode": INFERENCE_MODE,
+        "claim_unit": CLAIM_UNIT,
+    }
+    bindings.update(binding_overrides)
+    return {
+        "schema": 1,
+        "method": "platt",
+        "coefficients": {"a": a, "b": b},
+        "bindings": bindings,
+        "fit": {
+            "dataset": "test-fixture",
+            "exclusion": "none",
+            "responses": 3,
+            "sentences": 12,
+            "sha256": "0" * 64,
+            "fitted_at": "2026-07-11",
+        },
+        "metrics": {
+            "in_domain": {"dataset": "test-fixture", "slice": "s", "sentences": 12, "ece": 0.01},
+            "out_of_domain": {
+                "dataset": "ood-fixture",
+                "subsets": ["a"],
+                "excluded_subsets": {"RAGTruth": "fitted on RAGTruth"},
+                "claims": 5,
+                "ece": 0.06,
+            },
+        },
+    }
+
+
+def write_config(
+    directory: Path, *, config: dict | None = None, artifact: dict | None = None
+) -> Path:
+    """Write a verifier config and its calibration artifact side by side."""
+    path = directory / "verifier.yaml"
+    path.write_text(yaml.safe_dump(config or _config()))
+    (directory / "calibration.yaml").write_text(yaml.safe_dump(artifact or make_artifact()))
+    return path
+
+
 @pytest.fixture
 def config_path(tmp_path):
-    path = tmp_path / "verifier.yaml"
-    path.write_text(yaml.safe_dump(_config()))
-    return path
+    return write_config(tmp_path)
 
 
 @pytest.fixture
@@ -62,10 +109,20 @@ def make_client(tmp_path):
     clients: list[TestClient] = []
 
     def _make(
-        scores: TokenScores, *, threshold: float = 0.5, span_threshold: float = 0.5
+        scores: TokenScores,
+        *,
+        threshold: float = 0.5,
+        span_threshold: float = 0.5,
+        a: float = 1.0,
+        b: float = 0.0,
     ) -> TestClient:
-        path = tmp_path / f"verifier-{len(clients)}.yaml"
-        path.write_text(yaml.safe_dump(_config(threshold=threshold, span_threshold=span_threshold)))
+        directory = tmp_path / f"cfg-{len(clients)}"
+        directory.mkdir()
+        path = write_config(
+            directory,
+            config=_config(threshold=threshold, span_threshold=span_threshold),
+            artifact=make_artifact(a=a, b=b),
+        )
         app = create_app(
             config_path=path,
             scorer_factory=lambda cfg: FakeScorer(scores),
