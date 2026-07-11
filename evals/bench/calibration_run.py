@@ -20,21 +20,18 @@ Usage (from evals/):
 import argparse
 import hashlib
 import json
-import platform
 from dataclasses import asdict
 from datetime import UTC, datetime
 from pathlib import Path
 
 from bench.calibration import apply_fit, fit_platt
 from bench.data import Example, load_ragtruth_test, stratified_slice
+from bench.harness import DEFAULT_CONFIG, environment, progress, write_results
 from bench.metrics import auroc, ece, reliability_bins
 from bench.sentence import sentence_hallucinated
 from engine.decomposition import CLAIM_UNIT, decompose
 from engine.signals import Scorer
 from engine.signals.groundedness import INFERENCE_MODE, LettuceDetectScorer
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONFIG = REPO_ROOT / "config" / "verifier.yaml"
 
 
 def sentence_outcomes(
@@ -53,15 +50,11 @@ def sentence_outcomes(
             fingerprints.append(f"{example.id}\t{claim.start}\t{claim.end}\t{outcome}")
             outcomes.append(outcome)
             supports.append(claim.support)
-        if (i + 1) % 100 == 0:
-            print(f"  [{label}] {i + 1}/{len(examples)} responses scored", flush=True)
+        progress(i + 1, len(examples), label=label, every=100)
     return fingerprints, outcomes, supports
 
 
 def main() -> None:
-    import torch
-    import transformers
-
     from engine.config import load_config
 
     parser = argparse.ArgumentParser(description=__doc__)
@@ -137,16 +130,10 @@ def main() -> None:
                 asdict(bin) for bin in reliability_bins(eval_outcomes, eval_supports)
             ],
         },
-        "environment": {
-            "platform": platform.platform(),
-            "python": platform.python_version(),
-            "torch": torch.__version__,
-            "transformers": transformers.__version__,
-        },
+        "environment": environment(),
     }
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(result, indent=1) + "\n")
+    write_results(args.out, result)
     summary = {k: result[k] for k in ("coefficients", "fit")}
     summary["in_domain"] = {
         k: v for k, v in result["in_domain"].items() if not k.startswith("reliability")

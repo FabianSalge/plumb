@@ -13,31 +13,19 @@ Usage (from evals/):
 
 import argparse
 import json
-import platform
 import statistics
 import time
 from pathlib import Path
 
 from bench.data import load_ragtruth_test, stratified_slice
+from bench.harness import DEFAULT_CONFIG, environment, percentile, progress, write_results
 from bench.metrics import auroc
 from bench.sentence import sentence_scores
 from engine.config import load_config
 from engine.signals.groundedness import LettuceDetectScorer
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CONFIG = REPO_ROOT / "config" / "verifier.yaml"
-
-
-def percentile(values: list[float], pct: float) -> float:
-    ordered = sorted(values)
-    index = min(len(ordered) - 1, round(pct / 100 * len(ordered) + 0.5) - 1)
-    return ordered[index]
-
 
 def main() -> None:
-    import torch
-    import transformers
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--per-task", type=int, default=200)
     parser.add_argument("--seed", type=int, default=18)
@@ -63,8 +51,7 @@ def main() -> None:
         for label, risk in pairs:
             labels.append(label)
             risks.append(risk)
-        if (i + 1) % 50 == 0:
-            print(f"  {i + 1}/{len(examples)} responses scored", flush=True)
+        progress(i + 1, len(examples), every=50)
 
     result = {
         "model": cfg.groundedness.model,
@@ -86,16 +73,10 @@ def main() -> None:
             "mean": sum(per_response_sentences) / len(per_response_sentences),
             "max": max(per_response_sentences),
         },
-        "environment": {
-            "platform": platform.platform(),
-            "python": platform.python_version(),
-            "torch": torch.__version__,
-            "transformers": transformers.__version__,
-        },
+        "environment": environment(),
     }
 
-    args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(json.dumps(result, indent=1) + "\n")
+    write_results(args.out, result)
     print(json.dumps({k: result[k] for k in ("slice", "metrics", "latency")}, indent=1))
 
 
