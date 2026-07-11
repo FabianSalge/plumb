@@ -1,0 +1,28 @@
+{
+ "mode": "fast",
+ "engine_version": "0.2.0",
+ "config_version": "0.5.0",
+ "slice": {
+  "per_task": 200,
+  "seed": 18,
+  "responses": 600,
+  "warmup_requests": 10
+ },
+ "latency": {
+  "n": 600,
+  "p50_ms": 339.68543726950884,
+  "p95_ms": 1197.747291997075,
+  "contract_ms": 1000.0,
+  "meets_contract": false
+ },
+ "claims_per_response": {
+  "mean": 7.066666666666666,
+  "max": 22
+ },
+ "environment": {
+  "platform": "macOS-26.2-arm64-arm-64bit-Mach-O",
+  "python": "3.13.7",
+  "cpu": "Apple M4",
+  "memory_gb": 16
+ }
+}

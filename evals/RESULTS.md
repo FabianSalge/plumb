@@ -4,6 +4,43 @@ Raw per-run output lives in `results/*.json`; the harness is `bench/` (see
 `bench/run.py` for the exact protocol and invocation). Numbers below are
 rendered from those JSONs.
 
+## Fast-mode latency end to end through `/v1/verify` (#36, ADR-0003)
+
+2026-07-11. ADR-0003 gives fast mode a sub-second p95 contract and calls its
+numbers targets until measured. This measures it — wall-clock per request
+against a running server, so HTTP, validation, the joint forward pass,
+segmentation, calibration, gate, and structured logging are all inside the
+clock, not scorer-only time.
+
+### End-to-end protocol
+
+- **Server:** `make run` (uvicorn, one worker, root project's `model` extra) —
+  engine 0.2.0, config 0.5.0, the pinned LettuceDetect v2 weights.
+- **Client:** `bench/latency_run.py`, a pure HTTP client on the same machine.
+  Requests are sequential — this measures latency, not throughput — with 10
+  warmup requests excluded. The run aborts if the server's identity drifts
+  mid-run or a response carries no claims.
+- **Input distribution:** the seed-18 RAGTruth test slice (200 per task type →
+  600 responses), whole response as `text`, its source as the single context
+  passage, `mode: "fast"`. Claims per response mean 7.1, max 22 — matching the
+  offline sentence benchmark on the same slice, so the server segments exactly
+  as the bench does.
+- **Hardware:** MacBook, Apple M4, 16 GB, CPU only. Python 3.13.7.
+
+### Measured vs contract
+
+| Metric | Value | Contract |
+| --- | --- | --- |
+| p50 | 340 ms | — |
+| p95 | **1,198 ms** | sub-second p95 — **missed** |
+
+The contract is missed at the tail, by ~20%. Scorer-only per-response latency
+on the identical slice is 214 / 564 ms (median / p95, below): the serve path
+adds ~125 ms at the median and roughly doubles the tail, where the long
+Data2txt and Summary contexts already make the forward pass expensive.
+ADR-0003 says published numbers become a regression surface; this one starts
+as a gap to close, not a pass to defend.
+
 ## Calibration v0, Platt scaling on held-out RAGTruth (#32, ADR-0008)
 
 2026-07-11. The raw support score becomes a calibrated confidence: among

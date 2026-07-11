@@ -21,6 +21,12 @@ def test_environment_stamps_platform_and_libraries():
     assert set(env) >= {"platform", "python", "torch", "transformers"}
 
 
+def test_environment_without_libs_stamps_machine_only():
+    env = environment(hardware=True, libs=False)
+    assert {"platform", "python", "cpu", "memory_gb"} <= set(env)
+    assert "torch" not in env and "transformers" not in env
+
+
 def test_default_config_points_at_the_repo_verifier_config():
     assert DEFAULT_CONFIG.name == "verifier.yaml"
     assert DEFAULT_CONFIG.parent.name == "config"
