@@ -35,5 +35,5 @@
 ## 6. Verify and close
 
 - [x] 6.1 `make test`, `make lint`, `make typecheck` green locally; `make test-model` for the scorer-touching paths
-- [ ] 6.2 `make e2e` against the chart in kind with the new config + artifact
+- [x] 6.2 `make e2e` against the chart in kind with the new config + artifact
 - [ ] 6.3 OpenSpec validate the change, sync delta specs, archive after merge per workflow
