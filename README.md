@@ -72,8 +72,10 @@ make deploy    # build the image, load it into kind, install the chart
 make e2e       # golden verify request against the deployed chart
 ```
 
-CI runs this same flow on every PR: kind cluster, chart install, one golden
-verify request asserting a `supported` verdict.
+CI runs this same flow on every PR that touches code, chart, or config:
+kind cluster, chart install, one golden verify request asserting a
+`supported` verdict. Prose-only PRs (docs, specs, markdown) skip the heavy
+jobs; lint and secret scanning run regardless.
 
 ## Development
 
