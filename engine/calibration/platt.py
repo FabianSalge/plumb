@@ -24,3 +24,10 @@ def platt_confidence(support: float, a: float, b: float) -> float:
     clamped = min(max(support, EPSILON), 1.0 - EPSILON)
     logit = math.log(clamped / (1.0 - clamped))
     return 1.0 / (1.0 + math.exp(-(a * logit + b)))
+
+
+def span_confidence(raw_risk: float, a: float, b: float) -> float:
+    """Calibrated probability that a span flagged at max token risk `raw_risk` marks
+    a genuinely unsupported region: the claim map applied to the span's support-analog
+    1 − r, complemented back to the risk direction — one arithmetic path for both."""
+    return 1.0 - platt_confidence(1.0 - raw_risk, a=a, b=b)

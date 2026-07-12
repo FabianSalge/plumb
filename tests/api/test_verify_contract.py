@@ -35,7 +35,11 @@ def test_unsupported_claim_carries_spans(make_client):
     claim = body["claims"][0]
     assert claim["verdict"] == "unsupported"
     assert claim["confidence"] == pytest.approx(0.2)
-    assert claim["spans"] == [{"start": 4, "end": 15, "text": "sky is blue"}]
+    (span,) = claim["spans"]
+    assert (span["start"], span["end"], span["text"]) == (4, 15, "sky is blue")
+    # Identity span coefficients: the calibrated span confidence equals the raw
+    # max token risk of the flagged region.
+    assert span["confidence"] == pytest.approx(0.8)
     assert body["gate"] == "block"
 
 
@@ -70,7 +74,8 @@ def test_spans_are_claim_relative_in_a_later_claim(make_client):
     body = verify(client, text=text).json()
     second = body["claims"][1]
     assert second["verdict"] == "unsupported"
-    assert second["spans"] == [{"start": 9, "end": 14, "text": "green"}]
+    (span,) = second["spans"]
+    assert (span["start"], span["end"], span["text"]) == (9, 14, "green")
     assert body["gate"] == "block"
 
 
@@ -121,13 +126,13 @@ def test_version_fields_present(client):
 
 
 def test_response_shape_is_exactly_the_contract(make_client):
-    """Claims carry calibrated confidence, never the raw score; spans carry positions
-    and text only — span confidences wait for #40."""
+    """Claims carry calibrated confidence, never the raw score; spans carry positions,
+    text, and their calibrated confidence — no raw numbers anywhere."""
     client = make_client(char_scores("The sky is blue.", flag=(0, 3)))
     body = verify(client).json()
     assert set(body) == {"claims", "gate", "engine_version", "config_version"}
     assert set(body["claims"][0]) == {"text", "start", "end", "verdict", "confidence", "spans"}
-    assert set(body["claims"][0]["spans"][0]) == {"start", "end", "text"}
+    assert set(body["claims"][0]["spans"][0]) == {"start", "end", "text", "confidence"}
 
 
 def test_contradicted_absent_from_vocabulary(make_client):
@@ -163,6 +168,40 @@ def test_confidence_never_exactly_zero_or_one(make_client):
         confidence = body["claims"][0]["confidence"]
         assert confidence != bound
         assert 0.0 < confidence < 1.0
+
+
+def test_span_confidence_is_calibrated_not_raw(make_client):
+    """A non-identity span map visibly moves the number: the response carries the
+    calibrated value of the flagged region's raw max token risk, not the risk."""
+    from engine.calibration import span_confidence
+
+    client = make_client(char_scores("The sky is blue.", flag=(4, 15)), span_a=1.0, span_b=1.0)
+    (span,) = verify(client).json()["claims"][0]["spans"]
+    assert span["confidence"] == pytest.approx(span_confidence(0.8, a=1.0, b=1.0))
+    assert span["confidence"] != pytest.approx(0.8)
+
+
+def test_span_confidence_never_exactly_zero_or_one(make_client):
+    """A span flagged at raw risk 1.0 still ships a confidence strictly inside (0, 1)."""
+    client = make_client(char_scores("The sky is blue.", base=1.0))
+    (span,) = verify(client).json()["claims"][0]["spans"]
+    assert 0.0 < span["confidence"] < 1.0
+
+
+def test_span_raw_risk_goes_to_logs_not_the_response(make_client, capsys):
+    """Structured logs carry each span's raw max token risk alongside its calibrated
+    confidence; the response carries only the confidence."""
+    import json
+
+    client = make_client(char_scores("The sky is blue.", flag=(4, 15)), span_a=1.0, span_b=1.0)
+    (span,) = verify(client).json()["claims"][0]["spans"]
+    assert "raw_risk" not in span
+    lines = [json.loads(line) for line in capsys.readouterr().out.splitlines() if line]
+    calibrated = [line for line in lines if line.get("message") == "claims calibrated"]
+    (logged_claim,) = calibrated[0]["claims"]
+    (logged_span,) = logged_claim["spans"]
+    assert logged_span["raw_risk"] == pytest.approx(0.8)
+    assert logged_span["confidence"] == pytest.approx(span["confidence"])
 
 
 def test_raw_support_goes_to_logs_not_the_response(make_client, capsys):

@@ -79,12 +79,15 @@ def create_app(
         scores = scorer.score(request.text, request.context)
         assessed = decompose(request.text, scores, cfg.groundedness.span_threshold)
         confidences = [artifact.confidence(claim.support) for claim in assessed]
+        span_confidences = [
+            [artifact.span_confidence(span.raw_risk) for span in claim.spans] for claim in assessed
+        ]
         verdicts = [
             judge_claim(claim.text, confidence, cfg.groundedness.threshold)
             for claim, confidence in zip(assessed, confidences, strict=True)
         ]
-        # The raw support is log-only detail: the response carries the calibrated
-        # confidence, and anyone thresholding must threshold that.
+        # Raw numbers are log-only detail: the response carries the calibrated
+        # claim and span confidences, and anyone thresholding must threshold those.
         logger.info(
             "claims calibrated",
             extra={
@@ -94,8 +97,21 @@ def create_app(
                         "end": claim.end,
                         "raw_support": claim.support,
                         "confidence": confidence,
+                        "spans": [
+                            {
+                                "start": span.start,
+                                "end": span.end,
+                                "raw_risk": span.raw_risk,
+                                "confidence": span_confidence,
+                            }
+                            for span, span_confidence in zip(
+                                claim.spans, claim_span_confidences, strict=True
+                            )
+                        ],
                     }
-                    for claim, confidence in zip(assessed, confidences, strict=True)
+                    for claim, confidence, claim_span_confidences in zip(
+                        assessed, confidences, span_confidences, strict=True
+                    )
                 ]
             },
         )
@@ -108,11 +124,20 @@ def create_app(
                     verdict=verdict.verdict,
                     confidence=verdict.confidence,
                     spans=[
-                        SpanResult(start=span.start, end=span.end, text=span.text)
-                        for span in claim.spans
+                        SpanResult(
+                            start=span.start,
+                            end=span.end,
+                            text=span.text,
+                            confidence=span_confidence,
+                        )
+                        for span, span_confidence in zip(
+                            claim.spans, claim_span_confidences, strict=True
+                        )
                     ],
                 )
-                for claim, verdict in zip(assessed, verdicts, strict=True)
+                for claim, verdict, claim_span_confidences in zip(
+                    assessed, verdicts, span_confidences, strict=True
+                )
             ],
             gate=gate_decision(verdicts),
             engine_version=engine_version,

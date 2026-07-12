@@ -7,7 +7,7 @@ from engine.calibration.artifact import (
     load_artifact,
     validate_bindings,
 )
-from engine.calibration.platt import EPSILON, CalibrationError, platt_confidence
+from engine.calibration.platt import EPSILON, CalibrationError, platt_confidence, span_confidence
 
 __all__ = [
     "EPSILON",
@@ -15,5 +15,6 @@ __all__ = [
     "CalibrationError",
     "load_artifact",
     "platt_confidence",
+    "span_confidence",
     "validate_bindings",
 ]

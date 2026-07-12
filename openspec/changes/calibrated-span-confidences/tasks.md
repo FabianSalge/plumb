@@ -11,20 +11,20 @@
 
 ## 2. Engine: artifact schema 2 and the span map
 
-- [ ] 2.1 Failing tests: span confidence arithmetic — `1 − platt_confidence(1 − r)` with span coefficients, monotone increasing in r, strictly inside (0, 1) at r ∈ {0.0, 1.0}, error on non-finite coefficients or r outside [0, 1]
-- [ ] 2.2 Failing tests: artifact loading — schema-2 artifact with complete span section loads; schema-1 artifact refused naming found and served versions; missing span-section fields refused naming the field
-- [ ] 2.3 Failing tests: binding validation — span-threshold mismatch between artifact and running config fails startup naming the field with expected and found values, alongside the existing four bindings
-- [ ] 2.4 Implement in `engine/calibration/`: span section models, `KNOWN_SCHEMAS = {2}`, span confidence method on the artifact, span-threshold binding validation
+- [x] 2.1 Failing tests: span confidence arithmetic — `1 − platt_confidence(1 − r)` with span coefficients, monotone increasing in r, strictly inside (0, 1) at r ∈ {0.0, 1.0}, error on non-finite coefficients or r outside [0, 1]
+- [x] 2.2 Failing tests: artifact loading — schema-2 artifact with complete span section loads; schema-1 artifact refused naming found and served versions; missing span-section fields refused naming the field
+- [x] 2.3 Failing tests: binding validation — span-threshold mismatch between artifact and running config fails startup naming the field with expected and found values, alongside the existing four bindings
+- [x] 2.4 Implement in `engine/calibration/`: span section models, `KNOWN_SCHEMAS = {2}`, span confidence method on the artifact, span-threshold binding validation
 
 ## 3. Engine: reduction carries raw risk, not "confidence"
 
-- [ ] 3.1 Failing tests: `Span.raw_risk` rename — structured span logs carry the raw maximum token risk under the raw name
-- [ ] 3.2 Rename `reduction.Span.confidence` to `raw_risk` and update the span log line
+- [x] 3.1 Failing tests: `Span.raw_risk` rename — structured span logs carry the raw maximum token risk under the raw name
+- [x] 3.2 Rename `reduction.Span.confidence` to `raw_risk` and update the span log line
 
 ## 4. API: span confidence in the response
 
-- [ ] 4.1 Failing tests: response spans carry calibrated `confidence` strictly inside (0, 1); raw risk absent from the response body; unsupported-claim-with-spans scenario includes per-span confidence
-- [ ] 4.2 Implement: `api/schemas.py` span shape, `api/app.py` applies the artifact's span map to each span's raw risk, structured log carries raw risk and calibrated confidence side by side
+- [x] 4.1 Failing tests: response spans carry calibrated `confidence` strictly inside (0, 1); raw risk absent from the response body; unsupported-claim-with-spans scenario includes per-span confidence
+- [x] 4.2 Implement: `api/schemas.py` span shape, `api/app.py` applies the artifact's span map to each span's raw risk, structured log carries raw risk and calibrated confidence side by side
 - [ ] 4.3 Reference the new artifact from the verifier config with a config-version bump
 
 ## 5. Docs

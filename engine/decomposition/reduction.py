@@ -17,13 +17,14 @@ logger = logging.getLogger("plumb.engine.decomposition.reduction")
 @dataclass(frozen=True)
 class Span:
     """An unsupported region of a claim; `start`/`end` are claim-relative code-point
-    offsets into the claim text. `confidence` is the raw maximum token probability —
-    structured-log detail only until calibration (#32)."""
+    offsets into the claim text. `raw_risk` is the raw maximum token probability —
+    named raw so it cannot be mistaken for the calibrated confidence the API layer
+    derives from it; the raw value itself stays in structured logs."""
 
     start: int
     end: int
     text: str
-    confidence: float
+    raw_risk: float
 
 
 @dataclass(frozen=True)
@@ -94,4 +95,4 @@ def _merge_spans(
         else:
             close()
     close()
-    return [Span(start=s, end=e, text=claim_text[s:e], confidence=c) for s, e, c in closed]
+    return [Span(start=s, end=e, text=claim_text[s:e], raw_risk=c) for s, e, c in closed]
