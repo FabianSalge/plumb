@@ -10,7 +10,7 @@
 # revision 22296c700ef0ba4ab3e5c9afffa0185caaf61e52 (ADR-0006); thresholds
 # are per-model and the calibration artifact is per-model — refit both
 # when swapping.
-version: "0.5.0"
+version: "0.6.0"
 signals:
   groundedness:
     model: KRLabsOrg/lettucedect-v2-mmbert-base
@@ -20,10 +20,12 @@ signals:
     threshold: 0.5
     # Flags claim tokens into unsupported spans; independent from the verdict
     # threshold above — an unsupported claim with zero spans is legal (ADR-0007).
-    # Applies to raw token risks — span confidences are uncalibrated until #40.
+    # Applies to raw token risks; each flagged span then ships the calibrated
+    # probability that the region is unsupported, per the artifact's span map.
+    # The artifact binds this value — changing it demands a span refit.
     span_threshold: 0.5
-    # Platt calibration artifact, relative to this file. Fitted on held-out
-    # RAGTruth at the sentence claim unit; the engine refuses to start if the
-    # artifact's bindings mismatch the model/revision above or the engine's
-    # declared inference mode and claim unit.
-    calibration: calibration/lettucedect-v2-mmbert-base-sentence-v1.yaml
+    # Platt calibration artifact, relative to this file. Claim and span maps
+    # fitted on held-out RAGTruth at the sentence claim unit; the engine refuses
+    # to start if the artifact's bindings mismatch the model/revision above, the
+    # engine's declared inference mode and claim unit, or the span threshold.
+    calibration: calibration/lettucedect-v2-mmbert-base-sentence-v2.yaml

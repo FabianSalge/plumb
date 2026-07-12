@@ -28,13 +28,19 @@ def make_client(tmp_path):
         span_threshold: float = 0.5,
         a: float = 1.0,
         b: float = 0.0,
+        span_a: float = 1.0,
+        span_b: float = 0.0,
     ) -> TestClient:
         directory = tmp_path / f"cfg-{len(clients)}"
         directory.mkdir()
         path = write_config(
             directory,
             config=make_config(threshold=threshold, span_threshold=span_threshold),
-            artifact=make_artifact(a=a, b=b),
+            # The artifact's span threshold tracks the config's — a mismatch is a
+            # startup refusal, which has its own tests.
+            artifact=make_artifact(
+                a=a, b=b, span_a=span_a, span_b=span_b, span_threshold=span_threshold
+            ),
         )
         app = create_app(
             config_path=path,

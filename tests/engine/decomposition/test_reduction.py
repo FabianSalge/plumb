@@ -87,16 +87,17 @@ def test_span_threshold_is_injected_not_hardcoded():
     assert not reduce_claim(claim, scores, span_threshold=0.7).spans
 
 
-def test_spans_logged_with_confidences_response_carries_positions_only(caplog):
+def test_spans_carry_raw_risk_under_the_raw_name(caplog):
+    """The reduction's span number is the raw maximum token risk, named as raw so it
+    cannot be mistaken for the calibrated confidence the API attaches (design §7)."""
     claim = Claim("Paris is small.", 0, 15)
     scores = token_scores((0.1, 0, 5), (0.9, 6, 8), (0.95, 9, 14), (0.2, 14, 15))
     with caplog.at_level(logging.INFO, logger="plumb.engine.decomposition.reduction"):
         result = reduce_claim(claim, scores, span_threshold=0.5)
     records = [r for r in caplog.records if hasattr(r, "spans")]
     assert len(records) == 1
-    assert records[0].spans == [{"start": 6, "end": 14, "text": "is small", "confidence": 0.95}]
-    # The returned span object carries the confidence for the API layer to drop.
-    assert result.spans[0].confidence == 0.95
+    assert records[0].spans == [{"start": 6, "end": 14, "text": "is small", "raw_risk": 0.95}]
+    assert result.spans[0].raw_risk == 0.95
 
 
 # --- Decompose orchestration ---------------------------------------------------

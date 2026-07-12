@@ -12,11 +12,15 @@ class VerifyRequest(BaseModel):
 
 
 class SpanResult(BaseModel):
-    # Unicode code-point offsets into the claim's `text`. No confidence field
-    # until span confidences are calibrated (#40).
+    # Unicode code-point offsets into the claim's `text`.
     start: int
     end: int
     text: str
+    # Calibrated probability that this flagged region is genuinely unsupported by
+    # the union of the passages — strictly inside (0, 1), never the raw token risk,
+    # which stays in structured logs. Note the direction: higher means more surely
+    # unsupported, the opposite of the claim-level confidence.
+    confidence: float
 
 
 class ClaimResult(BaseModel):
