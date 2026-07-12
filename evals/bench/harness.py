@@ -10,6 +10,17 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG = REPO_ROOT / "config" / "verifier.yaml"
 
+# Fixed-pair latency protocol, shared by every model-decision run so the
+# short/500-word columns stay comparable across benchmarks and the HHEM spike.
+LATENCY_REPEATS = 30
+SHORT_EVIDENCE = "The quick brown fox jumps over the lazy dog near the quiet river bank today."
+SHORT_CLAIM = "A fox jumps over a dog."
+LONG_EVIDENCE = " ".join(
+    f"Fact number {i}: the archive records event {i} occurring in year {1500 + i}."
+    for i in range(1, 51)
+)  # 50 sentences x 10 words = 500 words
+LONG_CLAIM = "The archive records event 7 occurring in year 1507."
+
 
 def percentile(values: list[float], pct: float) -> float:
     ordered = sorted(values)
@@ -54,3 +65,20 @@ def progress(
 def write_results(path: Path, result: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, indent=1) + "\n")
+
+
+def weights_on_disk_bytes(repos: list[tuple[str, str | None]]) -> int | None:
+    """Size of each repo's pinned revision in the local cache (not stray revisions)."""
+    from huggingface_hub import scan_cache_dir
+
+    cached_models = {c.repo_id: c for c in scan_cache_dir().repos if c.repo_type == "model"}
+    total = 0
+    for repo, revision in repos:
+        if repo not in cached_models:
+            return None
+        revisions = cached_models[repo].revisions
+        matching = [r for r in revisions if revision is None or r.commit_hash == revision]
+        if not matching:
+            return None
+        total += max(r.size_on_disk for r in matching)
+    return total

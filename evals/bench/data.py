@@ -32,6 +32,9 @@ class Example:
     # `response`; empty for a supported response. Sentence-level labelling reads
     # these, the response-level label reads only whether any exist.
     spans: tuple[tuple[int, int], ...] = field(default=())
+    # Parallel to `spans`: "conflict" (the span contradicts the evidence) or
+    # "baseless" (it merely lacks support) — the distinction the NLI slot exists for.
+    span_kinds: tuple[str, ...] = field(default=())
 
 
 def is_hallucinated(span_counts: Mapping[str, int]) -> bool:
@@ -41,18 +44,37 @@ def is_hallucinated(span_counts: Mapping[str, int]) -> bool:
         raise DataError(f"hallucination span counts missing key: {exc}") from exc
 
 
-def hallucination_spans(raw: str) -> tuple[tuple[int, int], ...]:
-    """Parse the raw `hallucination_labels` JSON into (start, end) response offsets."""
+# RAGTruth's four annotation types collapse into the two kinds the signal stack
+# distinguishes: a conflict span is refuted by the evidence, a baseless span
+# merely lacks support.
+_KIND_BY_LABEL_TYPE = {
+    "Evident Conflict": "conflict",
+    "Subtle Conflict": "conflict",
+    "Evident Baseless Info": "baseless",
+    "Subtle Baseless Info": "baseless",
+}
+
+
+def span_kind(label_type: str) -> str:
+    try:
+        return _KIND_BY_LABEL_TYPE[label_type]
+    except KeyError as exc:
+        raise DataError(f"unknown hallucination label_type: {label_type!r}") from exc
+
+
+def hallucination_spans(raw: str) -> tuple[tuple[int, int, str], ...]:
+    """Parse the raw `hallucination_labels` JSON into (start, end, kind) triples,
+    with response code-point offsets and kind "conflict" or "baseless"."""
     try:
         items = json.loads(raw)
     except (json.JSONDecodeError, TypeError) as exc:
         raise DataError(f"hallucination_labels is not valid JSON: {exc}") from exc
-    spans: list[tuple[int, int]] = []
+    spans: list[tuple[int, int, str]] = []
     for item in items:
         try:
-            spans.append((int(item["start"]), int(item["end"])))
+            spans.append((int(item["start"]), int(item["end"]), span_kind(item["label_type"])))
         except (KeyError, TypeError, ValueError) as exc:
-            raise DataError(f"hallucination span missing start/end: {exc}") from exc
+            raise DataError(f"hallucination span missing start/end/label_type: {exc}") from exc
     return tuple(spans)
 
 
@@ -76,18 +98,21 @@ def load_ragtruth_test() -> list[Example]:
     from datasets import load_dataset
 
     rows = load_dataset("wandb/RAGTruth-processed", split="test")
-    examples = [
-        Example(
-            id=row["id"],
-            task_type=row["task_type"],
-            query=row["query"],
-            context=row["context"],
-            response=row["output"],
-            hallucinated=is_hallucinated(row["hallucination_labels_processed"]),
-            spans=hallucination_spans(row["hallucination_labels"]),
+    examples = []
+    for row in rows:
+        typed = hallucination_spans(row["hallucination_labels"])
+        examples.append(
+            Example(
+                id=row["id"],
+                task_type=row["task_type"],
+                query=row["query"],
+                context=row["context"],
+                response=row["output"],
+                hallucinated=is_hallucinated(row["hallucination_labels_processed"]),
+                spans=tuple((start, end) for start, end, _ in typed),
+                span_kinds=tuple(kind for _, _, kind in typed),
+            )
         )
-        for row in rows
-    ]
     positives = sum(e.hallucinated for e in examples)
     if len(examples) != EXPECTED_TEST_SIZE or positives != EXPECTED_TEST_POSITIVES:
         raise DataError(
