@@ -4,6 +4,65 @@ Raw per-run output lives in `results/*.json`; the harness is `bench/` (see
 `bench/run.py` for the exact protocol and invocation). Numbers below are
 rendered from those JSONs.
 
+## Fast-mode p95 re-measured: the serve path exonerated (#59)
+
+2026-07-12. #36 measured fast mode at 340 / 1,198 ms (p50 / p95) and read
+the gap over scorer-only time (214 / 564 ms) as serve-path cost: ~125 ms at
+the median, double at the tail. #59 re-measured under the identical
+protocol — same seed-18 slice, same sequential client, same hardware, same
+`bench/latency_run.py` — and the gap is gone:
+
+| Metric | #36 (2026-07-11) | #59 (2026-07-12) | Contract |
+| --- | --- | --- | --- |
+| p50 | 340 ms | 216 ms | — |
+| p95 | 1,198 ms | **568 ms** | sub-second p95 — **met** |
+
+**Nothing in the code path changed; the measurement itself was the
+defect.** Two lines of evidence:
+
+- Per-stage instrumentation over the same 600-request slice puts the entire
+  serve path at ~2 ms: HTTP plus client 0.6 ms, ASGI middleware 0.6 ms, and
+  segmentation, calibration, gate, structured logging and response
+  serialization each under 1 ms at p99. The model forward pass is 99% of
+  wall time among the slowest 5% of requests, and in-server forward times
+  (218 / 600 ms median / p95) match the offline scorer benchmark
+  (214 / 564 ms) — the server does not slow the model down.
+- Between the two measurements the serve path only gained work (#54 added
+  span-confidence calibration to every response), so a code change cannot
+  explain a tail that halved.
+
+What can: machine state. The #36 run was taken with the kind cluster up
+(PR #53 records port 8000 held by a stale port-forward) and no record of
+what else the machine was doing. The protocol now stamps ambient load
+averages, sampled before the first request, into every latency results
+JSON — a contaminated run reads as one. This run's stamp: 3.3 / 4.0 / 4.0
+(1 m / 5 m / 15 m; a Docker VM was busy on the host throughout) — adverse
+conditions, and the contract is still met with margin.
+
+### Forward-pass levers, measured and declined
+
+The tail is now entirely the forward pass on long Data2txt and Summary
+contexts. The cheap levers were measured on the eight longest-context slice
+examples: attention already runs sdpa, and raising torch intra-op threads
+from 4 to 10 buys ~6% on the longest sequences (Accelerate/AMX does the
+matmul work regardless of the thread pool). Anything that would actually
+move the tail — int8 dynamic quantization, `torch.compile` — changes
+inference numerics and therefore demands an `INFERENCE_MODE` bump and a
+calibration refit (ADR-0008): out of scope for #59, on the table if the
+contract tightens or the hardware class drops.
+
+No engine or API code changed, so the offline sentence benchmark numbers
+(#45) are unchanged by construction.
+
+### Re-measurement protocol
+
+Identical to the #36 protocol below — server `make run`, sequential
+`bench/latency_run.py` client on the same machine, 10 warmup requests
+excluded, run aborts on identity drift or an empty claims list — plus the
+ambient-load stamp above. Server engine 0.2.0, config 0.6.0 (#36 measured
+config 0.5.0; the delta is #54's span-confidence work). MacBook, Apple M4,
+16 GB, CPU only. Python 3.13.7.
+
 ## NLI model decision, entailment slot (#60, ADR-0010)
 
 2026-07-12. Decides which model fills the NLI entailment slot fixed by
@@ -208,6 +267,9 @@ flagging threshold (spans exist only where risk ≥ threshold), a threshold
 change forces a span refit by construction.
 
 ## Fast-mode latency end to end through `/v1/verify` (#36, ADR-0003)
+
+*Superseded by the #59 re-measurement above: the tail here was measurement
+contamination, not serve-path cost.*
 
 2026-07-11. ADR-0003 gives fast mode a sub-second p95 contract and calls its
 numbers targets until measured. This measures it — wall-clock per request
