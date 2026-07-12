@@ -21,6 +21,6 @@ appear in the API response, where every span confidence is the calibrated value.
 - **WHEN** the span-flagging threshold in the config file changes and the service reloads
 - **THEN** the same request can yield different spans without any code change, and `config_version` in the response reflects the new config
 
-#### Scenario: Raw risks stay in the logs
+#### Scenario: Confidences stay in the logs
 - **WHEN** spans are derived for a scored claim
 - **THEN** a structured log line carries the spans with their raw maximum token risks, and the spans returned toward the API carry positions, text, and the calibrated confidence only
