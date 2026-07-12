@@ -4,6 +4,129 @@ Raw per-run output lives in `results/*.json`; the harness is `bench/` (see
 `bench/run.py` for the exact protocol and invocation). Numbers below are
 rendered from those JSONs.
 
+## NLI model decision, entailment slot (#60, ADR-0010)
+
+2026-07-12. Decides which model fills the NLI entailment slot fixed by
+ADR-0004. The slot's job is the distinction the groundedness signal cannot
+make: *refuted by the evidence* (the `contradicted` verdict the README
+promises) versus *merely unsupported*. RAGTruth annotates exactly this —
+every hallucination span is a Conflict or a Baseless Info span — so the
+benchmark asks each candidate to separate the two.
+
+### NLI protocol
+
+- **Data:** the seed-18 slice (200 per task type → 600 responses), segmented
+  by the engine's own segmenter → 4,240 sentences. Each sentence is labelled
+  from the spans it overlaps: `conflict` if it overlaps any conflict span
+  (evident or subtle), else `baseless` if it overlaps any baseless span,
+  else `supported` → 127 conflict, 236 baseless, 3,877 supported.
+- **Scoring:** one (premise = context, hypothesis = sentence) pass per
+  sentence through the candidate's three-class head (`bench/nli_run.py`),
+  question-less, mirroring how `/v1/verify` scores. When a pair exceeds the
+  candidate's window the premise truncates — never the hypothesis — and the
+  pair counts toward the truncated share.
+- **Metrics:** contradiction AUROC — among hallucinated sentences, does
+  P(contradiction) rank conflict above baseless — is the headline; it is the
+  slot's reason to exist. Hallucination AUROC (risk = 1 − P(entailment))
+  keeps the table comparable with the sentence-level groundedness benchmark
+  below (0.926 on the same sentences). Verdict columns read the argmax:
+  precision/recall of `contradicted` among hallucinated sentences, and how
+  often supported sentences get called contradicted.
+- **Sanity:** an entailed, a neutral, and a contradicted hypothesis must each
+  land in their own argmax class before scoring starts, or the run aborts
+  (`sanity` in each JSON).
+- **Hardware:** MacBook, Apple M4, 16 GB, CPU only, no concurrent load.
+  Python 3.13.7, torch 2.12.1, transformers 5.13.0 (`tf5`) for every
+  candidate — no tf4/tf5 split this round.
+
+### NLI accuracy
+
+| Candidate | Contra. AUROC | Halluc. AUROC | Contra. precision | Contra. recall | False-contra. (supported) | Truncated |
+| --- | --- | --- | --- | --- | --- | --- |
+| modernbert-base-nli | 0.609 | 0.825 | 0.456 | 0.370 | 9.4% | 0.0% |
+| **deberta-base-long-nli** | **0.693** | 0.814 | **0.679** | 0.283 | **6.7%** | 1.6% |
+| modernbert-large-nli | 0.651 | **0.832** | 0.490 | 0.386 | 7.4% | 0.0% |
+| deberta-v3-base-mnli-fever-anli | 0.651 | 0.665 | 0.487 | 0.307 | 9.8% | 60.6% |
+| mdeberta-v3-base-mnli-xnli | 0.624 | 0.614 | 0.432 | 0.276 | 8.3% | 72.6% |
+
+### NLI latency and footprint
+
+| Candidate | Short pair | 500-word pair | Per-sentence median / p95 | Per-response median / p95 | Load | RSS after load | Weights on disk |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| modernbert-base-nli | 19 ms | 218 ms | 170 / 468 ms | 1,018 / 4,012 ms | 3.5 s | 501 MB | 574 MB |
+| deberta-base-long-nli | 30 ms | 309 ms | 241 / 811 ms | 1,433 / 6,437 ms | 3.8 s | 624 MB | 714 MB |
+| modernbert-large-nli | 53 ms | 544 ms | 427 / 1,101 ms | 2,584 / 10,058 ms | 3.4 s | 529 MB | 1,513 MB |
+| deberta-v3-base-mnli-fever-anli | 100 ms | 1,020 ms | 1,022 / 1,073 ms | 6,105 / 13,688 ms | 3.6 s | 629 MB | 362 MB |
+| mdeberta-v3-base-mnli-xnli | 122 ms | 1,076 ms | 1,109 / 1,742 ms | 6,918 / 15,112 ms | 3.8 s | 810 MB | 2,471 MB |
+
+Unlike the groundedness signal's single whole-answer pass, the NLI slot pays
+one forward pass per sentence — per-response latency scales with sentence
+count (mean 7.1, max 22), which prices this signal into thorough mode, not
+fast mode, exactly as ADR-0003/0004 anticipated.
+
+### Operational bar (ADR-0006's, applied to this slot)
+
+| Candidate | License | Pinned revision | No `trust_remote_code` | Single Hub repo | transformers | Window | Upstream status (July 2026) |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| modernbert-base-nli (tasksource) | Apache-2.0 | yes | yes | yes | 5.x verified | 8,192 | line Jan 2025; org active (Dec 2025 releases) |
+| deberta-base-long-nli (tasksource) | Apache-2.0 | yes | yes | yes | 5.x verified | 1,680 | Oct 2024; org active |
+| modernbert-large-nli (tasksource) | Apache-2.0 | yes | yes | yes | 5.x verified | 8,192 | Jan 2025; org active |
+| deberta-v3-base-mnli-fever-anli (MoritzLaurer) | MIT | yes | yes | yes | 5.x verified | 512 | frozen; author's NLI line dormant since Feb 2025 |
+| mdeberta-v3-base-mnli-xnli (MoritzLaurer) | MIT | yes | yes | yes | 5.x verified | 512 | frozen Jan 2024; only multilingual candidate |
+
+### NLI candidates not run locally
+
+- **dleemiller/finecat-nli-l** — the freshest checkpoint in the field (July
+  2026, ModernBERT-large distilled from a DeBERTa teacher, strong published
+  MNLI/ANLI numbers) ships with no license. Disqualified before
+  benchmarking, exactly as Bespoke-MiniCheck was in the groundedness round.
+  If upstream adds a permissive license it is the first candidate to
+  re-benchmark.
+- **dleemiller/ModernCE-large-nli** (MIT, Oct 2025) — same architecture and
+  size as modernbert-large-nli but trained on SNLI+MNLI only (no ANLI, no
+  doc-level NLI); dominated on training mix by the tasksource line already
+  in the table.
+
+### Reading the NLI numbers
+
+- **Telling refuted from merely unsupported is hard for every candidate** —
+  the best contradiction AUROC is 0.693 against the 0.9+ the field posts on
+  sentence-pair NLI benchmarks. The premise here is a whole RAG context, not
+  a curated sentence pair, and a "baseless" sentence often *looks* like a
+  contradiction candidate. The verdict machinery in #61 should treat
+  P(contradiction) as evidence for a conservative verdict, not as a
+  calibrated probability.
+- **The window column explains the detection column.** Both 512-token
+  models truncate the majority of premises and their hallucination AUROC
+  collapses (0.665 / 0.614 vs 0.81+ for everyone who sees the whole
+  context): evidence that would support a sentence gets cut off, so
+  supported text drifts toward neutral or contradicted. They are also the
+  two slowest — DeBERTa-v2 attention at a full 512 window costs more on
+  this CPU than ModernBERT reading 4× the tokens.
+- **deberta-base-long-nli wins the job it was hired for:** best
+  contradiction AUROC (0.693), highest contradicted-verdict precision
+  (0.679) at the lowest false-contradiction rate on supported sentences
+  (6.7%), second-fastest per sentence, 1.6% truncation at its 1,680 window.
+  Its conservative recall (0.283) is the right failure direction for a
+  verdict that accuses the model of contradicting the tenant's documents.
+- **Scale bought nothing here:** modernbert-large trails the DeBERTa on the
+  headline metric at 2.6× its per-sentence cost; tasksource's doc-level NLI
+  training mix matters more than parameter count.
+
+### NLI caveats
+
+- Conflict sentences are the scarce class: 127 of 363 hallucinated
+  sentences. AUROC confidence intervals are wide; per-class counts stay
+  published, and the decision leans on the operational columns agreeing
+  with the accuracy ones, not on any single point estimate.
+- The conflict/baseless split is annotation-derived, not a perfect NLI
+  ontology — an annotator's "baseless" can hide a mild conflict. The noise
+  floor is shared by all candidates equally.
+- No candidate saw RAGTruth in training (NLI-trained, not
+  hallucination-trained), so unlike the groundedness round there is no
+  in-domain advantage to discount.
+- Single machine, single run; medians are stable, p95s indicative.
+
 ## Span calibration: does the claim map transfer? (#40)
 
 2026-07-12. ADR-0007 shipped spans with positions only; #40 asks whether the
