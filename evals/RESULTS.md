@@ -14,8 +14,8 @@ protocol — same seed-18 slice, same sequential client, same hardware, same
 
 | Metric | #36 (2026-07-11) | #59 (2026-07-12) | Contract |
 | --- | --- | --- | --- |
-| p50 | 340 ms | 216 ms | — |
-| p95 | 1,198 ms | **568 ms** | sub-second p95 — **met** |
+| p50 | 340 ms | 197 ms | — |
+| p95 | 1,198 ms | **529 ms** | sub-second p95 — **met** |
 
 **Nothing in the code path changed; the measurement itself was the
 defect.** Two lines of evidence:
@@ -35,9 +35,13 @@ What can: machine state. The #36 run was taken with the kind cluster up
 (PR #53 records port 8000 held by a stale port-forward) and no record of
 what else the machine was doing. The protocol now stamps ambient load
 averages, sampled before the first request, into every latency results
-JSON — a contaminated run reads as one. This run's stamp: 3.3 / 4.0 / 4.0
-(1 m / 5 m / 15 m; a Docker VM was busy on the host throughout) — adverse
-conditions, and the contract is still met with margin.
+JSON — a contaminated run reads as one. The headline numbers above are
+from an idle machine — the two resident kind clusters' containers paused
+for the run; stamp 1.4 / 2.5 / 3.2 (1 m / 5 m / 15 m), the longer averages
+still decaying from earlier work. A second run under deliberate co-load —
+a Docker VM busy at ~50% CPU throughout, stamp 3.3 / 4.0 / 4.0 — still met
+the contract at p50 216 / p95 568 ms: the margin survives roughly the
+conditions that sank #36.
 
 ### Forward-pass levers, measured and declined
 
