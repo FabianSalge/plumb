@@ -6,6 +6,7 @@ against the ADR-0003 contract, and the per-response sanity check that the
 server stayed the same server for the whole run.
 """
 
+import os
 import statistics
 from collections.abc import Mapping
 
@@ -15,6 +16,18 @@ from bench.harness import percentile
 
 class LatencyError(Exception):
     """The run cannot produce an honest number — stop, don't publish garbage."""
+
+
+def ambient_load() -> dict[str, float]:
+    """The machine's load averages, for stamping into a run's results JSON.
+
+    Latency percentiles are only comparable across runs on an idle machine —
+    the #36 measurement was taken with a kind cluster running and published a
+    p95 twice the true one (#59). Sample this before the first request, while
+    the load is still ambient rather than the run's own.
+    """
+    one, five, fifteen = os.getloadavg()
+    return {"1m": round(one, 2), "5m": round(five, 2), "15m": round(fifteen, 2)}
 
 
 def verify_payload(example: Example) -> dict:

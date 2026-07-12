@@ -2,7 +2,7 @@
 
 import pytest
 from bench.data import Example
-from bench.latency import LatencyError, check_identity, summarize, verify_payload
+from bench.latency import LatencyError, ambient_load, check_identity, summarize, verify_payload
 
 
 def example(**overrides) -> Example:
@@ -45,6 +45,18 @@ class TestSummarize:
     def test_empty_run_fails_loudly(self):
         with pytest.raises(LatencyError):
             summarize([], contract_ms=1000.0)
+
+
+class TestAmbientLoad:
+    # #59: #36's p95 was inflated by concurrent machine load the results JSON
+    # never recorded. Every latency run now stamps the load averages found
+    # before its first request, so a contaminated measurement reads as one.
+    def test_reports_the_three_load_averages(self):
+        load = ambient_load()
+        assert set(load) == {"1m", "5m", "15m"}
+        for value in load.values():
+            assert isinstance(value, float)
+            assert value >= 0.0
 
 
 class TestCheckIdentity:

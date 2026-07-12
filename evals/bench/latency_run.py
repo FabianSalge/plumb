@@ -21,7 +21,7 @@ from pathlib import Path
 
 from bench.data import load_ragtruth_test, stratified_slice
 from bench.harness import environment, progress, write_results
-from bench.latency import LatencyError, check_identity, summarize, verify_payload
+from bench.latency import LatencyError, ambient_load, check_identity, summarize, verify_payload
 
 # ADR-0003: fast mode's contract is sub-second p95.
 CONTRACT_P95_MS = 1000.0
@@ -63,6 +63,10 @@ def main() -> None:
     examples = stratified_slice(load_ragtruth_test(), per_task=args.per_task, seed=args.seed)
     print(f"slice: {len(examples)} responses", flush=True)
 
+    # Sampled before the first request: the run's own load must not hide what
+    # else the machine was doing when the percentiles were taken (#59).
+    load = ambient_load()
+
     for _ in range(args.warmup):
         post_verify(args.url, verify_payload(examples[0]))
 
@@ -96,6 +100,7 @@ def main() -> None:
         # The machine stamp is the server's too — same host; the model runs in
         # the server process (`make run`, root project's `model` extra).
         "environment": environment(hardware=True, libs=False),
+        "ambient_load": load,
     }
 
     write_results(args.out, result)
