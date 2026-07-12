@@ -50,3 +50,16 @@ p95 1,198 ms on Apple M4 CPU over the RAGTruth benchmark slice — protocol
 in `evals/RESULTS.md`. The fast-mode contract is no longer a target; it is
 measured, and **missed at p95 by ~20%**. The contract stands as the bar;
 the gap is a defect to close, not a number to renegotiate.
+
+## Re-measurement (2026-07-12, appended)
+
+Issue #59 re-measured fast mode under the #36 protocol on unchanged
+serve-path code: p50 197 ms, p95 529 ms on an idle machine — the sub-second
+p95 contract is **met**, with margin — and p50 216 ms, p95 568 ms under
+deliberate co-load. Per-stage instrumentation attributes
+~2 ms per request to the serve path and ≥99% of tail wall time to the model
+forward pass; the #36 tail was measurement-environment contamination (the
+kind cluster was running during that run), not serve-path cost. Latency
+runs now stamp ambient load averages into their results JSON so a loaded
+machine cannot silently publish a quiet-machine number. Protocol and
+analysis in `evals/RESULTS.md`.

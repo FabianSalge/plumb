@@ -1,7 +1,7 @@
 {
  "mode": "fast",
  "engine_version": "0.2.0",
- "config_version": "0.5.0",
+ "config_version": "0.6.0",
  "slice": {
   "per_task": 200,
   "seed": 18,
@@ -10,10 +10,10 @@
  },
  "latency": {
   "n": 600,
-  "p50_ms": 339.68543726950884,
-  "p95_ms": 1197.747291997075,
+  "p50_ms": 196.8414585571736,
+  "p95_ms": 528.7242918275297,
   "contract_ms": 1000.0,
-  "meets_contract": false
+  "meets_contract": true
  },
  "claims_per_response": {
   "mean": 7.066666666666666,
@@ -24,5 +24,10 @@
   "python": "3.13.7",
   "cpu": "Apple M4",
   "memory_gb": 16
+ },
+ "ambient_load": {
+  "1m": 1.37,
+  "5m": 2.49,
+  "15m": 3.16
  }
 }
