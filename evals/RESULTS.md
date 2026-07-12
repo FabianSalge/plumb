@@ -4,6 +4,86 @@ Raw per-run output lives in `results/*.json`; the harness is `bench/` (see
 `bench/run.py` for the exact protocol and invocation). Numbers below are
 rendered from those JSONs.
 
+## Span calibration: does the claim map transfer? (#40)
+
+2026-07-12. ADR-0007 shipped spans with positions only; #40 asks whether the
+claim-level Platt map (#32) is valid on span-level scores, or a span-level fit
+is needed. The rule was fixed before fitting (change design §3): evaluate both
+candidates on the held-out seed-18 slice's spans, ship the transferred claim
+coefficients iff their span ECE is within 0.01 absolute of the span fit's.
+
+**It does not transfer: the span-level fit ships.** Transfer ECE 0.0527 vs
+fitted ECE 0.0370 — the 0.0157 gap exceeds the margin, so the artifact
+(`config/calibration/lettucedect-v2-mmbert-base-sentence-v2.yaml`, schema 2)
+carries span coefficients a = 0.736, b = 0.416 fitted at span level. One
+honest caveat: the paired-bootstrap 95% CI on the ECE difference is
+[−0.016, 0.046] — it straddles zero, so with only 422 held-out spans the
+preference for the fit is the pre-registered point rule firing, not a
+statistically decisive separation. Both candidates are recorded in the
+artifact and below.
+
+### Span protocol
+
+- **Fit:** spans produced by the serve path itself (whole-answer joint pass,
+  the engine's segmenter and reduction, flagging threshold 0.5) over the
+  2,100 RAGTruth test responses outside the seed-18 slice → 1,282 spans,
+  62.2% genuinely unsupported. A span is labeled unsupported iff it overlaps
+  ≥1 character of a human-annotated hallucination span (any-overlap, the
+  mirror of the #45 sentence convention); 351 of the 798 unsupported fit
+  spans overlap only partially — the convention's fuzzy edge, published, not
+  hidden. Fit-set SHA-256 is in the artifact.
+- **Held-out evaluation:** the seed-18 slice's spans (600 responses →
+  422 spans, 60.7% unsupported, 105 partial). Span confidence direction:
+  P(the flagged region is genuinely unsupported), monotone increasing in the
+  span's raw max token risk — raw span AUROC 0.731 (unchanged by the
+  monotone map; the run aborts if it moves). Spans discriminate much more
+  weakly than sentences (0.926) — a flagged span is a localization hint, not
+  a second verdict.
+- **Out-of-domain:** unmeasured and recorded as such in the artifact —
+  LLM-AggreFact carries claim-level labels only; no span-annotated OOD
+  dataset exists.
+- **Hardware:** MacBook, Apple M4, CPU only. Python 3.13.7, torch 2.12.1,
+  transformers 5.13.0 (`tf5`). `bench/span_calibration_run.py`.
+
+### Span reliability
+
+| Candidate | Held-out span ECE |
+| --- | --- |
+| Raw max token risk (uncalibrated) | 0.1236 |
+| Transferred claim map (a = 0.829, b = 0.506) | 0.0527 |
+| **Span-level fit (a = 0.736, b = 0.416) — ships** | **0.0370** |
+
+Held-out reliability of the shipped span map (seed-18 spans, confidence =
+P(unsupported), 10 equal-width bins; empty bins omitted):
+
+| Bin | n | Mean confidence | Unsupported rate |
+| --- | --- | --- | --- |
+| [0.3, 0.4) | 6 | 0.399 | 0.500 |
+| [0.4, 0.5) | 166 | 0.439 | 0.392 |
+| [0.5, 0.6) | 50 | 0.548 | 0.600 |
+| [0.6, 0.7) | 57 | 0.640 | 0.649 |
+| [0.7, 0.8) | 56 | 0.749 | 0.750 |
+| [0.8, 0.9) | 65 | 0.852 | 0.908 |
+| [0.9, 1.0] | 22 | 0.924 | 0.909 |
+
+The transferred claim map on the same spans, for comparison:
+
+| Bin | n | Mean confidence | Unsupported rate |
+| --- | --- | --- | --- |
+| [0.3, 0.4) | 64 | 0.386 | 0.438 |
+| [0.4, 0.5) | 112 | 0.443 | 0.357 |
+| [0.5, 0.6) | 45 | 0.547 | 0.644 |
+| [0.6, 0.7) | 52 | 0.641 | 0.615 |
+| [0.7, 0.8) | 49 | 0.747 | 0.735 |
+| [0.8, 0.9) | 65 | 0.853 | 0.892 |
+| [0.9, 1.0] | 35 | 0.929 | 0.943 |
+
+The bins are thin — the population is every span the engine flags across 600
+responses, and that is 422. Per-bin counts stay published so nobody reads
+three-decimal stability into a 22-span bin. Because the artifact binds the
+flagging threshold (spans exist only where risk ≥ threshold), a threshold
+change forces a span refit by construction.
+
 ## Fast-mode latency end to end through `/v1/verify` (#36, ADR-0003)
 
 2026-07-11. ADR-0003 gives fast mode a sub-second p95 contract and calls its
