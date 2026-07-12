@@ -1,7 +1,7 @@
 [project]
 name = "plumb-evals"
 version = "0.1.0"
-description = "Benchmark harness for the groundedness signal model decision (#18)"
+description = "Benchmark harness for signal model decisions and engine-level evals"
 requires-python = ">=3.13"
 dependencies = [
     "torch>=2.12",

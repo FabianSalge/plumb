@@ -17,7 +17,18 @@ from pathlib import Path
 import psutil
 
 from bench.data import Example, load_ragtruth_test, stratified_slice
-from bench.harness import environment, percentile, progress, write_results
+from bench.harness import (
+    LATENCY_REPEATS,
+    LONG_CLAIM,
+    LONG_EVIDENCE,
+    SHORT_CLAIM,
+    SHORT_EVIDENCE,
+    environment,
+    percentile,
+    progress,
+    weights_on_disk_bytes,
+    write_results,
+)
 from bench.metrics import auroc, balanced_accuracy, f1_score, precision_recall
 
 THRESHOLD = 0.5  # pred_hallucinated = support < THRESHOLD, every candidate alike
@@ -37,15 +48,6 @@ SANITY_EVIDENCE = (
 SANITY_QUESTION = "What is the capital of France?"
 SANITY_SUPPORTED = "The capital of France is Paris."
 SANITY_CONTRADICTED = "The capital of France is Berlin."
-
-LATENCY_REPEATS = 30
-SHORT_EVIDENCE = "The quick brown fox jumps over the lazy dog near the quiet river bank today."
-SHORT_CLAIM = "A fox jumps over a dog."
-LONG_EVIDENCE = " ".join(
-    f"Fact number {i}: the archive records event {i} occurring in year {1500 + i}."
-    for i in range(1, 51)
-)  # 50 sentences x 10 words = 500 words
-LONG_CLAIM = "The archive records event 7 occurring in year 1507."
 
 
 def synthetic_example(evidence: str, claim: str, question: str = "") -> Example:
@@ -93,23 +95,6 @@ def fixed_pair_latency(candidate, evidence: str, claim: str) -> dict:
         candidate.support_score(example)
         millis.append((time.perf_counter() - start) * 1000)
     return {"median_ms": statistics.median(millis), "p95_ms": percentile(millis, 95)}
-
-
-def weights_on_disk_bytes(repos: list[tuple[str, str | None]]) -> int | None:
-    """Size of each repo's pinned revision in the local cache (not stray revisions)."""
-    from huggingface_hub import scan_cache_dir
-
-    cached_models = {c.repo_id: c for c in scan_cache_dir().repos if c.repo_type == "model"}
-    total = 0
-    for repo, revision in repos:
-        if repo not in cached_models:
-            return None
-        revisions = cached_models[repo].revisions
-        matching = [r for r in revisions if revision is None or r.commit_hash == revision]
-        if not matching:
-            return None
-        total += max(r.size_on_disk for r in matching)
-    return total
 
 
 def main() -> None:
