@@ -31,3 +31,17 @@ repos:
     rev: v8.30.1
     hooks:
       - id: gitleaks
+  - repo: local
+    hooks:
+      # Two ADR branches merged the same number once (#71); the CI lint job
+      # runs this against the PR merge ref, so the second of a colliding
+      # pair fails before it lands.
+      - id: adr-numbers-unique
+        name: ADR numbers are unique
+        language: system
+        entry: >
+          bash -c 'dups=$(ls docs/adr | grep -oE "^[0-9]{4}" | sort |
+          uniq -d); [ -z "$dups" ] ||
+          { echo "duplicate ADR number(s): $dups"; exit 1; }'
+        files: ^docs/adr/
+        pass_filenames: false
