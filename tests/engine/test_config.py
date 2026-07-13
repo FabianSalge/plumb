@@ -87,3 +87,68 @@ def test_repo_default_config_is_valid_and_pins_a_revision():
     assert cfg.version
     assert cfg.groundedness.model == "KRLabsOrg/lettucedect-v2-mmbert-base"
     assert len(cfg.groundedness.revision) == 40, "expected a full git revision hash"
+
+
+RETRIEVAL = {
+    "expansion_window": 2,
+    "recall_depth": 20,
+    "per_claim_quota": 1,
+    "pool_budget_tokens": 3000,
+    "reranker": {
+        "model": "fake/reranker",
+        "revision": "cafebabe",
+    },
+}
+
+
+def with_retrieval(data: dict) -> dict:
+    copy = yaml.safe_load(yaml.safe_dump(data))
+    copy["retrieval"] = yaml.safe_load(yaml.safe_dump(RETRIEVAL))
+    return copy
+
+
+def test_retrieval_section_is_optional_for_fast_only_configs(tmp_path):
+    cfg = load_config(write(tmp_path, VALID))
+    assert cfg.retrieval is None
+
+
+def test_retrieval_section_loads(tmp_path):
+    cfg = load_config(write(tmp_path, with_retrieval(VALID)))
+    assert cfg.retrieval is not None
+    assert cfg.retrieval.expansion_window == 2
+    assert cfg.retrieval.recall_depth == 20
+    assert cfg.retrieval.per_claim_quota == 1
+    assert cfg.retrieval.pool_budget_tokens == 3000
+    assert cfg.retrieval.reranker.model == "fake/reranker"
+    assert cfg.retrieval.reranker.revision == "cafebabe"
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "retrieval.expansion_window",
+        "retrieval.recall_depth",
+        "retrieval.per_claim_quota",
+        "retrieval.pool_budget_tokens",
+        "retrieval.reranker.model",
+        "retrieval.reranker.revision",
+    ],
+)
+def test_partial_retrieval_section_fails_loudly(tmp_path, field):
+    with pytest.raises(ConfigError, match=field.rsplit(".", 1)[-1]):
+        load_config(write(tmp_path, without(with_retrieval(VALID), field)))
+
+
+def test_unknown_retrieval_key_fails_loudly(tmp_path):
+    broken = with_retrieval(VALID)
+    broken["retrieval"]["reranker_model"] = "fake/reranker"
+    with pytest.raises(ConfigError):
+        load_config(write(tmp_path, broken))
+
+
+def test_repo_default_config_carries_retrieval_with_pinned_reranker():
+    """The checked-in config must configure thorough-mode retrieval (ADR-0010)."""
+    cfg = load_config("config/verifier.yaml")
+    assert cfg.retrieval is not None
+    assert cfg.retrieval.reranker.model == "BAAI/bge-reranker-v2-m3"
+    assert len(cfg.retrieval.reranker.revision) == 40, "expected a full git revision hash"

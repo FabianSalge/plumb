@@ -22,7 +22,7 @@ resources:
 # stay identical to config/verifier.yaml — a render test fails on drift.
 # Bump version on any change; it is echoed as config_version in every response.
 verifier:
-  version: "0.6.0"
+  version: "0.7.0"
   signals:
     groundedness:
       model: KRLabsOrg/lettucedect-v2-mmbert-base
@@ -33,6 +33,17 @@ verifier:
       # Resolved relative to the mounted config; the deployment maps the
       # chart's calibration-artifact key to exactly this path.
       calibration: calibration/lettucedect-v2-mmbert-base-sentence-v2.yaml
+  # Thorough-mode retrieval knobs (ADR-0010); the store connection itself is
+  # deployment config under `store` below, not part of the versioned engine
+  # behavior.
+  retrieval:
+    expansion_window: 2
+    recall_depth: 20
+    per_claim_quota: 1
+    pool_budget_tokens: 3000
+    reranker:
+      model: BAAI/bge-reranker-v2-m3
+      revision: "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e"
 
 networkPolicy:
   enabled: true
