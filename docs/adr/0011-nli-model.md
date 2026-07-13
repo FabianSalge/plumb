@@ -1,4 +1,4 @@
-# ADR-0010: NLI slot — deberta-base-long-nli brings contradicted within reach
+# ADR-0011: NLI slot — deberta-base-long-nli brings contradicted within reach
 
 2026-07-12 · Status: Accepted
 

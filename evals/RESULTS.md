@@ -67,7 +67,7 @@ ambient-load stamp above. Server engine 0.2.0, config 0.6.0 (#36 measured
 config 0.5.0; the delta is #54's span-confidence work). MacBook, Apple M4,
 16 GB, CPU only. Python 3.13.7.
 
-## NLI model decision, entailment slot (#60, ADR-0010)
+## NLI model decision, entailment slot (#60, ADR-0011)
 
 2026-07-12. Decides which model fills the NLI entailment slot fixed by
 ADR-0004. The slot's job is the distinction the groundedness signal cannot
