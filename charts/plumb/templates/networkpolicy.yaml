@@ -25,4 +25,10 @@ spec:
         - protocol: TCP
           port: 443
     {{- end }}
+    {{- if .Values.store.enabled }}
+    # The tenant store: enabling it opens exactly this port and nothing else.
+    - ports:
+        - protocol: TCP
+          port: {{ .Values.store.egressPort }}
+    {{- end }}
 {{- end }}

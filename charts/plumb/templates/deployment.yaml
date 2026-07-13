@@ -38,18 +38,43 @@ spec:
           env:
             - name: PLUMB_CONFIG
               value: /etc/plumb/verifier.yaml
+            {{- if .Values.store.enabled }}
+            # Read-only tenant store (thorough mode); the DSN comes from an
+            # existing Secret, never from chart values.
+            - name: PLUMB_STORE_DSN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "store.dsnSecret is required when store.enabled" .Values.store.dsnSecret }}
+                  key: {{ .Values.store.dsnSecretKey }}
+            - name: PLUMB_STORE_TABLE
+              value: {{ required "store.table is required when store.enabled" .Values.store.table | quote }}
+            - name: PLUMB_STORE_ID_COLUMN
+              value: {{ required "store.idColumn is required when store.enabled" .Values.store.idColumn | quote }}
+            - name: PLUMB_STORE_TEXT_COLUMN
+              value: {{ required "store.textColumn is required when store.enabled" .Values.store.textColumn | quote }}
+            {{- with .Values.store.sourceColumn }}
+            - name: PLUMB_STORE_SOURCE_COLUMN
+              value: {{ . | quote }}
+            {{- end }}
+            {{- with .Values.store.snapshotColumn }}
+            - name: PLUMB_STORE_SNAPSHOT_COLUMN
+              value: {{ . | quote }}
+            {{- end }}
+            - name: PLUMB_STORE_REGCONFIG
+              value: {{ .Values.store.regconfig | quote }}
+            {{- end }}
           volumeMounts:
             - name: verifier-config
               mountPath: /etc/plumb
               readOnly: true
-          # startupProbe headroom covers the first-start ~420 MB weight
-          # download; liveness/readiness stay tight for steady state.
+          # startupProbe headroom covers the first-start weight downloads;
+          # liveness/readiness stay tight for steady state.
           startupProbe:
             httpGet:
               path: /readyz
               port: http
             periodSeconds: 10
-            failureThreshold: 36
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: /readyz

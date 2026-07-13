@@ -1,0 +1,75 @@
+# Disposable tenant store for the thorough-mode e2e: a seeded Postgres with a
+# read-only role, standing in for the tenant's pgvector-shaped chunk table.
+# Applied by `make deploy-thorough`, never part of the product chart.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: plumb-e2e-store-init
+data:
+  init.sql: |
+    CREATE TABLE chunks (
+      id integer PRIMARY KEY,
+      body text NOT NULL,
+      src text NOT NULL,
+      snap text NOT NULL
+    );
+    INSERT INTO chunks (id, body, src, snap) VALUES
+      (1, 'Paris is the capital and most populous city of France.', 'wiki/paris', 'e2e-1'),
+      (2, 'The Eiffel Tower is 330 metres tall and stands in Paris.', 'wiki/eiffel', 'e2e-1'),
+      (3, 'The Louvre is the world''s most-visited museum.', 'wiki/louvre', 'e2e-1');
+    -- The posture under test: the verifier connects with a read-only role.
+    CREATE ROLE plumb_ro LOGIN PASSWORD 'plumb_ro';
+    GRANT SELECT ON chunks TO plumb_ro;
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: plumb-e2e-store
+type: Opaque
+stringData:
+  dsn: postgresql://plumb_ro:plumb_ro@plumb-e2e-store:5432/postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plumb-e2e-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plumb-e2e-store
+  template:
+    metadata:
+      labels:
+        app: plumb-e2e-store
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          env:
+            - name: POSTGRES_PASSWORD
+              value: e2e-only
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: init
+              mountPath: /docker-entrypoint-initdb.d
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            periodSeconds: 2
+      volumes:
+        - name: init
+          configMap:
+            name: plumb-e2e-store-init
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plumb-e2e-store
+spec:
+  selector:
+    app: plumb-e2e-store
+  ports:
+    - port: 5432
+      targetPort: 5432

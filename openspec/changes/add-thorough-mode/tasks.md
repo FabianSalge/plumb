@@ -37,8 +37,8 @@ Checks come first throughout: each group starts with failing tests.
 
 ## 7. Chart and deployment
 
-- [ ] 7.1 Failing chart tests: store values (enabled flag off by default, DSN via Secret reference only, table/columns/regconfig); NetworkPolicy egress to the store endpoint only when enabled; fast-only default renders no store config
-- [ ] 7.2 Implement chart values, templates, and startup wiring; document values in the chart README
+- [x] 7.1 Failing chart tests: store values (enabled flag off by default, DSN via Secret reference only, table/columns/regconfig); NetworkPolicy egress to the store endpoint only when enabled; fast-only default renders no store config
+- [x] 7.2 Implement chart values, templates, and startup wiring; document values in the README (the chart has no README of its own — chart docs live in the main README's Helm section)
 - [ ] 7.3 Extend kind e2e: Postgres pod with seeded chunks, golden thorough request through the Service asserting verdicts and `evidence` provenance (`make e2e`)
 
 ## 8. Evals

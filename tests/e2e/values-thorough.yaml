@@ -1,0 +1,20 @@
+# Chart overrides for the thorough-mode e2e: point at the disposable seeded
+# store (tests/e2e/postgres.yaml) and give the pod room for both models —
+# the scorer plus the ~2.3 GB reranker downloaded at first start.
+store:
+  enabled: true
+  dsnSecret: plumb-e2e-store
+  table: chunks
+  idColumn: id
+  textColumn: body
+  sourceColumn: src
+  snapshotColumn: snap
+  regconfig: english
+resources:
+  requests:
+    cpu: 500m
+    memory: 4096Mi
+  limits:
+    memory: 6144Mi
+startupProbe:
+  failureThreshold: 90

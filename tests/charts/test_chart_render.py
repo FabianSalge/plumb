@@ -153,3 +153,66 @@ class TestNetworkPolicy:
     def test_disabled_renders_no_policy(self):
         manifests = render("networkPolicy.enabled=false")
         assert "NetworkPolicy" not in manifests
+
+
+STORE_VALUES = [
+    "store.enabled=true",
+    "store.dsnSecret=tenant-store",
+    "store.table=chunks",
+    "store.idColumn=id",
+    "store.textColumn=body",
+]
+
+
+def store_env(deployment: dict) -> dict[str, dict]:
+    return {env["name"]: env for env in container(deployment)["env"]}
+
+
+class TestStore:
+    def test_fast_only_default_renders_no_store_config(self, default_render):
+        env = store_env(only(default_render, "Deployment"))
+        assert not any(name.startswith("PLUMB_STORE_") for name in env)
+
+    def test_enabled_store_renders_env_with_dsn_from_secret(self):
+        manifests = render(*STORE_VALUES)
+        env = store_env(only(manifests, "Deployment"))
+        dsn = env["PLUMB_STORE_DSN"]
+        assert "value" not in dsn, "the DSN must never be rendered inline"
+        secret_ref = dsn["valueFrom"]["secretKeyRef"]
+        assert secret_ref == {"name": "tenant-store", "key": "dsn"}
+        assert env["PLUMB_STORE_TABLE"]["value"] == "chunks"
+        assert env["PLUMB_STORE_ID_COLUMN"]["value"] == "id"
+        assert env["PLUMB_STORE_TEXT_COLUMN"]["value"] == "body"
+        assert env["PLUMB_STORE_REGCONFIG"]["value"] == "simple"
+
+    def test_optional_columns_render_only_when_set(self):
+        without = store_env(only(render(*STORE_VALUES), "Deployment"))
+        assert "PLUMB_STORE_SOURCE_COLUMN" not in without
+        assert "PLUMB_STORE_SNAPSHOT_COLUMN" not in without
+        manifests = render(*STORE_VALUES, "store.sourceColumn=src", "store.snapshotColumn=snap")
+        env = store_env(only(manifests, "Deployment"))
+        assert env["PLUMB_STORE_SOURCE_COLUMN"]["value"] == "src"
+        assert env["PLUMB_STORE_SNAPSHOT_COLUMN"]["value"] == "snap"
+
+    def test_dsn_never_lands_in_the_configmap(self):
+        config_map = only(render(*STORE_VALUES), "ConfigMap")
+        assert "dsn" not in str(config_map).lower()
+
+    @pytest.mark.parametrize(
+        "missing", ["store.dsnSecret", "store.table", "store.idColumn", "store.textColumn"]
+    )
+    def test_enabled_store_requires_connection_values(self, missing):
+        values = [value for value in STORE_VALUES if not value.startswith(f"{missing}=")]
+        with pytest.raises(AssertionError, match="helm template failed"):
+            render(*values)
+
+    def test_store_egress_opens_exactly_the_store_port(self):
+        policy = only(render(*STORE_VALUES), "NetworkPolicy")
+        assert egress_ports(policy) == {53, 443, 5432}
+        without = only(render(), "NetworkPolicy")
+        assert egress_ports(without) == {53, 443}
+
+    def test_store_egress_port_follows_values(self):
+        policy = only(render(*STORE_VALUES, "store.egressPort=6432"), "NetworkPolicy")
+        assert 6432 in egress_ports(policy)
+        assert 5432 not in egress_ports(policy)
