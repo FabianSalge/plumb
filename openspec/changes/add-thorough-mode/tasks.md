@@ -20,13 +20,13 @@ Checks come first throughout: each group starts with failing tests.
 
 ## 4. Reranker
 
-- [ ] 4.1 Failing tests: `Reranker` protocol, fake-reranker unit coverage; model-marked test loading the pinned bge-reranker-v2-m3 revision and scoring one batch
-- [ ] 4.2 Implement `engine/retrieval/rerank.py` mirroring the scorer's load pattern (model extra, pinned revision, no baked weights); one batched pass per request, one rerank per unique query
+- [x] 4.1 Failing tests: `Reranker` protocol, fake-reranker unit coverage; model-marked test loading the pinned bge-reranker-v2-m3 revision and scoring one batch
+- [x] 4.2 Implement `engine/retrieval/rerank.py` mirroring the scorer's load pattern (model extra, pinned revision, no baked weights); one batched pass per request, one rerank per unique query
 
 ## 5. Pooling
 
-- [ ] 5.1 Failing tests: dedupe by chunk identity; caller passages first and never displaced; per-claim quota guarantees the minority claim's slot; global fill by rerank score; budget counted in scoring-tokenizer tokens reserving prompt + answer; every drop logged with identity and reason
-- [ ] 5.2 Implement `engine/retrieval/pool.py`
+- [x] 5.1 Failing tests: dedupe by chunk identity; caller passages first and never displaced; per-claim quota guarantees the minority claim's slot; global fill by rerank score; budget counted in scoring-tokenizer tokens reserving prompt + answer; every drop logged with identity and reason
+- [x] 5.2 Implement `engine/retrieval/pool.py`
 
 ## 6. API surface
 
