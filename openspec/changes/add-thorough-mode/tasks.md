@@ -9,8 +9,8 @@ Checks come first throughout: each group starts with failing tests.
 
 ## 2. Query expansion
 
-- [ ] 2.1 Failing golden tests pinning exact query strings: leading sentence + preceding window + claim, dedupe preserving order, single-space join, window 0/1/N, leading-claim case, duplicate-sentence sharing
-- [ ] 2.2 Implement `engine/retrieval/expansion.py` over the existing segmentation output
+- [x] 2.1 Failing golden tests pinning exact query strings: leading sentence + preceding window + claim, dedupe preserving order, single-space join, window 0/1/N, leading-claim case, duplicate-sentence sharing
+- [x] 2.2 Implement `engine/retrieval/expansion.py` over the existing segmentation output
 
 ## 3. Store adapter
 
