@@ -14,9 +14,9 @@ Checks come first throughout: each group starts with failing tests.
 
 ## 3. Store adapter
 
-- [ ] 3.1 Failing tests: `EvidenceStore` protocol and `Chunk` (text, source identity, chunk identity, optional snapshot identity — never invented); fake-store unit coverage
-- [ ] 3.2 Failing tests (marked, real Postgres): FTS recall via `websearch_to_tsquery`/`ts_rank_cd`, configurable table/columns/regconfig, read-only session, loud errors on unreachable store and schema mismatch
-- [ ] 3.3 Implement `engine/retrieval/store.py` and `engine/retrieval/postgres.py`; add the Postgres driver dependency; startup probe validating connection and schema
+- [x] 3.1 Failing tests: `EvidenceStore` protocol and `Chunk` (text, source identity, chunk identity, optional snapshot identity — never invented); fake-store unit coverage
+- [x] 3.2 Failing tests (marked, real Postgres): FTS recall via `websearch_to_tsquery`/`ts_rank_cd`, configurable table/columns/regconfig, read-only session, loud errors on unreachable store and schema mismatch
+- [x] 3.3 Implement `engine/retrieval/store.py` and `engine/retrieval/postgres.py`; add the Postgres driver dependency; startup probe validating connection and schema
 
 ## 4. Reranker
 

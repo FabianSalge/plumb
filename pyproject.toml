@@ -7,6 +7,7 @@ license = "Apache-2.0"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.139",
+    "psycopg[binary]>=3.2",
     "pydantic>=2.9",
     "pyyaml>=6",
     "uvicorn>=0.50",
@@ -53,8 +54,9 @@ testpaths = ["tests"]
 markers = [
     "model: loads the real LettuceDetect weights; needs the 'model' extra and a model download",
     "e2e: golden verify request against a deployed instance; needs PLUMB_URL reachable",
+    "postgres: FTS recall against a disposable Postgres container; needs Docker",
 ]
-addopts = "-m 'not model and not e2e'"
+addopts = "-m 'not model and not e2e and not postgres'"
 
 [tool.coverage.run]
 source = ["engine", "api"]

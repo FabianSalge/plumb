@@ -75,6 +75,11 @@ vectors. Recall is Postgres full-text search:
 
 - rank: `ts_rank_cd` over `to_tsvector(<regconfig>, <text_column>)` matched
   against `websearch_to_tsquery(<regconfig>, query)`, `LIMIT recall_depth`.
+- terms are OR-joined before `websearch_to_tsquery` (found during
+  implementation: websearch semantics AND all terms, which would demand every
+  content word of an expanded multi-sentence query in one chunk — the
+  opposite of recall). Bag-of-words OR recall with `ts_rank_cd` density
+  ranking; the reranker restores precision, per ADR-0002's division of labor.
 - The deployment config names table, id column, text column, optional source
   column, optional snapshot column, and the FTS regconfig (default
   `simple` — language analyzers are a tenant choice, not a guess).

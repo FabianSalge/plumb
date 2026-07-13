@@ -1,4 +1,4 @@
-.PHONY: test test-model lint typecheck run image kind-up deploy e2e
+.PHONY: test test-model test-postgres lint typecheck run image kind-up deploy e2e
 
 KIND_CLUSTER = plumb
 # Digest-pinned default node image of the kind release in use (v0.32.0) —
@@ -10,6 +10,9 @@ test:
 
 test-model:  ## integration test against the real LettuceDetect weights (downloads ~1.2 GB once)
 	uv run --extra model pytest -m model --no-cov
+
+test-postgres:  ## FTS adapter tests against a disposable Postgres container (needs Docker)
+	uv run pytest -m postgres --no-cov
 
 lint:
 	uv run ruff check . && uv run ruff format --check .
