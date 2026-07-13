@@ -7,8 +7,24 @@ from engine.gate import GateDecision, Verdict
 
 class VerifyRequest(BaseModel):
     text: str = Field(min_length=1)
-    context: list[str] = Field(min_length=1)
+    # Required non-empty in fast mode (enforced in the handler, where the mode
+    # is known); optional in thorough mode, where it joins the evidence pool
+    # with caller provenance.
+    context: list[str] | None = None
     mode: str
+
+
+class EvidenceResult(BaseModel):
+    """Retrieval provenance: this chunk was retrieved for the claim's query and
+    made the scoring window — "retrieved for", never "supports" (joint inference
+    cannot name a supporting passage, ADR-0007/0010)."""
+
+    source_id: str
+    chunk_id: str
+    # Claim-local rerank rank, 1-based.
+    rank: int
+    # Store snapshot identity where the store exposes one — never invented.
+    snapshot_id: str | None = None
 
 
 class SpanResult(BaseModel):
@@ -39,6 +55,9 @@ class ClaimResult(BaseModel):
     # the span-flagging threshold is a separate knob from the verdict threshold,
     # so an unsupported claim with zero spans is legal.
     spans: list[SpanResult]
+    # Thorough mode only (fast-mode responses never carry it): retrieval
+    # provenance for this claim, in claim-local rank order.
+    evidence: list[EvidenceResult] | None = None
 
 
 class VerifyResponse(BaseModel):

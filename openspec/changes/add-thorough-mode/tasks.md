@@ -30,10 +30,10 @@ Checks come first throughout: each group starts with failing tests.
 
 ## 6. API surface
 
-- [ ] 6.1 Failing tests: `mode: "thorough"` accepted; unknown modes 400 naming both supported modes; `context` optional in thorough / required in fast; thorough on a store-less deployment 400 fast-only; store failure mid-request 502, no partial-evidence verdict
-- [ ] 6.2 Failing tests: per-claim `evidence` (source/chunk identity, retrieval rank, snapshot identity only where exposed); caller passages absent from `evidence`; fast-mode responses unchanged byte-for-byte
-- [ ] 6.3 Failing property test: gate parity in thorough mode over a fixed pool; scorer-truncation-in-thorough logged as error
-- [ ] 6.4 Implement schema changes and mode dispatch in `api/schemas.py` / `api/app.py`; thorough path pools then calls the unchanged scoring/decomposition/calibration sequence
+- [x] 6.1 Failing tests: `mode: "thorough"` accepted; unknown modes 400 naming both supported modes; `context` optional in thorough / required in fast; thorough on a store-less deployment 400 fast-only; store failure mid-request 502, no partial-evidence verdict
+- [x] 6.2 Failing tests: per-claim `evidence` (source/chunk identity, retrieval rank, snapshot identity only where exposed); caller passages absent from `evidence`; fast-mode responses unchanged byte-for-byte
+- [x] 6.3 Failing property test: gate parity in thorough mode over a fixed pool; scorer-truncation-in-thorough logged as error
+- [x] 6.4 Implement schema changes and mode dispatch in `api/schemas.py` / `api/app.py`; thorough path pools then calls the unchanged scoring/decomposition/calibration sequence
 
 ## 7. Chart and deployment
 

@@ -76,6 +76,9 @@ class LettuceDetectScorer:
             )
         return result
 
+    def count_tokens(self, text: str) -> int:
+        return self._pipeline.count_tokens(text)
+
 
 class _TransformersTokenClassifier:  # pragma: no cover — exercised by `pytest -m model`
     """Torch-backed TokenClassifier reproducing lettucedetect's tokenization:
@@ -85,6 +88,13 @@ class _TransformersTokenClassifier:  # pragma: no cover — exercised by `pytest
     def __init__(self, model: Any, tokenizer: Any) -> None:
         self._model = model
         self._tokenizer = tokenizer
+
+    def count_tokens(self, text: str) -> int:
+        return int(
+            self._tokenizer(text, add_special_tokens=False, return_tensors="pt")["input_ids"].shape[
+                1
+            ]
+        )
 
     def token_probs(self, prompt: str, claim: str) -> TokenScores:
         import torch

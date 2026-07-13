@@ -8,8 +8,10 @@ from engine.decomposition import CLAIM_UNIT
 from engine.signals.groundedness import INFERENCE_MODE
 
 
-def make_config(*, threshold: float = 0.5, span_threshold: float = 0.5) -> dict:
-    return {
+def make_config(
+    *, threshold: float = 0.5, span_threshold: float = 0.5, retrieval: bool = False
+) -> dict:
+    config: dict = {
         "version": "test-1",
         "signals": {
             "groundedness": {
@@ -21,6 +23,15 @@ def make_config(*, threshold: float = 0.5, span_threshold: float = 0.5) -> dict:
             }
         },
     }
+    if retrieval:
+        config["retrieval"] = {
+            "expansion_window": 1,
+            "recall_depth": 5,
+            "per_claim_quota": 1,
+            "pool_budget_tokens": 50,
+            "reranker": {"model": "fake/reranker", "revision": "cafebabe"},
+        }
+    return config
 
 
 def make_artifact(

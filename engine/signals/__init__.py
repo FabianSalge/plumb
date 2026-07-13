@@ -29,6 +29,13 @@ class TokenScores:
 class TokenClassifier(Protocol):
     def token_probs(self, prompt: str, claim: str) -> TokenScores: ...
 
+    def count_tokens(self, text: str) -> int: ...
+
 
 class Scorer(Protocol):
     def score(self, text: str, passages: list[str]) -> TokenScores: ...
+
+    def count_tokens(self, text: str) -> int:
+        """Length of `text` in this scorer's own tokens — the currency the
+        thorough-mode evidence pool budget is denominated in (ADR-0010)."""
+        ...
