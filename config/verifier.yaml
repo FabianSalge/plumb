@@ -10,7 +10,7 @@
 # revision 22296c700ef0ba4ab3e5c9afffa0185caaf61e52 (ADR-0006); thresholds
 # are per-model and the calibration artifact is per-model — refit both
 # when swapping.
-version: "0.6.0"
+version: "0.7.0"
 signals:
   groundedness:
     model: KRLabsOrg/lettucedect-v2-mmbert-base
@@ -29,3 +29,23 @@ signals:
     # to start if the artifact's bindings mismatch the model/revision above, the
     # engine's declared inference mode and claim unit, or the span threshold.
     calibration: calibration/lettucedect-v2-mmbert-base-sentence-v2.yaml
+# Thorough-mode retrieval (ADR-0010). Remove this section for a fast-only
+# deployment — thorough requests are then rejected as unsupported.
+retrieval:
+  # Preceding answer sentences joined into each claim's query, on top of the
+  # answer's leading sentence; golden tests pin the exact query strings.
+  expansion_window: 2
+  # Chunks recalled from the store per query before reranking (ADR-0002).
+  recall_depth: 20
+  # Guaranteed scoring-window slots per claim after the global rerank.
+  per_claim_quota: 1
+  # Evidence pool budget in scoring-tokenizer tokens, reserving room for the
+  # prompt template and the answer inside the model's 4096 window; anything
+  # dropped is logged with chunk identity, never silently truncated.
+  pool_budget_tokens: 3000
+  # Cross-encoder for precision over store recall (ADR-0002). Provisional pin:
+  # #58 owns reranker selection; a swap is a config bump plus this comment's
+  # removal, never a silent change.
+  reranker:
+    model: BAAI/bge-reranker-v2-m3
+    revision: 953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e

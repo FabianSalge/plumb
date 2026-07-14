@@ -30,12 +30,17 @@ def make_client(tmp_path):
         b: float = 0.0,
         span_a: float = 1.0,
         span_b: float = 0.0,
+        retrieval: bool = False,
+        store=None,
+        reranker=None,
     ) -> TestClient:
         directory = tmp_path / f"cfg-{len(clients)}"
         directory.mkdir()
         path = write_config(
             directory,
-            config=make_config(threshold=threshold, span_threshold=span_threshold),
+            config=make_config(
+                threshold=threshold, span_threshold=span_threshold, retrieval=retrieval
+            ),
             # The artifact's span threshold tracks the config's — a mismatch is a
             # startup refusal, which has its own tests.
             artifact=make_artifact(
@@ -45,6 +50,8 @@ def make_client(tmp_path):
         app = create_app(
             config_path=path,
             scorer_factory=lambda cfg: FakeScorer(scores),
+            store=store,
+            reranker_factory=None if reranker is None else (lambda cfg: reranker),
         )
         client = TestClient(app)
         client.__enter__()

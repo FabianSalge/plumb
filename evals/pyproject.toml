@@ -9,6 +9,8 @@ dependencies = [
     "lettucedetect>=0.2.1",
     "nltk>=3.9",
     "psutil>=7",
+    # The thorough-mode bench seeds its Postgres store (bench.store_seed).
+    "psycopg[binary]>=3.2",
     "sentencepiece>=0.2",
     # The engine itself, so the sentence-level benchmark (#45) segments and scores
     # through the exact code that ships — one segmenter, no divergent copy.

@@ -32,11 +32,36 @@ class SignalsConfig(BaseModel):
     groundedness: SignalModelConfig
 
 
+class RerankerConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    model: str
+    revision: str
+
+
+class RetrievalConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    # Sentences of preceding answer context joined into each claim's query
+    # (plus the leading sentence) — deterministic expansion, no model (ADR-0010).
+    expansion_window: int
+    # Chunks recalled from the store per query before reranking (ADR-0002).
+    recall_depth: int
+    # Guaranteed scoring-window slots for each claim's top-reranked chunks.
+    per_claim_quota: int
+    # Pool budget in scoring-tokenizer tokens; pooling, not the scorer's
+    # window, decides what is scored — truncation is logged, never silent.
+    pool_budget_tokens: int
+    reranker: RerankerConfig
+
+
 class VerifierConfig(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     version: str
     signals: SignalsConfig
+    # Absent means a fast-only deployment: thorough requests are rejected.
+    retrieval: RetrievalConfig | None = None
 
     @property
     def groundedness(self) -> SignalModelConfig:

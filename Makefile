@@ -1,4 +1,4 @@
-.PHONY: test test-model lint typecheck run image kind-up deploy e2e
+.PHONY: test test-model test-postgres lint typecheck run image kind-up deploy deploy-thorough e2e e2e-thorough
 
 KIND_CLUSTER = plumb
 # Digest-pinned default node image of the kind release in use (v0.32.0) —
@@ -10,6 +10,9 @@ test:
 
 test-model:  ## integration test against the real LettuceDetect weights (downloads ~1.2 GB once)
 	uv run --extra model pytest -m model --no-cov
+
+test-postgres:  ## FTS adapter tests against a disposable Postgres container (needs Docker)
+	uv run pytest -m postgres --no-cov
 
 lint:
 	uv run ruff check . && uv run ruff format --check .
@@ -31,6 +34,14 @@ deploy: image  ## build the image, load it into kind, and install the chart
 	helm upgrade --install plumb charts/plumb \
 		--kube-context kind-$(KIND_CLUSTER) --wait --timeout 10m
 
+deploy-thorough: image  ## deploy with the seeded e2e store and thorough mode enabled
+	kind load docker-image plumb:dev --name $(KIND_CLUSTER)
+	kubectl --context kind-$(KIND_CLUSTER) apply -f tests/e2e/postgres.yaml
+	kubectl --context kind-$(KIND_CLUSTER) rollout status deploy/plumb-e2e-store --timeout 120s
+	helm upgrade --install plumb charts/plumb \
+		--kube-context kind-$(KIND_CLUSTER) -f tests/e2e/values-thorough.yaml \
+		--wait --timeout 20m
+
 e2e:  ## golden verify request against the chart in kind (run after `make deploy`)
 	@set -e; \
 	kubectl --context kind-$(KIND_CLUSTER) port-forward svc/plumb 8000:8000 >/dev/null & \
@@ -39,3 +50,12 @@ e2e:  ## golden verify request against the chart in kind (run after `make deploy
 		curl -fsS -o /dev/null http://127.0.0.1:8000/healthz 2>/dev/null && break; sleep 1; \
 	done; \
 	PLUMB_URL=http://127.0.0.1:8000 uv run pytest -m e2e --no-cov
+
+e2e-thorough:  ## fast + thorough goldens against the store-enabled deployment (after `make deploy-thorough`)
+	@set -e; \
+	kubectl --context kind-$(KIND_CLUSTER) port-forward svc/plumb 8000:8000 >/dev/null & \
+	pf=$$!; trap 'kill $$pf 2>/dev/null' EXIT; \
+	for _ in $$(seq 30); do \
+		curl -fsS -o /dev/null http://127.0.0.1:8000/healthz 2>/dev/null && break; sleep 1; \
+	done; \
+	PLUMB_URL=http://127.0.0.1:8000 PLUMB_E2E_THOROUGH=1 uv run pytest -m e2e --no-cov

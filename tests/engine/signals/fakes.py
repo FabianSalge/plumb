@@ -16,6 +16,9 @@ class FakeScorer:
         self.calls.append((text, passages))
         return self.scores
 
+    def count_tokens(self, text: str) -> int:
+        return len(text.split())
+
 
 def char_scores(
     text: str, *, base: float = 0.1, flag: tuple[int, int] | None = None, flag_prob: float = 0.8

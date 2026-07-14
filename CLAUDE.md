@@ -58,8 +58,9 @@ says how it was verified.
 
 - pre-commit install --hook-type commit-msg --hook-type pre-commit  (once per clone)
 - pre-commit run --all-files
-- make test       — pytest with the coverage floor (model-marked tests excluded)
-- make test-model — integration test against the real LettuceDetect weights
+- make test       — pytest with the coverage floor (model/e2e/postgres-marked excluded)
+- make test-model — integration tests against the real model weights (scorer + reranker)
+- make test-postgres — store adapter tests against a disposable Postgres container (needs Docker)
 - make lint       — ruff check + format check
 - make typecheck  — mypy (strict)
 - make run        — serve the API locally with the real model
@@ -67,6 +68,8 @@ says how it was verified.
 - make kind-up    — create the local kind cluster
 - make deploy     — build the image, load it into kind, install the chart
 - make e2e        — golden verify request against the chart in kind
+- make deploy-thorough — deploy with the seeded e2e store, thorough mode enabled
+- make e2e-thorough    — fast + thorough goldens against that deployment
 - evals/ is its own uv project (model benchmarks): from evals/,
   uv run --extra tf4|tf5 python -m bench.run — see evals/RESULTS.md
 - keep this list current; agents rely on it.

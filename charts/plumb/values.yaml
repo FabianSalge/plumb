@@ -18,11 +18,18 @@ resources:
   limits:
     memory: 2560Mi
 
+# 10 s period × failureThreshold bounds first-start model downloads. The
+# default covers the ~420 MB scorer; store-enabled deployments also download
+# the ~2.3 GB reranker at first start — raise this (and the memory limit)
+# accordingly.
+startupProbe:
+  failureThreshold: 36
+
 # Rendered into the ConfigMap the API reads via PLUMB_CONFIG. Defaults must
 # stay identical to config/verifier.yaml — a render test fails on drift.
 # Bump version on any change; it is echoed as config_version in every response.
 verifier:
-  version: "0.6.0"
+  version: "0.7.0"
   signals:
     groundedness:
       model: KRLabsOrg/lettucedect-v2-mmbert-base
@@ -33,6 +40,39 @@ verifier:
       # Resolved relative to the mounted config; the deployment maps the
       # chart's calibration-artifact key to exactly this path.
       calibration: calibration/lettucedect-v2-mmbert-base-sentence-v2.yaml
+  # Thorough-mode retrieval knobs (ADR-0010); the store connection itself is
+  # deployment config under `store` below, not part of the versioned engine
+  # behavior.
+  retrieval:
+    expansion_window: 2
+    recall_depth: 20
+    per_claim_quota: 1
+    pool_budget_tokens: 3000
+    reranker:
+      model: BAAI/bge-reranker-v2-m3
+      revision: "953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e"
+
+# Tenant store connection (thorough mode, ADR-0010). Deployment identity, not
+# versioned engine behavior — changing it never bumps config_version. Disabled
+# by default: a fast-only deployment rejects thorough requests. When enabled,
+# the pod validates the connection and schema at startup and fails loudly.
+store:
+  enabled: false
+  # Name of an existing Secret carrying the read-only connection string; the
+  # DSN reaches the pod only via secretKeyRef, never rendered into manifests.
+  dsnSecret: ""
+  dsnSecretKey: dsn
+  table: ""
+  idColumn: ""
+  textColumn: ""
+  # Optional provenance columns — rendered only when set; snapshot identity is
+  # never invented (ADR-0010).
+  sourceColumn: ""
+  snapshotColumn: ""
+  # Postgres full-text-search config; language analyzers are a tenant choice.
+  regconfig: simple
+  # The one extra egress hole the store opens in the default-deny policy.
+  egressPort: 5432
 
 networkPolicy:
   enabled: true
