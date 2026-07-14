@@ -43,10 +43,15 @@ Checks come first throughout: each group starts with failing tests.
 
 ## 8. Evals
 
-- [ ] 8.1 Measure thorough-mode p50/p95 end to end on stated hardware against the p95 ≤ 10 s target; publish in `evals/RESULTS.md` with knob settings
-- [ ] 8.2 Measure thorough-mode calibration error (ECE) on retrieved-evidence traffic alongside the provided-context number; publish in `evals/RESULTS.md`
+Re-scoped 2026-07-14: laptop measurement killed as contaminated (ambient
+load, the #59 lesson); the published numbers move to #69's pinned cloud
+hardware, whose scope now includes the thorough bench. The harness and the
+protocol ship here.
+
+- [x] 8.1 Ship the thorough-mode bench (`bench.store_seed`, `bench.thorough_run`) and publish the protocol, spot-check latency findings, and the deferral to #69 in `evals/RESULTS.md`
+- [x] 8.2 Same for calibration error on retrieved-evidence traffic: measured in the same `bench.thorough_run` pass, published with #69's run
 
 ## 9. Docs and closeout
 
-- [ ] 9.1 Update README and docs: thorough mode contract, `evidence` documented as retrieval provenance not support attribution, store onboarding (read-only role), fast mode unmoved
-- [ ] 9.2 Full local gate: `make test`, `make lint`, `make typecheck`, chart lint; OpenSpec validate; PR describes how each acceptance criterion was verified
+- [x] 9.1 Update README and docs: thorough mode contract, `evidence` documented as retrieval provenance not support attribution, store onboarding (read-only role), fast mode unmoved
+- [x] 9.2 Full local gate: `make test`, `make lint`, `make typecheck`, chart lint; OpenSpec validate; PR describes how each acceptance criterion was verified

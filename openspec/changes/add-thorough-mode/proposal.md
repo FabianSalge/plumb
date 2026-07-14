@@ -38,9 +38,11 @@ decision.
   contract does not move.
 - Deployment config carries the tenant store connection, read-only,
   versioned like the rest of the chart values.
-- Evals: thorough-mode p50/p95 measured end to end against ADR-0010's
-  p95 ≤ 10 s target, and thorough-mode calibration error measured on
-  retrieved-evidence traffic — both published in `evals/RESULTS.md`.
+- Evals: the thorough-mode bench (latency against ADR-0010's p95 ≤ 10 s
+  target + calibration error on retrieved-evidence traffic in one pass)
+  ships here with its protocol in `evals/RESULTS.md`; the published numbers
+  run on #69's pinned cloud hardware — laptop measurement was rejected as
+  contaminated, the #59 lesson (re-scoped during implementation, 2026-07-14).
 
 ## Capabilities
 
